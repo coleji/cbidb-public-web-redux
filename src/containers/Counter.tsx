@@ -1,33 +1,47 @@
-import * as React from 'react';
+import * as React from "react";
+import { connect } from "react-redux";
 
-export interface CounterProps {
+interface TestCompPropsFromState {
+	counter: number
 }
 
-export interface CounterState {
-  counter: number;
+interface TestCompPropsFromDispatch {
+	increment: () => any,
+	decrement: () => any
 }
 
-class Counter extends React.Component<CounterProps, CounterState> {
-
-  constructor(props: any) {
-    super(props);
-    this.state = { counter: 0 };
-  }
-
-  incrementCounter() {
-    this.setState({ counter: this.state.counter + 1 });
-  }
-
-  render() {
-    return (
-      <div>
-        <h1>counter at: {this.state.counter}</h1>
-        <button
-          onClick={() => this.incrementCounter()}
-        />
-      </div>
-    );
-  }
+interface TestCompPropsFromSelf {
+	blah: string
 }
 
-export default Counter;
+type TestCompProps = TestCompPropsFromState & TestCompPropsFromDispatch & TestCompPropsFromSelf
+
+class Counter extends React.PureComponent<TestCompProps> {
+	render(): React.ReactNode {
+		return <div>
+			{this.props.blah}: {this.props.counter}
+			<span onClick={this.props.increment}>+</span>&nbsp;&nbsp;&nbsp;&nbsp;
+			<span onClick={this.props.decrement}>-</span>
+		</div>
+	}
+}
+
+export default connect<TestCompPropsFromState, TestCompPropsFromDispatch, TestCompPropsFromSelf, GlobalState>(
+	state => ({
+		counter: state.counter
+	}),
+	dispatch => ({
+		increment: () => {
+			console.log("+")
+			dispatch({
+				type: "INCREMENT"
+			})
+		},
+		decrement: () => {
+			console.log("-")
+			dispatch({
+				type: "DECREMENT"
+			})
+		},
+	})
+)(Counter)

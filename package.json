@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "server": "webpack --env.platform=server",
-    "web": "webpack --env.platform=web"
+    "web": "webpack --env.platform=web",
+    "start": "nodejs dist/js/server.js"
   },
   "author": "",
   "license": "ISC",
