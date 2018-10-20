@@ -6,6 +6,7 @@
   "scripts": {
     "server": "webpack --env.platform=server",
     "web": "webpack --env.platform=web",
+    "build": "npm run web && npm run server",
     "start": "nodejs dist/js/server.js"
   },
   "author": "",
@@ -21,6 +22,7 @@
     "@types/redux-devtools": "^3.0.44",
     "@types/redux-devtools-dock-monitor": "^1.1.33",
     "@types/redux-devtools-log-monitor": "^1.0.34",
+    "@types/redux-router": "^1.0.45",
     "connected-react-router": "^4.5.0",
     "history": "^4.7.2",
     "react": "^16.5.1",
@@ -31,7 +33,8 @@
     "redux": "^4.0.0",
     "redux-devtools": "^3.4.1",
     "redux-devtools-dock-monitor": "^1.1.3",
-    "redux-devtools-log-monitor": "^1.4.0"
+    "redux-devtools-log-monitor": "^1.4.0",
+    "redux-router": "^2.1.2"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",

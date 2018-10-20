@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 class Picker extends React.PureComponent {
 	render(): React.ReactNode {
 		return <div>
-			<Link to="/counter">Counter</Link>
+			<Link to="/counter/0">Counter</Link>
 		</div>
 	}
 }

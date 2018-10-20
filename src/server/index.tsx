@@ -13,7 +13,7 @@ app.use(express.static("dist"))
 
 app.get("*", (req, res, next) => {
 	const promise = Promise.resolve()
-	const store = createStore(null);
+	const store = createStore();
 
 	promise.then((data) => {
 		const context = { data }
@@ -31,7 +31,7 @@ app.get("*", (req, res, next) => {
       <html>
         <head>
           <title>SSR with RR</title>
-          <script src="js/client.js" defer></script>
+          <script src="/js/client.js" defer></script>
         </head>
         <body>
           <div id="app">${markup}</div>

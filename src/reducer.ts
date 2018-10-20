@@ -10,8 +10,8 @@ const defaultState: GlobalState = {
 }
 
 const reducer: Reducer = (state = defaultState, action: Action) => {
-	console.log("Running reducer", action)
-	console.log("Current state", state)
+//	console.log("Running reducer", action)
+//	console.log("Current state", state)
 	const ret = (function() {
 		switch (action.type) {
 			case "INCREMENT":
@@ -28,7 +28,7 @@ const reducer: Reducer = (state = defaultState, action: Action) => {
 				return state;
 		}
 	}())
-	console.log("new state", ret)
+//	console.log("new state", ret)
 	return ret;
 }
 

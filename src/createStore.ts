@@ -5,9 +5,9 @@ declare var __DEVELOPMENT__: any
 declare var __CLIENT__: any
 declare var __DEVTOOLS__: any
 
-export default function createStore(history: any) {
+export default function createStore() {
 	const DevTools = require('./DevTools').default;
-	const middleware = [routerMiddleware(history)];
+	const middleware: any[] = [/*routerMiddleware(history)*/];
 
 	//TODO: prod vs dev mode, i.e. dont initialize DevTools stuff
 
@@ -25,7 +25,7 @@ export default function createStore(history: any) {
 	}*/
 	const reducer = require('./reducer');
 
-	const connectedReducer = (!!history) ? connectRouter(history)(reducer) : reducer;
+	const connectedReducer = /*(!!history) ? connectRouter(history)(reducer) :*/ reducer;
 
 	const store = _createStore(
 		connectedReducer, // new root reducer with router state
