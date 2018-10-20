@@ -1,5 +1,5 @@
 import { createStore as _createStore, applyMiddleware, compose } from 'redux';
-import { connectRouter, routerMiddleware } from 'connected-react-router'
+// import { connectRouter, routerMiddleware } from 'connected-react-router'
 
 declare var __DEVELOPMENT__: any
 declare var __CLIENT__: any
