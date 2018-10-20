@@ -16,6 +16,10 @@ interface TestCompPropsFromSelf {
 
 type TestCompProps = TestCompPropsFromState & TestCompPropsFromDispatch & TestCompPropsFromSelf
 
+interface CounterState {
+	currentCount: number
+}
+
 class Counter extends React.PureComponent<TestCompProps> {
 	render(): React.ReactNode {
 		return <div>
@@ -28,7 +32,7 @@ class Counter extends React.PureComponent<TestCompProps> {
 
 export default connect<TestCompPropsFromState, TestCompPropsFromDispatch, TestCompPropsFromSelf, GlobalState>(
 	state => ({
-		counter: state.counter
+		counter: state.counter.currentCount
 	}),
 	dispatch => ({
 		increment: () => {

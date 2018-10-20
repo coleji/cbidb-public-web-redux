@@ -2,20 +2,34 @@ import * as React from 'react'
 import { hydrate } from 'react-dom'
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
+import { routerForBrowser } from 'redux-little-router';
 
 import createStore from '../createStore'
 import App from '../containers/App'
 
-const history = createBrowserHistory()
-const store = createStore();
+import * as counterReducer from '../reducer'
+import routes from '../routes'
+
+
+
+const { reducer, middleware, enhancer } = routerForBrowser({
+  // The configured routes. Required.
+  routes
+});
+
+const store = createStore({
+  reducers: {router: reducer, counter: counterReducer},
+  enhancers: [enhancer],
+  middlewares: [middleware],
+  addDevTools: true
+});
 
 
 hydrate(
-	<Provider store={store}>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
-	</Provider>,
-	document.getElementById('app')
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>,
+  document.getElementById('app')
 );

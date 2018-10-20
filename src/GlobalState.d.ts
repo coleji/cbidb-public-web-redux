@@ -1,3 +1,4 @@
-interface GlobalState {
-	counter: number
+interface GlobalState{
+    counter: CounterState,
+    router: any
 }

@@ -1,12 +1,9 @@
-/// <reference path="GlobalState.d.ts" />
-
 import { Action } from "redux";
 
+type Reducer = (state: CounterState, action: Action) => CounterState
 
-type Reducer = (state: GlobalState, action: Action) => GlobalState
-
-const defaultState: GlobalState = {
-	counter: 0
+const defaultState: CounterState = {
+	currentCount: 0
 }
 
 const reducer: Reducer = (state = defaultState, action: Action) => {
@@ -17,12 +14,12 @@ const reducer: Reducer = (state = defaultState, action: Action) => {
 			case "INCREMENT":
 				return {
 					...state,
-					counter: state.counter+1
+					currentCount: state.currentCount+1
 				};
 			case "DECREMENT":
 				return {
 					...state,
-					counter: state.counter-1
+					currentCount: state.currentCount-1
 				};
 			default:
 				return state;

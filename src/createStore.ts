@@ -1,13 +1,23 @@
-import { createStore as _createStore, applyMiddleware, compose } from 'redux';
+import { createStore as reduxCreateStore, applyMiddleware, compose } from 'redux';
+import { combineReducers } from 'redux';
 // import { connectRouter, routerMiddleware } from 'connected-react-router'
 
 declare var __DEVELOPMENT__: any
 declare var __CLIENT__: any
 declare var __DEVTOOLS__: any
 
-export default function createStore() {
+interface CreateStoreParameters {
+  reducers: any,
+  enhancers?: any[],
+	middlewares?: any[],
+	addDevTools: boolean
+}
+
+export default function createStore(params: CreateStoreParameters) {
 	const DevTools = require('./DevTools').default;
-	const middleware: any[] = [/*routerMiddleware(history)*/];
+	const middleware = params.middlewares || [];
+	const enhancers = params.enhancers || [];
+	const {addDevTools} = params
 
 	//TODO: prod vs dev mode, i.e. dont initialize DevTools stuff
 
@@ -23,19 +33,25 @@ export default function createStore() {
 	} else {
 		finalCreateStore = applyMiddleware(...middleware)(_createStore);
 	}*/
-	const reducer = require('./reducer');
 
-	const connectedReducer = /*(!!history) ? connectRouter(history)(reducer) :*/ reducer;
+	const rootReducer = combineReducers(params.reducers)
 
-	const store = _createStore(
-		connectedReducer, // new root reducer with router state
-		reducer(undefined, {type: "whatever"}),
-		compose(
-		  applyMiddleware(
-			...middleware, // for dispatching history actions
-			// ... other middlewares ...
-		  ), DevTools.instrument()
-		),
+	const allEnhancers = [
+		...enhancers,
+		applyMiddleware(
+		...middleware, // for dispatching history actions
+		// ... other middlewares ...
+		)
+	].concat(addDevTools ? [DevTools.instrument()] : [])
+
+	const initialState = rootReducer(undefined, {type: "whatever"})
+
+	console.log(initialState)
+
+	const store = reduxCreateStore(
+		rootReducer, // new root reducer with router state
+		initialState,
+		compose(...allEnhancers),
 	  )
 
 	//reduxRouterMiddleware.listenForReplays(store);
