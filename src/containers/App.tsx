@@ -1,13 +1,8 @@
 import * as React from 'react'
-import { Route, Link, Redirect, Switch } from 'react-router-dom'
 import Picker from "./Picker"
 import Counter from "./Counter"
 import { connect } from "react-redux";
 
-const devTools = (true) ? (function(){
-	const DevTools = require('../DevTools').default;
-	return <DevTools />;
-}()) : undefined;
 /*
 const routes = <Switch>
 	<Route exact path="/" render={() => <Picker />} />
@@ -19,7 +14,8 @@ const routes = <Switch>
 </Switch>*/
 
 interface AppPropsFromState {
-	router: any
+	router: any,
+	isServer: boolean
 }
 
 interface AppPropsFromDispatch {
@@ -34,7 +30,11 @@ type AppProps = AppPropsFromState & AppPropsFromDispatch & AppPropsFromSelf
 
 class App extends React.PureComponent<AppProps> {
 	render() {
-		console.log(this.props.router)
+		const devTools = (!this.props.isServer) ? (function(){
+			const DevTools = require('../DevTools').default;
+			return <DevTools />;
+		}()) : undefined;
+		console.log(this.props)
 		const path = this.props.router.pathname
 		const regex = /\/counter\/([0-9])/
 		const result = regex.exec(path)
@@ -50,7 +50,8 @@ class App extends React.PureComponent<AppProps> {
 
 export default connect<AppPropsFromState, AppPropsFromDispatch, AppPropsFromSelf, GlobalState>(
 	state => ({
-		router: state.router
+		router: state.router,
+		isServer: state.isServer
 	}),
 	dispatch => ({})
 )(App)

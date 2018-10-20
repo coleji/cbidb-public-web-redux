@@ -1,4 +1,5 @@
 interface GlobalState{
     counter: CounterState,
-    router: any
+    router: any,
+    isServer: boolean
 }

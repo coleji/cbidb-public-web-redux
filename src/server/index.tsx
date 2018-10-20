@@ -1,7 +1,6 @@
 import * as express from "express"
 import * as React from "react"
 import { renderToString } from "react-dom/server"
-import { StaticRouter, matchPath } from "react-router-dom"
 import { Provider } from 'react-redux';
 const { routerForExpress } = require('redux-little-router');
 
@@ -23,18 +22,15 @@ app.get("*", (req, res, next) => {
 
 
   const store = createStore({
-    reducers: { router: reducer, counter: counterReducer },
+    reducers: { router: reducer, counter: counterReducer, isServer: () => true },
     enhancers: [enhancer],
-    middlewares: [middleware],
-    addDevTools: false
+    middlewares: [middleware]
   });
 
 
   const markup = renderToString(
     <Provider store={store}>
-      <StaticRouter location={req.url} context={{}}>
         <App />
-      </StaticRouter>
     </Provider>
   )
 

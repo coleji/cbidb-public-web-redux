@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { hydrate } from 'react-dom'
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom'
 import { routerForBrowser } from 'redux-little-router';
 
 import createStore from '../createStore'
@@ -18,18 +17,15 @@ const { reducer, middleware, enhancer } = routerForBrowser({
 });
 
 const store = createStore({
-  reducers: {router: reducer, counter: counterReducer},
+  reducers: {router: reducer, counter: counterReducer, isServer: () => false},
   enhancers: [enhancer],
-  middlewares: [middleware],
-  addDevTools: true
+  middlewares: [middleware]
 });
 
 
 hydrate(
   <Provider store={store}>
-    <BrowserRouter>
       <App />
-    </BrowserRouter>
   </Provider>,
   document.getElementById('app')
 );
