@@ -3,8 +3,10 @@ import Picker from "./Picker"
 import Counter from "./Counter"
 import { connect } from "react-redux";
 
-import {JoomlaHelmet, JoomlaBody} from '../components/JoomlaBase'
+import JoomlaBase from '../components/JoomlaBase'
 import JoomlaMainPage from '../components/JoomlaMainPage'
+import LoginPage from './LoginPage';
+import Currency from '../util/Currency'
 
 interface AppPropsFromState {
 	router: any,
@@ -31,17 +33,13 @@ class App extends React.PureComponent<AppProps> {
 		const path = this.props.router.pathname
 		const regex = /\/counter\/([0-9])/
 		const result = regex.exec(path)
-		const toRender = !!result ? <Counter blah={result[1]} /> : <Picker />
+		const toRender = !!result ? <Counter blah={result[1]} /> : <LoginPage jpPrice={Currency.dollars(325)} lastSeason={2018}/>
 		return (
 			<div>
-				<JoomlaHelmet>
-					<JoomlaBody>
-						<JoomlaMainPage>
-							{toRender}
-							{devTools}
-						</JoomlaMainPage>
-					</JoomlaBody>
-				</JoomlaHelmet>
+				<JoomlaBase>
+						{toRender}
+						{devTools}
+				</JoomlaBase>
 			</div>
 		)
 	}
