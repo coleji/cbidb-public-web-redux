@@ -25,7 +25,7 @@ class Counter extends React.PureComponent<TestCompProps> {
 		return <div>
 			{this.props.blah}: {this.props.counter}
 			<span onClick={this.props.increment}>+</span>&nbsp;&nbsp;&nbsp;&nbsp;
-			<span onClick={this.props.decrement}>-</span>
+			<span onClick={this.props.decrement}>--</span>
 		</div>
 	}
 }
