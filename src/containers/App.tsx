@@ -3,15 +3,8 @@ import Picker from "./Picker"
 import Counter from "./Counter"
 import { connect } from "react-redux";
 
-/*
-const routes = <Switch>
-	<Route exact path="/" render={() => <Picker />} />
-	<Route path="/counter/:num" render={props => {
-		console.log("routing props: ", props)
-		return (<Counter blah={props.match.params.num}/>)
-	}} />
-	<Route render={() => (<div>Miss</div>)} />
-</Switch>*/
+import {JoomlaHelmet, JoomlaBody} from '../components/JoomlaBase'
+import JoomlaMainPage from '../components/JoomlaMainPage'
 
 interface AppPropsFromState {
 	router: any,
@@ -41,8 +34,14 @@ class App extends React.PureComponent<AppProps> {
 		const toRender = !!result ? <Counter blah={result[1]} /> : <Picker />
 		return (
 			<div>
-				{toRender}
-				{devTools}
+				<JoomlaHelmet>
+					<JoomlaBody>
+						<JoomlaMainPage>
+							{toRender}
+							{devTools}
+						</JoomlaMainPage>
+					</JoomlaBody>
+				</JoomlaHelmet>
 			</div>
 		)
 	}
