@@ -1,10 +1,6 @@
 import { createStore as reduxCreateStore, applyMiddleware, compose } from 'redux';
 import { combineReducers } from 'redux';
 
-declare var __DEVELOPMENT__: any
-declare var __CLIENT__: any
-declare var __DEVTOOLS__: any
-
 interface CreateStoreParameters {
   reducers: any,
   enhancers?: any[],
