@@ -18,5 +18,5 @@ export default (props: Props) =>
         <td style={{textAlign: "left"}}>
             <input id={props.id} className="text_field apex-item-text" type={props.isPassword ? "password" : "text"} name={props.id} size={25} maxLength={100} defaultValue={props.value} />
         </td>
-        {props.extraCells}
+        {props.extraCells ? <td>{props.extraCells}</td> : null}
     </tr>

@@ -6,7 +6,7 @@ import { routerForBrowser } from 'redux-little-router';
 import createStore from '../createStore'
 import App from '../containers/App'
 
-import * as counterReducer from '../reducer/globalReducer'
+import {makeRootReducer} from '../reducer/rootReducer'
 import routes from '../routes'
 
 
@@ -16,8 +16,10 @@ const { reducer, middleware, enhancer } = routerForBrowser({
   routes
 });
 
+const rootReducer = makeRootReducer(reducer, false)
+
 const store = createStore({
-  reducers: {router: reducer, counter: counterReducer, isServer: () => false},
+  rootReducer,
   enhancers: [enhancer],
   middlewares: [middleware]
 });

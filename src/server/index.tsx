@@ -2,12 +2,12 @@ import * as express from "express"
 import * as React from "react"
 import { renderToString } from "react-dom/server"
 import { Provider } from 'react-redux';
-const { routerForExpress } = require('redux-little-router');
+import { routerForExpress } from 'redux-little-router';
 import {Helmet} from "react-helmet";
 
 import App from '../containers/App'
 import createStore from '../createStore'
-import * as counterReducer from '../reducer/globalReducer'
+import {makeRootReducer} from '../reducer/rootReducer'
 import routes from '../routes'
 
 const app = express()
@@ -21,9 +21,10 @@ app.get("*", (req, res, next) => {
     request: req
   });
 
+  const rootReducer = makeRootReducer(reducer, true)
 
   const store = createStore({
-    reducers: { router: reducer, counter: counterReducer, isServer: () => true },
+    rootReducer,
     enhancers: [enhancer],
     middlewares: [middleware]
   });

@@ -32,5 +32,7 @@ const loginReducer: LoginReducer = (state = defaultState, action) => {
 
 export {
 	LoginState,
-	loginReducer
+	loginReducer,
+	LoginActionType,
+	LoginAction
 }

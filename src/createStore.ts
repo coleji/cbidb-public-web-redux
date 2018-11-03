@@ -1,10 +1,10 @@
 import { createStore as reduxCreateStore, applyMiddleware, compose } from 'redux';
-import { combineReducers } from 'redux';
+import {RootReducer} from './reducer/rootReducer'
 
 interface CreateStoreParameters {
-  reducers: any,
+  rootReducer: RootReducer,
   enhancers?: any[],
-	middlewares?: any[]
+  middlewares?: any[]
 }
 
 export default function createStore(params: CreateStoreParameters) {
@@ -27,7 +27,7 @@ export default function createStore(params: CreateStoreParameters) {
 		finalCreateStore = applyMiddleware(...middleware)(_createStore);
 	}*/
 
-	const rootReducer = combineReducers(params.reducers)
+	const rootReducer = params.rootReducer;
 
 	const allEnhancers = [
 		...enhancers,

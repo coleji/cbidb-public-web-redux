@@ -1,29 +1,26 @@
 import * as React from 'react'
-import Picker from "./Picker"
-import Counter from "./Counter"
 import { connect } from "react-redux";
 
 import JoomlaBase from '../components/JoomlaBase'
-import JoomlaMainPage from '../components/JoomlaMainPage'
 import LoginPage from './LoginPage';
-import Currency from '../util/Currency'
+import {RootState} from '../reducer/rootReducer'
 
-interface AppPropsFromState {
-	router: any,
+interface StateProps {
+	router: Location,
 	isServer: boolean
 }
 
-interface AppPropsFromDispatch {
+interface DispatchProps {
 
 }
 
-interface AppPropsFromSelf {
+interface SelfProps {
 
 }
 
-type AppProps = AppPropsFromState & AppPropsFromDispatch & AppPropsFromSelf
+type Props = StateProps & DispatchProps & SelfProps
 
-class App extends React.PureComponent<AppProps> {
+class App extends React.PureComponent<Props> {
 	render() {
 		const devTools = (!this.props.isServer) ? (function(){
 			const DevTools = require('../DevTools').default;
@@ -33,7 +30,7 @@ class App extends React.PureComponent<AppProps> {
 		const path = this.props.router.pathname
 		const regex = /\/counter\/([0-9])/
 		const result = regex.exec(path)
-		const toRender = !!result ? <Counter blah={result[1]} /> : <LoginPage jpPrice={Currency.dollars(325)} lastSeason={2018}/>
+		const toRender = <LoginPage />
 		return (
 			<div>
 				<JoomlaBase>
@@ -45,7 +42,7 @@ class App extends React.PureComponent<AppProps> {
 	}
 }
 
-export default connect<AppPropsFromState, AppPropsFromDispatch, AppPropsFromSelf, GlobalState>(
+export default connect<StateProps, DispatchProps, SelfProps, RootState>(
 	state => ({
 		router: state.router,
 		isServer: state.isServer

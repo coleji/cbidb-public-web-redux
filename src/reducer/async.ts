@@ -1,5 +1,4 @@
 import * as http from 'http';
-import { string, number } from 'prop-types';
 
 interface MakeAPIRequestParams {
 	host: string,

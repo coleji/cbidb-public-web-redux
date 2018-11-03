@@ -1,23 +1,32 @@
 import * as React from "react";
-import JoomlaTwoColumns from "../components/JoomlaTwoColumns";
+import { connect } from "react-redux";
 
+import JoomlaTwoColumns from "../components/JoomlaTwoColumns";
 import PlaceholderLink from "../components/PlaceholderLink"
 import JoomlaArticleRegion from "../components/JoomlaArticleRegion";
 import Currency from "../util/Currency"
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
+import {RootState} from '../reducer/rootReducer'
 
-interface LoginPageProps {
+interface StateProps {
     jpPrice: Currency,
     lastSeason: number
 }
 
-class LoginPage extends React.PureComponent<LoginPageProps> {
+interface DispatchProps {
+    login: (userName: string, password: string) => void
+}
+
+interface SelfProps {}
+
+type Props = StateProps & DispatchProps & SelfProps
+
+class LoginPage extends React.PureComponent<Props> {
 	render() {
         const self = this;
 
         // left column 
-
 
         const welcomeRegion = (function() {
             const body = <div>
@@ -99,4 +108,12 @@ class LoginPage extends React.PureComponent<LoginPageProps> {
     }
 }
 
-export default LoginPage
+export default connect<StateProps, DispatchProps, SelfProps, RootState>(
+	state => ({
+        jpPrice: Currency.cents(32500),
+        lastSeason: 2018
+	}),
+	dispatch => ({
+        login: (userName, password) => {}
+    })
+)(LoginPage)
