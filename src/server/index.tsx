@@ -7,7 +7,7 @@ import {Helmet} from "react-helmet";
 
 import App from '../containers/App'
 import createStore from '../createStore'
-import * as counterReducer from '../reducer'
+import * as counterReducer from '../reducer/globalReducer'
 import routes from '../routes'
 
 const app = express()
@@ -53,6 +53,6 @@ app.get("*", (req, res, next) => {
     `)
 })
 
-app.listen(3000, () => {
-  console.log(`Server is listening on port: 3000`)
+app.listen(8080, () => {
+  console.log(`Server is listening on port: 8080`)
 })

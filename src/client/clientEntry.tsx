@@ -6,7 +6,7 @@ import { routerForBrowser } from 'redux-little-router';
 import createStore from '../createStore'
 import App from '../containers/App'
 
-import * as counterReducer from '../reducer'
+import * as counterReducer from '../reducer/globalReducer'
 import routes from '../routes'
 
 
