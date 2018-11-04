@@ -7,7 +7,8 @@ interface MakeAPIRequestParams {
 	apiEndpoint: string,
 	httpMethod: string,
 	postData?: any,
-	postFormat?: string
+	postFormat?: string,
+	extraHeaders?: any
 }
 
 interface CreateActionFromAPIResponseParams {
@@ -15,13 +16,13 @@ interface CreateActionFromAPIResponseParams {
 	httpMethod: string,
 	postData?: any,
 	postFormat?: string,
+	extraHeaders?: any,
 	config: {
 		apiHost: string,
 		apiPort: number,
 		host: string,
 		port: number,
 		isBehindReverseProxy: boolean,
-
 	},
 	dataForEach?: any,
 	dispatch: any
@@ -36,6 +37,7 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 			method: params.httpMethod,
 			headers: <any>{ }
 		};
+
 		if (params.httpMethod == 'POST') {
 			if (params.postFormat == "JSON") {
 				options.headers['Content-Type'] = 'application/json';
@@ -45,6 +47,10 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 				options.headers['Content-Length'] = params.postData.length;
 			}
 			
+		}
+
+		for (var p in params.extraHeaders || {}) {
+			options.headers[p] = params.extraHeaders[p];
 		}
 
 		let req = http.request(options, (res: any) => {
@@ -81,7 +87,8 @@ var createActionFromAPIResponse = function(params: CreateActionFromAPIResponsePa
 			postData: params.postData,
 			host : params.config.apiHost || params.config.host,
 			port : params.config.apiPort || params.config.port,
-			isBehindReverseProxy : params.config.isBehindReverseProxy
+			isBehindReverseProxy : params.config.isBehindReverseProxy,
+			extraHeaders: params.extraHeaders
 		})
 		.then((json: any) => {
 			console.log("api success")

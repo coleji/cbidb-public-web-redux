@@ -1,12 +1,13 @@
 import {createActionFromAPIResponse} from './async'
 
 export const loginAction = (dispatch: any, username: string, password: string) => createActionFromAPIResponse({
-    apiEndpoint: "/authenticate",
+    apiEndpoint: "/api/authenticate",
     httpMethod: "POST",
-    postData: "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password),
+	postData: "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password),
+	extraHeaders: {"dont-redirect": "true"},
 	config: {
 		apiHost: "localhost",
-		apiPort: 3000,
+		apiPort: 8080,
 		host: "localhost",
 		port: 8080,
 		isBehindReverseProxy: false
