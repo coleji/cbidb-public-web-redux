@@ -4,6 +4,7 @@ import { renderToString } from "react-dom/server"
 import { Provider } from 'react-redux';
 import { routerForExpress } from 'redux-little-router';
 import {Helmet} from "react-helmet";
+import * as httpProxy from 'http-proxy';
 
 import App from '../containers/App'
 import createStore from '../createStore'

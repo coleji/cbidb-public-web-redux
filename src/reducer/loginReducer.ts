@@ -2,14 +2,23 @@ import { Action } from "redux";
 
 interface LoginState {
 	userName: string
+	asyncState: AsyncState
 }
 
+type AsyncState = 
+	| "LOADING"
+	| "SUCCESS"
+	| "FAILURE"
+
 const defaultState: LoginState = {
-	userName: ""
+	userName: "",
+	asyncState: "LOADING"
 }
 
 type LoginActionType =
-	| "LOGIN"
+	| "LOGIN_REQUEST"
+	| "LOGIN_SUCCESS"
+	| "LOGIN_FAILURE"
 	| "LOGOUT"
 
 interface LoginAction extends Action {
@@ -21,8 +30,12 @@ type LoginReducer = (state: LoginState, action: LoginAction) => LoginState
 
 const loginReducer: LoginReducer = (state = defaultState, action) => {
 	switch (action.type) {
-	case "LOGIN":
-		return { userName: action.userName };
+	case "LOGIN_REQUEST":
+		return { userName: action.userName, asyncState: "LOADING" };
+	case "LOGIN_SUCCESS":
+		return { userName: action.userName, asyncState: "SUCCESS" };
+	case "LOGIN_FAILURE":
+		return { userName: action.userName, asyncState: "FAILURE" };
 	case "LOGOUT":
 		return defaultState;
 	default:

@@ -6,13 +6,15 @@ interface MakeAPIRequestParams {
 	isBehindReverseProxy: boolean,
 	apiEndpoint: string,
 	httpMethod: string,
-	postData?: string
+	postData?: any,
+	postFormat?: string
 }
 
 interface CreateActionFromAPIResponseParams {
 	apiEndpoint: string,
 	httpMethod: string,
-	postData?: string,
+	postData?: any,
+	postFormat?: string,
 	config: {
 		apiHost: string,
 		apiPort: number,
@@ -30,13 +32,19 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 		let options = {
 			hostname: params.host,
 			port: (params.isBehindReverseProxy ? 80 : params.port),
-			path: '/api' + params.apiEndpoint,
+			path: params.apiEndpoint,
 			method: params.httpMethod,
 			headers: <any>{ }
 		};
 		if (params.httpMethod == 'POST') {
-			options.headers['Content-Type'] = 'application/json';
-			options.headers['Content-Length'] = JSON.stringify(params.postData).length;
+			if (params.postFormat == "JSON") {
+				options.headers['Content-Type'] = 'application/json';
+				options.headers['Content-Length'] = JSON.stringify(params.postData).length;
+			} else {
+				options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+				options.headers['Content-Length'] = params.postData.length;
+			}
+			
 		}
 
 		let req = http.request(options, (res: any) => {
@@ -54,7 +62,11 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 		});
 
 		if (params.httpMethod == 'POST') {
-			req.write(JSON.stringify(params.postData));
+			if (params.postFormat == "JSON") {
+				req.write(JSON.stringify(params.postData));
+			} else {
+				req.write(params.postData);
+			}
 		}
 		req.end();
 	});
@@ -62,6 +74,7 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 
 var createActionFromAPIResponse = function(params: CreateActionFromAPIResponseParams) {
 	return new Promise((resolve, reject) => {
+		console.log("starting api call")
 		makeAPIRequest({
 			apiEndpoint: params.apiEndpoint,
 			httpMethod: params.httpMethod,
@@ -71,6 +84,7 @@ var createActionFromAPIResponse = function(params: CreateActionFromAPIResponsePa
 			isBehindReverseProxy : params.config.isBehindReverseProxy
 		})
 		.then((json: any) => {
+			console.log("api success")
 			let data = json.data;
 			if (params.dataForEach) data.forEach(params.dataForEach);
 			if (params.dispatch && data && data.sessionExpired) {
@@ -80,6 +94,7 @@ var createActionFromAPIResponse = function(params: CreateActionFromAPIResponsePa
 				reject("Session expired.");
 			} else resolve(data);
 		}).catch((e) => {
+			console.log("api failure")
 			reject(e);
 		});
 	});

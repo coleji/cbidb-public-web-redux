@@ -8,6 +8,7 @@ import Currency from "../util/Currency"
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import {RootState} from '../reducer/rootReducer'
+import {loginAction} from '../async/login'
 
 interface StateProps {
     jpPrice: Currency,
@@ -67,7 +68,7 @@ class LoginPage extends React.PureComponent<Props> {
         }())
 
         const loginRegion = (function() {
-            const button = <Button text="LOGIN" />
+            const button = <Button text="LOGIN" onClick={() => self.props.login("user", "pw")}/>
             const body =  (
                 <div>
                     Enter your email address and password to continue.
@@ -114,6 +115,9 @@ export default connect<StateProps, DispatchProps, SelfProps, RootState>(
         lastSeason: 2018
 	}),
 	dispatch => ({
-        login: (userName, password) => {}
+        login: (userName, password) => {
+            console.log("logging in")
+            loginAction(dispatch, userName, password)
+        }
     })
 )(LoginPage)
