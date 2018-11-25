@@ -10,10 +10,10 @@ type AsyncState =
 	| "SUCCESS"
 	| "FAILURE"
 
-const defaultState: LoginState = {
+const defaultState: LoginState = null; /*{
 	userName: "",
 	asyncState: "LOADING"
-}
+}*/
 
 type LoginActionType =
 	| "LOGIN_REQUEST"
@@ -25,6 +25,8 @@ interface LoginAction extends Action {
 	type: LoginActionType,
 	userName?: string
 }
+
+type LoginDispatch = (action: LoginAction) => void;
 
 type LoginReducer = (state: LoginState, action: LoginAction) => LoginState
 
@@ -47,5 +49,6 @@ export {
 	LoginState,
 	loginReducer,
 	LoginActionType,
-	LoginAction
+	LoginAction,
+	LoginDispatch
 }

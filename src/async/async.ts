@@ -55,7 +55,7 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 
 		let req = http.request(options, (res: any) => {
 			let resData = '';
-			console.log("API RESPONSE: ", res)
+			//console.log("API RESPONSE: ", res)
 			res.on('data', (chunk: any) => {
 				resData += chunk;
 			});
@@ -91,8 +91,10 @@ var createActionFromAPIResponse = function(params: CreateActionFromAPIResponsePa
 			isBehindReverseProxy : params.config.isBehindReverseProxy,
 			extraHeaders: params.extraHeaders
 		})
+		// TODO: dont autodetect if the response is a JSON with a `data` property
+		// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
 		.then((json: any) => {
-			console.log("api success")
+			console.log("api success", json)
 			let data = json.data;
 			if (params.dataForEach) data.forEach(params.dataForEach);
 			if (params.dispatch && data && data.sessionExpired) {
@@ -100,7 +102,8 @@ var createActionFromAPIResponse = function(params: CreateActionFromAPIResponsePa
 					type: "LOGOUT"
 				});
 				reject("Session expired.");
-			} else resolve(data);
+			} else if (data) resolve(data);
+			else resolve(json)
 		}).catch((e) => {
 			console.log("api failure")
 			reject(e);

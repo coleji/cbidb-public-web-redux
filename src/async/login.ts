@@ -1,9 +1,10 @@
 import {createActionFromAPIResponse} from './async'
+import { LoginDispatch } from '../reducer/loginReducer';
 
-export const loginAction = (dispatch: any, username: string, password: string) => createActionFromAPIResponse({
+export const loginAction = (dispatch: LoginDispatch, userName: string, password: string) => createActionFromAPIResponse({
     apiEndpoint: "/api/authenticate-member",
     httpMethod: "POST",
-	postData: "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password),
+	postData: "username=" + encodeURIComponent(userName) + "&password=" + encodeURIComponent(password),
 	extraHeaders: {"dont-redirect": "true"},
 	config: {
 		apiHost: "workstation.community-boating.org", //TODO: make into config
@@ -13,7 +14,28 @@ export const loginAction = (dispatch: any, username: string, password: string) =
 		isBehindReverseProxy: false //TODO: make into config
 	},
 	dispatch
-}).then(() => dispatch({type: "LOGIN_SUCCESS"}))
+}).then(data => {
+	console.log("login result: ", data)
+	if (String(data) == "false") {
+		dispatch({type: "LOGIN_FAILURE"})
+	} else {
+		return createActionFromAPIResponse({
+			apiEndpoint: "/api/member-welcome",
+			httpMethod: "GET",
+			config: {
+				apiHost: "workstation.community-boating.org", //TODO: make into config
+				apiPort: 443, //TODO: make into config
+				host: "workstation.community-boating.org", //TODO: make into config
+				port: 443, //TODO: make into config
+				isBehindReverseProxy: false //TODO: make into config
+			},
+			dispatch
+		}).then(data => {
+			console.log("welcome package: ", data)
+			dispatch({type: "LOGIN_SUCCESS", userName})
+		})	
+	}
+})
 .catch((e) => {
     console.log("error: ", e)
     dispatch({type: "LOGIN_FAILURE"})

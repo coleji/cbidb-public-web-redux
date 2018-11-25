@@ -3,16 +3,19 @@ import * as React from "react"
 import { renderToString } from "react-dom/server"
 import { Provider } from 'react-redux';
 import { routerForExpress } from 'redux-little-router';
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 import * as httpProxy from 'http-proxy';
+import * as cookieParser from 'cookie-parser';
 
 import App from '../containers/App'
 import createStore from '../createStore'
-import {makeRootReducer} from '../reducer/rootReducer'
+import { makeRootReducer } from '../reducer/rootReducer'
 import routes from '../routes'
+import { makeAPIRequest } from '../async/async';
 
-const app = express()
+const app = express();
 
+app.use(cookieParser(""));
 
 const apiDirectConnection = false
 
@@ -31,12 +34,12 @@ if (!apiDirectConnection) {
 
 	// Proxy to API server
 	app.use('/api', (req, res) => {
-    console.log("forwarding an api request to " + req.path)
-		proxy.web(req, res, {target: targetUrl});
+		console.log("forwarding an api request to " + req.path)
+		proxy.web(req, res, { target: targetUrl });
 	});
 
 	app.use('/ws', (req, res) => {
-		proxy.web(req, res, {target: targetUrl + '/ws'});
+		proxy.web(req, res, { target: targetUrl + '/ws' });
 	});
 
 	/*server.on('upgrade', (req, socket, head) => {
@@ -50,10 +53,10 @@ if (!apiDirectConnection) {
 			console.error('proxy error', error);
 		}
 		if (!res.headersSent) {
-			res.writeHead(500, {'content-type': 'application/json'});
+			res.writeHead(500, { 'content-type': 'application/json' });
 		}
 
-		json = {error: 'proxy_error', reason: error.message};
+		json = { error: 'proxy_error', reason: error.message };
 		res.end(JSON.stringify(json));
 	});
 }
@@ -61,45 +64,66 @@ if (!apiDirectConnection) {
 app.use(express.static("dist"))
 
 app.get("*", (req, res, next) => {
+	const { reducer, middleware, enhancer } = routerForExpress({
+		routes,
+		request: req
+	});
 
-  const { reducer, middleware, enhancer } = routerForExpress({
-    routes,
-    request: req
-  });
+	makeAPIRequest({
+		apiEndpoint: "/member-welcome",
+		httpMethod: "GET",
+		host: "localhost", //TODO: make into config
+		port: 3000, //TODO: make into config
+		isBehindReverseProxy: false, //TODO: make into config
+		extraHeaders: {
+			"Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"]
+		}
+	})
+	// TODO: dont autodetect if the response is a JSON with a `data` property
+	// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
+	.then((json: any) => {
+		console.log("got ", json)
+		if (json && json.data && json.data.userName) return Promise.resolve({login: {userName: json.data.userName}});
+		else Promise.resolve({})
+	}, (e) => {
+		Promise.resolve({})
+	})
+	.then(initialState => {
+		const rootReducer = makeRootReducer(reducer, true)
 
-  const rootReducer = makeRootReducer(reducer, true)
+		const store = createStore({
+			rootReducer,
+			enhancers: [enhancer],
+			middlewares: [middleware],
+			initialState
+		});
 
-  const store = createStore({
-    rootReducer,
-    enhancers: [enhancer],
-    middlewares: [middleware]
-  });
 
+		const markup = renderToString(
+			<Provider store={store}>
+				<App />
+			</Provider>
+		)
+		const helmet = Helmet.renderStatic();
 
-  const markup = renderToString(
-    <Provider store={store}>
-        <App />
-    </Provider>
-  )
-  const helmet = Helmet.renderStatic();
-
-  res.send(`
-      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-      <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb">
-        <head>
-          ${helmet.title.toString()}
-          ${helmet.meta.toString()}
-          ${helmet.link.toString()}
-          ${helmet.script.toString()}
-          <script src="/js/client.js" defer></script>
-        </head>
-        <body class="main-overlay-dark primary-overlay-dark readonstyle-button font-family-momentum font-size-is-default logo-enabled-1 logo-style-light menu-type-fusionmenu typography-style-light col12 menu-resources  option-com-content view-article">
-          <div id="app">${markup}</div>
-        </body>
-      </html>
-    `)
+		res.send(`
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb">
+		<head>
+		${helmet.title.toString()}
+		${helmet.meta.toString()}
+		${helmet.link.toString()}
+		${helmet.script.toString()}
+		<script src="/js/client.js" defer></script>
+		</head>
+		<body class="main-overlay-dark primary-overlay-dark readonstyle-button font-family-momentum font-size-is-default logo-enabled-1 logo-style-light menu-type-fusionmenu typography-style-light col12 menu-resources  option-com-content view-article">
+		<div id="app">${markup}</div>
+		</body>
+	</html>
+	`)
+	})
 })
 
 app.listen(8080, () => {
-  console.log(`Server is listening on port: 8080`)
+	console.log(`Server is listening on port: 8080`)
 })
