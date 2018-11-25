@@ -1,16 +1,16 @@
 import {createActionFromAPIResponse} from './async'
 
 export const loginAction = (dispatch: any, username: string, password: string) => createActionFromAPIResponse({
-    apiEndpoint: "/api/authenticate",
+    apiEndpoint: "/api/authenticate-member",
     httpMethod: "POST",
 	postData: "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password),
 	extraHeaders: {"dont-redirect": "true"},
 	config: {
-		apiHost: "localhost",
-		apiPort: 8080,
-		host: "localhost",
-		port: 8080,
-		isBehindReverseProxy: false
+		apiHost: "workstation.community-boating.org", //TODO: make into config
+		apiPort: 443, //TODO: make into config
+		host: "workstation.community-boating.org", //TODO: make into config
+		port: 443, //TODO: make into config
+		isBehindReverseProxy: false //TODO: make into config
 	},
 	dispatch
 }).then(() => dispatch({type: "LOGIN_SUCCESS"}))

@@ -55,6 +55,7 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 
 		let req = http.request(options, (res: any) => {
 			let resData = '';
+			console.log("API RESPONSE: ", res)
 			res.on('data', (chunk: any) => {
 				resData += chunk;
 			});

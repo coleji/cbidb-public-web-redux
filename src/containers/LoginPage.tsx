@@ -19,11 +19,18 @@ interface DispatchProps {
 	login: (userName: string, password: string) => void
 }
 
+interface LoginProps {userName: string, password: string}
+
 interface SelfProps { }
 
 type Props = StateProps & DispatchProps & SelfProps
 
 class LoginPage extends React.PureComponent<Props> {
+	private usernameRef = React.createRef<HTMLInputElement>()
+	private passwordRef = React.createRef<HTMLInputElement>()
+	constructor(props: Props) {
+		super(props);
+	}
 	render() {
 		const self = this;
 
@@ -68,14 +75,14 @@ class LoginPage extends React.PureComponent<Props> {
 		}())
 
 		const loginRegion = (function () {
-			const button = <Button text="LOGIN" onClick={() => self.props.login("user", "pw")} />
+			const button = <Button text="LOGIN" onClick={() => self.props.login(self.usernameRef.current.value, self.passwordRef.current.value)} />
 			const body = (
 				<div>
 					Enter your email address and password to continue.
                     <br />
 					<table><tbody>
-						<TextInput id="P101_USERNAME" label="Email" value="" isPassword={false} />
-						<TextInput id="P101_PASSWORD" label="Password" value="" isPassword={true} extraCells={button} />
+						<TextInput id="P101_USERNAME" innerRef={self.usernameRef} label="Email" value="" isPassword={false} />
+						<TextInput id="P101_PASSWORD" innerRef={self.passwordRef} label="Password" value="" isPassword={true} extraCells={button} />
 						<tr><td></td><td><span><PlaceholderLink text="I forgot my password!" /></span></td></tr>
 					</tbody></table>
 				</div>
