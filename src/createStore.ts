@@ -5,7 +5,7 @@ interface CreateStoreParameters {
   rootReducer: RootReducer,
   enhancers?: any[],
   middlewares?: any[],
-  initialState?: any
+  seedState?: any
 }
 
 export default function createStore(params: CreateStoreParameters) {
@@ -38,8 +38,8 @@ export default function createStore(params: CreateStoreParameters) {
 		),
 		DevTools.instrument()
 	]
-	console.log("opening with init state: ", params.initialState)
-	const initialState = rootReducer(params.initialState, {type: "whatever"})
+	console.log("opening with seed state: ", params.seedState)
+	const initialState = rootReducer(params.seedState, {type: "whatever"})
 
 	console.log(initialState)
 
@@ -57,5 +57,5 @@ export default function createStore(params: CreateStoreParameters) {
 		});
 	}*/
 
-	return store;
+	return {store, initialState};
 }

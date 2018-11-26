@@ -88,14 +88,14 @@ app.get("*", (req, res, next) => {
 	}, (e) => {
 		Promise.resolve({})
 	})
-	.then(initialState => {
+	.then(seedState => {
 		const rootReducer = makeRootReducer(reducer, true)
 
-		const store = createStore({
+		const {store, initialState}  = createStore({
 			rootReducer,
 			enhancers: [enhancer],
 			middlewares: [middleware],
-			initialState
+			seedState
 		});
 
 
@@ -115,6 +115,9 @@ app.get("*", (req, res, next) => {
 		${helmet.link.toString()}
 		${helmet.script.toString()}
 		<script src="/js/client.js" defer></script>
+		<script>
+		var initialStateFromServer = ${JSON.stringify(initialState)}
+		</script>
 		</head>
 		<body class="main-overlay-dark primary-overlay-dark readonstyle-button font-family-momentum font-size-is-default logo-enabled-1 logo-style-light menu-type-fusionmenu typography-style-light col12 menu-resources  option-com-content view-article">
 		<div id="app">${markup}</div>

@@ -16,12 +16,15 @@ const { reducer, middleware, enhancer } = routerForBrowser({
   routes
 });
 
+const seedState = (window as any).initialStateFromServer
+
 const rootReducer = makeRootReducer(reducer, false)
 
-const store = createStore({
+const {store, initialState} = createStore({
   rootReducer,
   enhancers: [enhancer],
-  middlewares: [middleware]
+  middlewares: [middleware],
+  seedState
 });
 
 
