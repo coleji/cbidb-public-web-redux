@@ -1,7 +1,8 @@
 import { Action } from "redux";
 
 interface LoginState {
-	userName: string
+	userName: string,
+	password: string,
 	asyncState: AsyncState
 }
 
@@ -10,20 +11,24 @@ type AsyncState =
 	| "SUCCESS"
 	| "FAILURE"
 
-const defaultState: LoginState = null; /*{
+const defaultState: LoginState = {
 	userName: "",
-	asyncState: "LOADING"
-}*/
+	password: "",
+	asyncState: null
+}
 
 type LoginActionType =
 	| "LOGIN_REQUEST"
 	| "LOGIN_SUCCESS"
 	| "LOGIN_FAILURE"
 	| "LOGOUT"
+	| "USERNAME"
+	| "PASSWORD"
 
 interface LoginAction extends Action {
 	type: LoginActionType,
-	userName?: string
+	userName?: string,
+	password?: string
 }
 
 type LoginDispatch = (action: LoginAction) => void;
@@ -31,15 +36,20 @@ type LoginDispatch = (action: LoginAction) => void;
 type LoginReducer = (state: LoginState, action: LoginAction) => LoginState
 
 const loginReducer: LoginReducer = (state = defaultState, action) => {
+	console.log(action)
 	switch (action.type) {
 	case "LOGIN_REQUEST":
-		return { userName: action.userName, asyncState: "LOADING" };
+		return { ...state, asyncState: "LOADING", };
 	case "LOGIN_SUCCESS":
-		return { userName: action.userName, asyncState: "SUCCESS" };
+		return { ...state, asyncState: "SUCCESS" };
 	case "LOGIN_FAILURE":
-		return { userName: action.userName, asyncState: "FAILURE" };
+		return { ...state, asyncState: "FAILURE" };
 	case "LOGOUT":
 		return defaultState;
+	case "USERNAME":
+		return {...state, userName: action.userName };
+	case "PASSWORD":
+		return {...state, password: action.password };
 	default:
 		return state;
 	}

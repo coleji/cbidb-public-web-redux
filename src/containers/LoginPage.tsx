@@ -9,14 +9,19 @@ import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer'
 import { loginAction } from '../async/login'
+import { stat } from "fs";
 
 interface StateProps {
 	jpPrice: Currency,
-	lastSeason: number
+	lastSeason: number,
+	userName: string,
+	password: string
 }
 
 interface DispatchProps {
-	login: (userName: string, password: string) => void
+	login: (userName: string, password: string) => void,
+	setUsername: (userName: string) => void,
+	setPassword: (password: string) => void
 }
 
 interface LoginProps {userName: string, password: string}
@@ -81,8 +86,8 @@ class LoginPage extends React.PureComponent<Props> {
 					Enter your email address and password to continue.
                     <br />
 					<table><tbody>
-						<TextInput id="P101_USERNAME" innerRef={self.usernameRef} label="Email" value="" isPassword={false} />
-						<TextInput id="P101_PASSWORD" innerRef={self.passwordRef} label="Password" value="" isPassword={true} extraCells={button} />
+						<TextInput id="P101_USERNAME" innerRef={self.usernameRef} label="Email" value={self.props.userName} isPassword={false} onChange={ev => self.props.setUsername(ev.target.value)} />
+						<TextInput id="P101_PASSWORD" innerRef={self.passwordRef} label="Password" value={self.props.password} isPassword={true} extraCells={button}  onChange={ev => self.props.setPassword(ev.target.value)}/>
 						<tr><td></td><td><span><PlaceholderLink text="I forgot my password!" /></span></td></tr>
 					</tbody></table>
 				</div>
@@ -119,12 +124,16 @@ class LoginPage extends React.PureComponent<Props> {
 export default connect<StateProps, DispatchProps, SelfProps, RootState>(
 	state => ({
 		jpPrice: Currency.cents(32500),
-		lastSeason: 2018
+		lastSeason: 2018,
+		userName: state.login.userName,
+		password: state.login.password
 	}),
 	dispatch => ({
 		login: (userName, password) => {
 			console.log("logging in")
 			loginAction(dispatch, userName, password)
-		}
+		},
+		setUsername: (userName: string) => dispatch({type: "USERNAME", userName: userName}),
+		setPassword: (password: string) => dispatch({type: "PASSWORD", password: password})
 	})
 )(LoginPage)

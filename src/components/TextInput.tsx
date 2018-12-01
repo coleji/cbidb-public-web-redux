@@ -6,7 +6,8 @@ interface Props {
 	value: string,
 	isPassword: boolean,
 	extraCells?: React.ReactNode,
-	innerRef?: React.RefObject<any>
+	innerRef?: React.RefObject<any>,
+	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export default class TextInput extends React.PureComponent<Props> {
@@ -22,6 +23,7 @@ export default class TextInput extends React.PureComponent<Props> {
 					id={this.props.id} ref={this.props.innerRef} className="text_field apex-item-text"
 					type={this.props.isPassword ? "password" : "text"} name={this.props.id}
 					size={25} maxLength={100} defaultValue={this.props.value}
+					onChange={this.props.onChange}
 				/>
 			</td>
 			{this.props.extraCells ? <td>{this.props.extraCells}</td> : null}
