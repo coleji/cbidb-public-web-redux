@@ -30,7 +30,7 @@ export const defaultFormState: FormProps = {
 }
 
 interface DispatchProps {
-	login: () => void,
+	login: (form: FormProps) => void,
 	updateField: (name: string, value: string) => void
 }
 
@@ -48,8 +48,6 @@ class LoginPage extends PureComponentIgnoreForm<Props> {
 	render() {
 		console.log("login page props: ", this.props)
 		const self = this;
-
-		const login = () => self.props.login();
 
 		class FormInput extends FormWrappedTextInput<FormProps> {}
 
@@ -94,14 +92,14 @@ class LoginPage extends PureComponentIgnoreForm<Props> {
 		}())
 
 		const loginRegion = (function () {
-			const button = <Button text="LOGIN" onClick={login} />
+			const button = <Button text="LOGIN" onClick={() => self.props.login(self.props.form)} />
 			const body = (
 				<div>
 					Enter your email address and password to continue.
                     <br />
 					<table><tbody>
 						<FormInput id="P101_USERNAME" label="Email" isPassword={false} onChange={ev => self.props.updateField("P101_USERNAME", ev.target.value)}/>
-						<FormInput id="P101_PASSWORD" label="Password" isPassword={true} extraCells={button}  />
+						<FormInput id="P101_PASSWORD" label="Password" isPassword={true} extraCells={button} onChange={ev => self.props.updateField("P101_PASSWORD", ev.target.value)}/>
 						<tr><td></td><td><span><PlaceholderLink text="I forgot my password!" /></span></td></tr>
 					</tbody></table>
 				</div>
@@ -140,15 +138,14 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		jpPrice: Currency.cents(32500),
 		lastSeason: 2018,
 		form: {
-			P101_USERNAME: rootState.login.usernameForm,
-			P101_PASSWORD: rootState.login.passwordForm
+			P101_USERNAME: rootState.loginForm.usernameForm,
+			P101_PASSWORD: rootState.loginForm.passwordForm
 		}
 	}),
 	dispatch => ({
-		login: () => {
-			// const formState = rootState.form[FORM_NAME].values as FormProps
-			loginAction(dispatch)
+		login: (form: FormProps) => {
+			loginAction(dispatch, form.P101_USERNAME, form.P101_PASSWORD)
 		},
-		updateField: (name: string, value: string) => dispatch({type: "FIELD", name, value})
+		updateField: (name: string, value: string) => dispatch({type: "FORM_LOGIN", name, value})
 	})
 )(LoginPage)

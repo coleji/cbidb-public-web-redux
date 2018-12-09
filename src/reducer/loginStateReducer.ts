@@ -2,9 +2,7 @@ import { Action } from "redux";
 
 interface LoginState {
 	authenticatedUserName: string,
-	asyncState: AsyncState,
-	usernameForm: string,
-	passwordForm: string
+	asyncState: AsyncState
 }
 
 type AsyncState = 
@@ -14,9 +12,7 @@ type AsyncState =
 
 const defaultState: LoginState = {
 	authenticatedUserName: null,
-	asyncState: null,
-	usernameForm: "",
-	passwordForm: ""
+	asyncState: null
 }
 
 type LoginActionType =
@@ -24,7 +20,6 @@ type LoginActionType =
 	| "LOGIN_SUCCESS"
 	| "LOGIN_FAILURE"
 	| "LOGOUT"
-	| "FIELD"
 
 interface LoginAction extends Action {
 	type: LoginActionType,
@@ -44,15 +39,11 @@ const loginReducer: LoginReducer = (state = defaultState, action) => {
 	case "LOGIN_REQUEST":
 		return { ...state, asyncState: "LOADING", };
 	case "LOGIN_SUCCESS":
-		return { ...state, asyncState: "SUCCESS" };
+		return { ...state, asyncState: "SUCCESS", authenticatedUserName: action.userName};
 	case "LOGIN_FAILURE":
 		return { ...state, asyncState: "FAILURE" };
 	case "LOGOUT":
 		return defaultState;
-	case "FIELD":
-		if (action.name == "P101_USERNAME") return {...state, usernameForm: action.value}
-		if (action.name == "P101_PASSWORD") return {...state, passwordForm: action.value}
-		else return state;
 	default:
 		return state;
 	}

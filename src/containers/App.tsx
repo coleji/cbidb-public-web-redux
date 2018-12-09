@@ -5,11 +5,12 @@ import JoomlaBase from '../components/JoomlaBase'
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
 import {RootState} from '../reducer/rootReducer'
+import {LoginState} from "../reducer/loginStateReducer"
 
 interface StateProps {
 	router: Location,
 	isServer: boolean,
-	login: any
+	login: LoginState
 }
 
 interface DispatchProps {
@@ -34,7 +35,7 @@ class App extends React.PureComponent<Props> {
 		const regex = /\/counter\/([0-9])/
 		const result = regex.exec(path)
 		const toRender = (function() {
-			if (self.props.login && self.props.login.userName) {
+			if (self.props.login && self.props.login.authenticatedUserName) {
 				return <HomePage />
 			} else {
 				return <LoginPage />

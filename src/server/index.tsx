@@ -13,7 +13,6 @@ import { makeRootReducer } from '../reducer/rootReducer'
 import routes from '../routes'
 import { makeAPIRequest } from '../async/async';
 
-import {defaultFormState as defaultLoginForm} from "../containers/LoginPage"
 
 const app = express();
 
@@ -70,8 +69,9 @@ app.get("*", (req, res, next) => {
 		routes,
 		request: req
 	});
-
+	console.log("cookie is " + req.cookies["CBIDB-SEC"])
 	makeAPIRequest({
+		https: false,
 		apiEndpoint: "/member-welcome",
 		httpMethod: "GET",
 		host: "localhost", //TODO: make into config
@@ -85,9 +85,10 @@ app.get("*", (req, res, next) => {
 	// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
 	.then((json: any) => {
 		console.log("got ", json)
-		if (json && json.data && json.data.userName) return Promise.resolve({login: {userName: json.data.userName}});
+		if (json && json.data && json.data.userName) return Promise.resolve({login: {authenticatedUserName: json.data.userName}});
 		else Promise.resolve({})
 	}, (e) => {
+		console.log("server side get welcome pkg failed", e)
 		Promise.resolve({})
 	})
 	.then(seedState => {
@@ -97,10 +98,7 @@ app.get("*", (req, res, next) => {
 			rootReducer,
 			enhancers: [enhancer],
 			middlewares: [middleware],
-			seedState: {
-				...seedState,
-				form: {login: {values: defaultLoginForm}}
-			}
+			seedState
 		});
 
 

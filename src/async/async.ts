@@ -1,6 +1,8 @@
 import * as http from 'http';
+import * as https from 'https';
 
 interface MakeAPIRequestParams {
+	https: boolean,
 	host: string,
 	port: number,
 	isBehindReverseProxy: boolean,
@@ -12,6 +14,7 @@ interface MakeAPIRequestParams {
 }
 
 interface CreateActionFromAPIResponseParams {
+	https: boolean,
 	apiEndpoint: string,
 	httpMethod: string,
 	postData?: any,
@@ -53,7 +56,9 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 			options.headers[p] = params.extraHeaders[p];
 		}
 
-		let req = http.request(options, (res: any) => {
+		const method = params.https ? https : http;
+
+		let req = (method as any).request(options, (res: any) => {
 			let resData = '';
 			//console.log("API RESPONSE: ", res)
 			res.on('data', (chunk: any) => {
@@ -83,6 +88,7 @@ var createActionFromAPIResponse = function(params: CreateActionFromAPIResponsePa
 	return new Promise((resolve, reject) => {
 		console.log("starting api call")
 		makeAPIRequest({
+			https: params.https,
 			apiEndpoint: params.apiEndpoint,
 			httpMethod: params.httpMethod,
 			postData: params.postData,

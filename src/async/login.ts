@@ -1,10 +1,11 @@
 import {createActionFromAPIResponse} from './async'
 import { LoginDispatch } from '../reducer/loginStateReducer';
 
-export const loginAction = (dispatch: LoginDispatch) => createActionFromAPIResponse({
+export const loginAction = (dispatch: LoginDispatch, userName: string, password: string) => createActionFromAPIResponse({
+	https: true,
     apiEndpoint: "/api/authenticate-member",
     httpMethod: "POST",
-	postData: "username=" + encodeURIComponent("") + "&password=" + encodeURIComponent(""),
+	postData: "username=" + encodeURIComponent(userName) + "&password=" + encodeURIComponent(password),
 	extraHeaders: {"dont-redirect": "true"},
 	config: {
 		apiHost: "workstation.community-boating.org", //TODO: make into config
@@ -19,7 +20,9 @@ export const loginAction = (dispatch: LoginDispatch) => createActionFromAPIRespo
 	if (String(data) == "false") {
 		dispatch({type: "LOGIN_FAILURE"})
 	} else {
+		console.log("about to query welcome pkg")
 		return createActionFromAPIResponse({
+			https: true,
 			apiEndpoint: "/api/member-welcome",
 			httpMethod: "GET",
 			config: {
@@ -32,7 +35,7 @@ export const loginAction = (dispatch: LoginDispatch) => createActionFromAPIRespo
 			dispatch
 		}).then(data => {
 			console.log("welcome package: ", data)
-			dispatch({type: "LOGIN_SUCCESS", userName: ""})
+			dispatch({type: "LOGIN_SUCCESS", userName})
 		})	
 	}
 })
