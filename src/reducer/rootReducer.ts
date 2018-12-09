@@ -6,7 +6,8 @@ export interface RootState {
 	login: LoginState,
 	router: Location,
 	isServer: boolean,
-	loginForm: LoginFormState
+	loginForm: LoginFormState,
+	updatedFormName: String
 }
 
 export type RootReducer = (state: RootState, action: Action) => RootState
@@ -16,6 +17,7 @@ export const makeRootReducer: (router: Reducer, isServer: Boolean) => RootReduce
 		router,
 		isServer: () => isServer,
 		login: loginReducer,
-		loginForm: loginFormReducer
+		loginForm: loginFormReducer,
+		updatedFormName: () => ""
 	})	
 }

@@ -1,5 +1,5 @@
-import { createStore as reduxCreateStore, applyMiddleware, compose } from 'redux';
-import {RootReducer} from './reducer/rootReducer'
+import { createStore as reduxCreateStore, applyMiddleware, compose, Action } from 'redux';
+import { RootReducer, RootState } from './reducer/rootReducer'
 
 interface CreateStoreParameters {
   rootReducer: RootReducer,
@@ -28,7 +28,14 @@ export default function createStore(params: CreateStoreParameters) {
 		finalCreateStore = applyMiddleware(...middleware)(_createStore);
 	}*/
 
-	const rootReducer = params.rootReducer;
+	// Attach last-form-updated state val
+	const rootReducer: (state: RootState, action: Action) => RootState = function(state: RootState, action: Action) {
+		const result: RootState = params.rootReducer(state, action);
+		return {
+			...result,
+			updatedFormName: (action as any).updatedFormName
+		}
+	}
 
 	const allEnhancers = [
 		...enhancers,

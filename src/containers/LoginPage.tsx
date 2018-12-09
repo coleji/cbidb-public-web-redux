@@ -11,6 +11,7 @@ import { RootState } from '../reducer/rootReducer'
 import { loginAction } from '../async/login'
 import PureComponentIgnoreForm from "../components/PureComponentIgnoreForm"
 
+// TODO: duplicated in App and here
 const FORM_NAME = "login"
 
 interface FormProps {
@@ -34,7 +35,9 @@ interface DispatchProps {
 	updateField: (name: string, value: string) => void
 }
 
-interface StaticProps { }
+interface StaticProps {
+	formName: string
+}
 
 type Props = StateProps & DispatchProps & StaticProps
 
@@ -138,14 +141,16 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		jpPrice: Currency.cents(32500),
 		lastSeason: 2018,
 		form: {
+
 			P101_USERNAME: rootState.loginForm.usernameForm,
 			P101_PASSWORD: rootState.loginForm.passwordForm
-		}
+		},
+		updatedFormName: rootState.updatedFormName
 	}),
 	dispatch => ({
 		login: (form: FormProps) => {
 			loginAction(dispatch, form.P101_USERNAME, form.P101_PASSWORD)
 		},
-		updateField: (name: string, value: string) => dispatch({type: "FORM_LOGIN", name, value})
+		updateField: (name: string, value: string) => dispatch({type: "FORM_LOGIN", updatedFormName: FORM_NAME, name, value})
 	})
 )(LoginPage)

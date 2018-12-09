@@ -38,7 +38,7 @@ class App extends React.PureComponent<Props> {
 			if (self.props.login && self.props.login.authenticatedUserName) {
 				return <HomePage />
 			} else {
-				return <LoginPage />
+				return <LoginPage formName="login"/>
 			}
 		}())
 		return (
