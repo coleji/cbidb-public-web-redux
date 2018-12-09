@@ -20,7 +20,7 @@ const seedState = (window as any).initialStateFromServer
 
 const rootReducer = makeRootReducer(reducer, false)
 
-const {store, initialState} = createStore({
+export const {store, initialState} = createStore({
   rootReducer,
   enhancers: [enhancer],
   middlewares: [middleware],

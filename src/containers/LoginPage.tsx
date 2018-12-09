@@ -5,39 +5,53 @@ import JoomlaTwoColumns from "../components/JoomlaTwoColumns";
 import PlaceholderLink from "../components/PlaceholderLink"
 import JoomlaArticleRegion from "../components/JoomlaArticleRegion";
 import Currency from "../util/Currency"
-import TextInput from "../components/TextInput";
+import FormWrappedTextInput from "../components/FormWrappedTextInput";
 import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer'
 import { loginAction } from '../async/login'
-import { stat } from "fs";
+import PureComponentIgnoreForm from "../components/PureComponentIgnoreForm"
 
-interface StateProps {
+const FORM_NAME = "login"
+
+interface FormProps {
+	P101_USERNAME: string,
+	P101_PASSWORD: string
+}
+
+export type StateProps = {
 	jpPrice: Currency,
 	lastSeason: number,
-	userName: string,
-	password: string
+	form: FormProps
+}
+
+export const defaultFormState: FormProps = {
+	P101_USERNAME: "",
+	P101_PASSWORD: ""
 }
 
 interface DispatchProps {
-	login: (userName: string, password: string) => void,
-	setUsername: (userName: string) => void,
-	setPassword: (password: string) => void
+	login: () => void,
+	updateField: (name: string, value: string) => void
 }
 
-interface LoginProps {userName: string, password: string}
+interface StaticProps { }
 
-interface SelfProps { }
+type Props = StateProps & DispatchProps & StaticProps
 
-type Props = StateProps & DispatchProps & SelfProps
-
-class LoginPage extends React.PureComponent<Props> {
+class LoginPage extends PureComponentIgnoreForm<Props> {
 	private usernameRef = React.createRef<HTMLInputElement>()
 	private passwordRef = React.createRef<HTMLInputElement>()
+	
 	constructor(props: Props) {
 		super(props);
 	}
 	render() {
+		console.log("login page props: ", this.props)
 		const self = this;
+
+		const login = () => self.props.login();
+
+		class FormInput extends FormWrappedTextInput<FormProps> {}
 
 		// left column 
 
@@ -80,14 +94,14 @@ class LoginPage extends React.PureComponent<Props> {
 		}())
 
 		const loginRegion = (function () {
-			const button = <Button text="LOGIN" onClick={() => self.props.login(self.usernameRef.current.value, self.passwordRef.current.value)} />
+			const button = <Button text="LOGIN" onClick={login} />
 			const body = (
 				<div>
 					Enter your email address and password to continue.
                     <br />
 					<table><tbody>
-						<TextInput id="P101_USERNAME" innerRef={self.usernameRef} label="Email" value={self.props.userName} isPassword={false} onChange={ev => self.props.setUsername(ev.target.value)} />
-						<TextInput id="P101_PASSWORD" innerRef={self.passwordRef} label="Password" value={self.props.password} isPassword={true} extraCells={button}  onChange={ev => self.props.setPassword(ev.target.value)}/>
+						<FormInput id="P101_USERNAME" label="Email" isPassword={false} onChange={ev => self.props.updateField("P101_USERNAME", ev.target.value)}/>
+						<FormInput id="P101_PASSWORD" label="Password" isPassword={true} extraCells={button}  />
 						<tr><td></td><td><span><PlaceholderLink text="I forgot my password!" /></span></td></tr>
 					</tbody></table>
 				</div>
@@ -121,19 +135,20 @@ class LoginPage extends React.PureComponent<Props> {
 	}
 }
 
-export default connect<StateProps, DispatchProps, SelfProps, RootState>(
-	state => ({
+export default connect<StateProps, DispatchProps, StaticProps, RootState>(
+	rootState => ({
 		jpPrice: Currency.cents(32500),
 		lastSeason: 2018,
-		userName: state.login.userName,
-		password: state.login.password
+		form: {
+			P101_USERNAME: rootState.login.usernameForm,
+			P101_PASSWORD: rootState.login.passwordForm
+		}
 	}),
 	dispatch => ({
-		login: (userName, password) => {
-			console.log("logging in")
-			loginAction(dispatch, userName, password)
+		login: () => {
+			// const formState = rootState.form[FORM_NAME].values as FormProps
+			loginAction(dispatch)
 		},
-		setUsername: (userName: string) => dispatch({type: "USERNAME", userName: userName}),
-		setPassword: (password: string) => dispatch({type: "PASSWORD", password: password})
+		updateField: (name: string, value: string) => dispatch({type: "FIELD", name, value})
 	})
 )(LoginPage)

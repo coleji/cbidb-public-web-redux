@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import JoomlaTwoColumns from "../components/JoomlaTwoColumns";
 import Currency from "../util/Currency"
 import { RootState } from '../reducer/rootReducer'
-import { loginAction } from '../async/login'
 
 interface StateProps {
 	jpPrice: Currency,
@@ -12,14 +11,14 @@ interface StateProps {
 }
 
 interface DispatchProps {
-	login: (userName: string, password: string) => void
+
 }
 
 interface LoginProps { userName: string, password: string }
 
-interface SelfProps { }
+interface StaticProps { }
 
-type Props = StateProps & DispatchProps & SelfProps
+type Props = StateProps & DispatchProps & StaticProps
 
 class HomePage extends React.PureComponent<Props> {
 	constructor(props: Props) {
@@ -40,15 +39,12 @@ class HomePage extends React.PureComponent<Props> {
 	}
 }
 
-export default connect<StateProps, DispatchProps, SelfProps, RootState>(
+export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
 		jpPrice: Currency.cents(32500),
 		lastSeason: 2018
 	}),
 	dispatch => ({
-		login: (userName, password) => {
-			console.log("logging in")
-			loginAction(dispatch, userName, password)
-		}
+
 	})
 )(HomePage)

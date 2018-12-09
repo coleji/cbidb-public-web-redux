@@ -13,6 +13,8 @@ import { makeRootReducer } from '../reducer/rootReducer'
 import routes from '../routes'
 import { makeAPIRequest } from '../async/async';
 
+import {defaultFormState as defaultLoginForm} from "../containers/LoginPage"
+
 const app = express();
 
 app.use(cookieParser(""));
@@ -95,7 +97,10 @@ app.get("*", (req, res, next) => {
 			rootReducer,
 			enhancers: [enhancer],
 			middlewares: [middleware],
-			seedState
+			seedState: {
+				...seedState,
+				form: {login: {values: defaultLoginForm}}
+			}
 		});
 
 
