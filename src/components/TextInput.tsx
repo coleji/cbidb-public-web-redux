@@ -6,13 +6,19 @@ interface Props {
 	isPassword: boolean,
 	extraCells?: React.ReactNode,
 	innerRef?: React.RefObject<any>,
-	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
+	onEnter?: () => void
 }
 
 export default class TextInput extends React.PureComponent<Props> {
 	render() {
 		console.log("here i go rendering again")
 		console.log(this.props)
+		const onKeyPress = (e: React.KeyboardEvent) => {
+			if (this.props.onEnter && (e.keyCode || e.which) == 13) {
+				this.props.onEnter();
+			}
+		}
 		return <tr>
 			<td style={{ textAlign: "right" }}>
 				<label id={this.props.id + "_LABEL"} htmlFor={this.props.id}>
@@ -30,6 +36,7 @@ export default class TextInput extends React.PureComponent<Props> {
 					type={this.props.isPassword ? "password" : "text"} name={this.props.id}
 					size={25} maxLength={100}
 					onChange={this.props.onChange}
+					onKeyPress={onKeyPress}
 				/>
 
 			</td>

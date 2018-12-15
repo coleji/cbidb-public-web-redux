@@ -8,7 +8,8 @@ interface Props<FormInput> {
 	isPassword: boolean,
 	extraCells?: React.ReactNode,
 	innerRef?: React.RefObject<any>,
-	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
+	onEnter?: () => void
 }
 
 export default class FormWrappedTextInput<FormInput> extends TextInput {

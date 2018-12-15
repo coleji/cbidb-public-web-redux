@@ -51,6 +51,7 @@ class LoginPage extends PureComponentIgnoreForm<Props> {
 	render() {
 		console.log("login page props: ", this.props)
 		const self = this;
+		const loginFunction = () => self.props.login(self.props.form);
 
 		class FormInput extends FormWrappedTextInput<FormProps> {}
 
@@ -95,14 +96,14 @@ class LoginPage extends PureComponentIgnoreForm<Props> {
 		}())
 
 		const loginRegion = (function () {
-			const button = <Button text="LOGIN" onClick={() => self.props.login(self.props.form)} />
+			const button = <Button text="LOGIN" onClick={loginFunction} />
 			const body = (
 				<div>
 					Enter your email address and password to continue.
                     <br />
 					<table><tbody>
 						<FormInput id="P101_USERNAME" label="Email" isPassword={false} onChange={ev => self.props.updateField("P101_USERNAME", ev.target.value)}/>
-						<FormInput id="P101_PASSWORD" label="Password" isPassword={true} extraCells={button} onChange={ev => self.props.updateField("P101_PASSWORD", ev.target.value)}/>
+						<FormInput id="P101_PASSWORD" label="Password" isPassword={true} extraCells={button} onChange={ev => self.props.updateField("P101_PASSWORD", ev.target.value)} onEnter={loginFunction}/>
 						<tr><td></td><td><span><PlaceholderLink text="I forgot my password!" /></span></td></tr>
 					</tbody></table>
 				</div>
