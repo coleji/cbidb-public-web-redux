@@ -11,7 +11,7 @@ const defaultState: LoginFormState = {
 }
 
 type LoginFormActionType =
-	| "FORM_LOGIN"
+	| "UPDATE_FORM"
 	| "LOGIN_FAILURE"
 
 interface LoginFormAction extends Action {
@@ -27,7 +27,7 @@ type LoginFormReducer = (state: LoginFormState, action: LoginFormAction) => Logi
 const loginFormReducer: LoginFormReducer = (state = defaultState, action) => {
 	console.log(action)
 	switch (action.type) {
-	case "FORM_LOGIN":
+	case "UPDATE_FORM":
 		if (action.name == "P101_USERNAME") return {...state, usernameForm: action.value}
 		if (action.name == "P101_PASSWORD") return {...state, passwordForm: action.value}
 		else return state;

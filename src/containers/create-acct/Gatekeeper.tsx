@@ -37,7 +37,11 @@ class Gatekeeper extends React.PureComponent<Props> {
 			</ul>
 		</div>
 
-		return <JoomlaMainPage>{<JoomlaArticleRegion title="You must be the parent or legal guardian." body={body} />}</JoomlaMainPage>
+		return <JoomlaMainPage>
+			<JoomlaArticleRegion title="You must be the parent or legal guardian.">
+				{body}
+			</JoomlaArticleRegion>
+			</JoomlaMainPage>
 	}
 }
 

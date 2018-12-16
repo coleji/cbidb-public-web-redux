@@ -41,7 +41,7 @@ class App extends React.PureComponent<Props> {
 					//TODO: dont allow this path etc if authenticated
 					return <Gatekeeper />
 				case "/create-acct":
-					return <CreateAccount />
+					return <CreateAccount formName="create-acct"/>
 				default:
 					if (self.props.login && self.props.login.authenticatedUserName) {
 						return <HomePage />

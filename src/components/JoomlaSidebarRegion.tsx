@@ -1,8 +1,7 @@
 import * as React from "react";
 
 interface JoomlaSidebarRegionProps {
-	title: React.ReactNode,
-	body: React.ReactNode
+	title: React.ReactNode
 }
 
 export default class JoomlaSidebarRegion extends React.Component<JoomlaSidebarRegionProps> {
@@ -27,7 +26,7 @@ export default class JoomlaSidebarRegion extends React.Component<JoomlaSidebarRe
 									borderColor: "#2358A6"
 								})}></div></div></div></div>
 						<div className="module-content" style={({ fontSize: "1.2em" })}>
-							{this.props.body}
+							{this.props.children}
 							<div className="clear"></div>
 						</div>
 					</div>

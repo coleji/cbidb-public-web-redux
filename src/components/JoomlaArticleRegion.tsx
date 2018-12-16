@@ -1,8 +1,7 @@
 import * as React from "react";
 
 interface JoomlaArticleRegionProps {
-    title: React.ReactNode,
-    body: React.ReactNode
+    title: React.ReactNode
 }
 
 export default class JoomlaArticleRegion extends React.Component<JoomlaArticleRegionProps> {
@@ -12,7 +11,7 @@ export default class JoomlaArticleRegion extends React.Component<JoomlaArticleRe
                 <div className="article-header">
                     <h2>{this.props.title}</h2>
                 </div>
-                <div className="article-body">{this.props.body}</div>
+                <div className="article-body">{this.props.children}</div>
                 <div className="article-buttons" style={{marginTop: "15px"}}></div>
             </div>
         )

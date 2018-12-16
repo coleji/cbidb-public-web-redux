@@ -9,7 +9,8 @@ interface Props<FormInput> {
 	extraCells?: React.ReactNode,
 	innerRef?: React.RefObject<any>,
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
-	onEnter?: () => void
+	onEnter?: () => void,
+	reduxAction?: (name: string, value: string) => void
 }
 
 export default class FormWrappedTextInput<FormInput> extends TextInput {
