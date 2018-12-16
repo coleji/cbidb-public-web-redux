@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { Link } from 'redux-little-router';
 
 import JoomlaTwoColumns from "../components/JoomlaTwoColumns";
 import PlaceholderLink from "../components/PlaceholderLink"
@@ -87,7 +88,9 @@ class LoginPage extends PureComponentIgnoreForm<Props> {
 		const newAcctRegion = (function () {
 			const body = <div>
 				<ul style={{ fontSize: "0.92em", marginLeft: "20px" }}>
-					<li><PlaceholderLink text={"Click here to create a parent account."} /></li>
+					<li><Link href="/precreate">
+						Click here to create a parent account.
+					</Link></li>
 				</ul>
 				<br />
 				{`If your child was a member in ${self.props.lastSeason}, please use your email and password from last season, rather than creating a new account.`}

@@ -63,6 +63,7 @@ if (!apiDirectConnection) {
 }
 
 app.use(express.static("dist"))
+app.use(express.static("public"))
 
 app.get("*", (req, res, next) => {
 	const { reducer, middleware, enhancer } = routerForExpress({

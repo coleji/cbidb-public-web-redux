@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 
 class JoomlaHelmet extends React.Component {
     render() {
+		const fileRoot = "/joomsource";
         return (
             <div>
                 <Helmet>
@@ -21,37 +22,37 @@ class JoomlaHelmet extends React.Component {
                     <script src="https://portal2.community-boating.org/i/libraries/jquery-migrate/3.0.0/jquery-migrate-3.0.0.min.js?v=18.1.0.00.45"></script>
 */}
 
-                    <link href="https://fileserv.community-boating.org/joomsource/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/2j_news_slider.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/rokbox-style.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/gantry.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/grid-12.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/joomla.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/joomla.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/overlays.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/typography.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/extensions.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/extensions-overlays.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/demo-styles.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/template.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/template-webkit.css" type="text/css" />
-                    <link rel="stylesheet" href="https://fileserv.community-boating.org/joomsource/fusionmenu.css" type="text/css" />
+                    <link href={fileRoot + "/favicon.ico"} rel="shortcut icon" type="image/x-icon" />
+                    <link rel="stylesheet" href={fileRoot + "/2j_news_slider.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/rokbox-style.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/gantry.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/grid-12.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/joomla.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/joomla.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/overlays.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/typography.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/extensions.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/extensions-overlays.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/demo-styles.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/template.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/template-webkit.css"} type="text/css" />
+                    <link rel="stylesheet" href={fileRoot + "/fusionmenu.css"} type="text/css" />
 
 
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/jq_last.js"></script>
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/j.e.js"></script>
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/jq.w.js"></script>
+                    <script type="text/javascript" src={fileRoot + "/jq_last.js"}></script>
+                    <script type="text/javascript" src={fileRoot + "/j.e.js"}></script>
+                    <script type="text/javascript" src={fileRoot + "/jq.w.js"}></script>
 
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/mootools.js"></script>
+                    <script type="text/javascript" src={fileRoot + "/mootools.js"}></script>
 
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/caption.js"></script>
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/rokbox.js"></script>
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/rokbox-config.js"></script>
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/gantry-totop.js"></script>
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/gantry-buildspans.js"></script>
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/gantry-smartload.js"></script>
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/load-transition.js"></script>
-                    <script type="text/javascript" src="https://fileserv.community-boating.org/joomsource/fusion.js"></script>
+                    <script type="text/javascript" src={fileRoot + "/caption.js"}></script>
+                    <script type="text/javascript" src={fileRoot + "/rokbox.js"}></script>
+                    <script type="text/javascript" src={fileRoot + "/rokbox-config.js"}></script>
+                    <script type="text/javascript" src={fileRoot + "/gantry-totop.js"}></script>
+                    <script type="text/javascript" src={fileRoot + "/gantry-buildspans.js"}></script>
+                    <script type="text/javascript" src={fileRoot + "/gantry-smartload.js"}></script>
+                    <script type="text/javascript" src={fileRoot + "/load-transition.js"}></script>
+                    <script type="text/javascript" src={fileRoot + "/fusion.js"}></script>
 
                     <script type="text/javascript">{`
                         /* BEGIN AG Google Analytics Plugin v.1.0.8 */
@@ -363,7 +364,7 @@ class JoomlaHelmet extends React.Component {
 
 
                     #rt-bg-image {
-                        background: url(https://fileserv.community-boating.org/joomsource/jpback.jpg) no-repeat;
+                        background: url(/joomsource/jpback.jpg) no-repeat;
                         background-size: 100%;
                     }
 

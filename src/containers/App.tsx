@@ -6,6 +6,8 @@ import LoginPage from './LoginPage';
 import HomePage from './HomePage';
 import {RootState} from '../reducer/rootReducer'
 import {LoginState} from "../reducer/loginStateReducer"
+import Gatekeeper from "../containers/create-acct/Gatekeeper";
+import CreateAccount from './create-acct/CreateAccount';
 
 interface StateProps {
 	router: Location,
@@ -32,13 +34,20 @@ class App extends React.PureComponent<Props> {
 		}()) : undefined;
 		console.log(this.props)
 		const path = this.props.router.pathname
-		const regex = /\/counter\/([0-9])/
-		const result = regex.exec(path)
+		
 		const toRender = (function() {
-			if (self.props.login && self.props.login.authenticatedUserName) {
-				return <HomePage />
-			} else {
-				return <LoginPage formName="login"/>
+			switch (path) {
+				case "/precreate":
+					//TODO: dont allow this path etc if authenticated
+					return <Gatekeeper />
+				case "/create-acct":
+					return <CreateAccount />
+				default:
+					if (self.props.login && self.props.login.authenticatedUserName) {
+						return <HomePage />
+					} else {
+						return <LoginPage formName="login"/>
+					}
 			}
 		}())
 		return (
