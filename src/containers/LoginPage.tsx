@@ -37,6 +37,8 @@ interface StaticProps {
 
 type Props = StateProps & DispatchProps & StaticProps
 
+class FormInput extends FormWrappedTextInput<FormProps> {}
+
 class LoginPage extends PureComponentIgnoreForm<Props> {
 	private usernameRef = React.createRef<HTMLInputElement>()
 	private passwordRef = React.createRef<HTMLInputElement>()
@@ -48,9 +50,7 @@ class LoginPage extends PureComponentIgnoreForm<Props> {
 		console.log("login page props: ", this.props)
 		const self = this;
 		const loginFunction = () => self.props.login(self.props.form);
-
-		class FormInput extends FormWrappedTextInput<FormProps> {}
-
+		
 		// left column 
 
 		const welcomeRegion = (
