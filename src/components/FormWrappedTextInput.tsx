@@ -11,7 +11,7 @@ interface Props<T> {
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
 	onEnter?: () => void,
 	reduxAction?: (name: string, value: string) => void,
-	value?: string
+	value: string
 }
 
 export default class FormWrappedTextInput<T> extends TextInput<Props<T>> {

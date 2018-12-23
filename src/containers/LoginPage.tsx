@@ -101,6 +101,7 @@ class LoginPage extends React.PureComponent<Props> {
 							id="username"
 							label="Email"
 							isPassword={false}
+							value={self.props.form.username}
 							onChange={(ev: React.ChangeEvent<HTMLInputElement>) => self.props.updateField("username", ev.target.value)}
 						/>
 						<FormInput

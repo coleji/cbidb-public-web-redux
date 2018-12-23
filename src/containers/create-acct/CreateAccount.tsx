@@ -49,30 +49,35 @@ class CreateAccount extends React.PureComponent<Props> {
 					id="firstName"
 					label="Parent First Name"
 					isPassword={false}
+					value={self.props.form.firstName}
 					reduxAction={self.props.updateField}
 				/>
 				<FormInput
 					id="lastName"
 					label="Parent Last Name"
 					isPassword={false}
+					value={self.props.form.lastName}
 					reduxAction={self.props.updateField}
 				/>
 				<FormInput
 					id="email"
 					label="Parent Email"
 					isPassword={false}
+					value={self.props.form.email}
 					reduxAction={self.props.updateField}
 				/>
 				<FormInput
 					id="pw1"
 					label="Create Password"
 					isPassword={true}
+					value={self.props.form.pw1}
 					reduxAction={self.props.updateField}
 				/>
 				<FormInput
 					id="pw2"
 					label="Confirm Password"
-					isPassword={false}
+					isPassword={true}
+					value={self.props.form.pw2}
 					reduxAction={self.props.updateField}
 				/>
 			</tbody></table>

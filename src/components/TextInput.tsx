@@ -9,7 +9,7 @@ interface Props {
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
 	onEnter?: () => void,
 	reduxAction?: (name: string, value: string) => void,
-	value?: string
+	value: string
 }
 
 export default class TextInput<T> extends React.PureComponent<Props & T> {
