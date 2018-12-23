@@ -1,18 +1,19 @@
 import { Action, Reducer, combineReducers } from "redux";
 
-import { LoginState, loginReducer } from "./loginStateReducer"
-import {LoginFormState, loginFormReducer} from "./loginFormReducer"
+import {formReducer} from "../form/form"
 
-import {Form as CreateAccountFormProps} from "../containers/create-acct/CreateAccount"
-import {formReducer as createAcctReducer} from "./createAcctReducer"
+import {loginFormReducer, LoginForm} from "../containers/LoginPage"
+import {CreateAccountForm, FORM_NAME as createAccountFormName} from "../containers/create-acct/CreateAccount"
+
+import {LoginState, loginReducer} from "./loginStateReducer"
+
 
 export interface RootState {
 	login: LoginState,
 	router: Location,
 	isServer: boolean,
-	loginForm: LoginFormState,
-	updatedFormName: String,
-	createAcctForm: CreateAccountFormProps
+	loginForm: LoginForm,
+	createAcctForm: CreateAccountForm
 }
 
 export type RootReducer = (state: RootState, action: Action) => RootState
@@ -23,7 +24,6 @@ export const makeRootReducer: (router: Reducer, isServer: Boolean) => RootReduce
 		isServer: () => isServer,
 		login: loginReducer,
 		loginForm: loginFormReducer,
-		createAcctForm: createAcctReducer,
-		updatedFormName: () => ""
+		createAcctForm: formReducer<CreateAccountForm>(createAccountFormName)
 	})	
 }

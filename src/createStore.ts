@@ -28,13 +28,8 @@ export default function createStore(params: CreateStoreParameters) {
 		finalCreateStore = applyMiddleware(...middleware)(_createStore);
 	}*/
 
-	// Attach last-form-updated state val
 	const rootReducer: (state: RootState, action: Action) => RootState = function(state: RootState, action: Action) {
-		const result: RootState = params.rootReducer(state, action);
-		return {
-			...result,
-			updatedFormName: (action as any).updatedFormName
-		}
+		return params.rootReducer(state, action);
 	}
 
 	const allEnhancers = [

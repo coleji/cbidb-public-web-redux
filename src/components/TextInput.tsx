@@ -8,10 +8,11 @@ interface Props {
 	innerRef?: React.RefObject<any>,
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
 	onEnter?: () => void,
-	reduxAction?: (name: string, value: string) => void
+	reduxAction?: (name: string, value: string) => void,
+	value?: string
 }
 
-export default class TextInput extends React.PureComponent<Props> {
+export default class TextInput<T> extends React.PureComponent<Props & T> {
 	render() {
 		console.log("here i go rendering again")
 		console.log(this.props)
@@ -42,6 +43,7 @@ export default class TextInput extends React.PureComponent<Props> {
 					size={25} maxLength={100}
 					onChange={onChange}
 					onKeyPress={onKeyPress}
+					value={this.props.value}
 				/>
 
 			</td>

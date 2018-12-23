@@ -10,25 +10,25 @@ import FormWrappedTextInput from "../components/FormWrappedTextInput";
 import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer'
 import { loginAction } from '../async/login'
-import PureComponentIgnoreForm from "../components/PureComponentIgnoreForm"
+import {formReducer, dispatchFormUpdate} from "../form/form"
 
 // TODO: duplicated in App and here
-const FORM_NAME = "login"
+export const FORM_NAME = "login"
 
-interface FormProps {
-	P101_USERNAME: string,
-	P101_PASSWORD: string
+export interface LoginForm {
+	username: string,
+	password: string
 }
 
 export type StateProps = {
 	jpPrice: Currency,
 	lastSeason: number,
-	form: FormProps
+	form: LoginForm
 }
 
 interface DispatchProps {
-	login: (form: FormProps) => void,
-	updateField: (name: string, value: string) => void
+	login: (form: LoginForm) => void,
+	updateField: (name: keyof LoginForm, value: string) => void
 }
 
 interface StaticProps {
@@ -37,15 +37,9 @@ interface StaticProps {
 
 type Props = StateProps & DispatchProps & StaticProps
 
-class FormInput extends FormWrappedTextInput<FormProps> {}
+class FormInput extends FormWrappedTextInput<LoginForm> {}
 
-class LoginPage extends PureComponentIgnoreForm<Props> {
-	private usernameRef = React.createRef<HTMLInputElement>()
-	private passwordRef = React.createRef<HTMLInputElement>()
-	
-	constructor(props: Props) {
-		super(props);
-	}
+class LoginPage extends React.PureComponent<Props> {	
 	render() {
 		console.log("login page props: ", this.props)
 		const self = this;
@@ -104,17 +98,18 @@ class LoginPage extends PureComponentIgnoreForm<Props> {
 					<br />
 					<table><tbody>
 						<FormInput
-							id="P101_USERNAME"
+							id="username"
 							label="Email"
 							isPassword={false}
-							onChange={ev => self.props.updateField("P101_USERNAME", ev.target.value)}
+							onChange={(ev: React.ChangeEvent<HTMLInputElement>) => self.props.updateField("username", ev.target.value)}
 						/>
 						<FormInput
-							id="P101_PASSWORD"
+							id="password"
 							label="Password"
 							isPassword={true}
 							extraCells={ <Button text="LOGIN" onClick={loginFunction} /> }
-							onChange={ev => self.props.updateField("P101_PASSWORD", ev.target.value)} onEnter={loginFunction}
+							value={self.props.form.password}
+							onChange={(ev: React.ChangeEvent<HTMLInputElement>) => self.props.updateField("password", ev.target.value)} onEnter={loginFunction}
 						/>
 						<tr><td></td><td><span>
 							<PlaceholderLink text="I forgot my password!" />
@@ -151,20 +146,29 @@ class LoginPage extends PureComponentIgnoreForm<Props> {
 	}
 }
 
+const standardFormReducer = formReducer<LoginForm>(FORM_NAME);
+
+export const loginFormReducer = (state: any = {}, action: any) => {
+	const modifiedState = 
+		action.type == "LOGIN_FAILURE"
+		? {...state, password: ""}
+		: state;
+	return standardFormReducer(modifiedState, action);
+}
+
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	rootState => ({
 		jpPrice: Currency.cents(32500),
 		lastSeason: 2018,
 		form: {
-			P101_USERNAME: rootState.loginForm.usernameForm,
-			P101_PASSWORD: rootState.loginForm.passwordForm
-		},
-		updatedFormName: rootState.updatedFormName
+			username: rootState.loginForm.username,
+			password: rootState.loginForm.password
+		}
 	}),
 	dispatch => ({
-		login: (form: FormProps) => {
-			loginAction(dispatch, form.P101_USERNAME, form.P101_PASSWORD)
+		login: (form: LoginForm) => {
+			loginAction(dispatch, form.username, form.password)
 		},
-		updateField: (name: string, value: string) => dispatch({type: "UPDATE_FORM", updatedFormName: FORM_NAME, name, value})
+		updateField: (name: keyof LoginForm, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	})
 )(LoginPage)
