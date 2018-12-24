@@ -1,14 +1,16 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { push } from 'redux-little-router';
 
 import JoomlaMainPage from "../../components/JoomlaMainPage";
 import { RootState } from "../../reducer/rootReducer";
 import JoomlaArticleRegion from "../../components/JoomlaArticleRegion";
-import PlaceholderLink from "../../components/PlaceholderLink";
+import {placeholderAction} from "../../components/PlaceholderLink";
 import Joomla8_4 from "../../components/Joomla8_4";
 import JoomlaSidebarRegion from "../../components/JoomlaSidebarRegion";
 import FormWrappedTextInput from "../../components/FormWrappedTextInput";
 import {dispatchFormUpdate} from "../../form/form"
+import Button from "../../components/Button";
 
 export const FORM_NAME = "create-acct"
 
@@ -25,7 +27,8 @@ interface StateProps {
 }
 
 interface DispatchProps {
-	updateField: (name: string, value: string) => void
+	updateField: (name: string, value: string) => void,
+	cancel: () => void
 }
 
 interface StaticProps {
@@ -43,7 +46,12 @@ class CreateAccount extends React.PureComponent<Props> {
 	}
 	render() {
 		const self= this;
-		const main = <JoomlaArticleRegion title="First let's make you a parent account.">
+
+		const buttons = <div>
+			<Button text="< Cancel" onClick={this.props.cancel}/>
+			<Button text="Register" onClick={placeholderAction}/>
+		</div>
+		const main = <JoomlaArticleRegion title="First let's make you a parent account." buttons={buttons}>
 			<table><tbody>
 				<FormInput
 					id="firstName"
@@ -82,6 +90,7 @@ class CreateAccount extends React.PureComponent<Props> {
 				/>
 			</tbody></table>
 		</JoomlaArticleRegion>
+
 		const sidebar = <JoomlaSidebarRegion title="INFO">
 			<div>
 				Please supply an email address and password for your online account. Your account will allow you to register child(ren) for classes, renew their memberships, and sign them up for special Junior Program events.<br />
@@ -98,6 +107,7 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		form: state.createAcctForm
 	}),
 	dispatch => ({
-		updateField: (name: string, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+		updateField: (name: string, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value),
+		cancel: () => dispatch(push("/"))
 	})
 )(CreateAccount)
