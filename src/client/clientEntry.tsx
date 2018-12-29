@@ -1,3 +1,6 @@
+require("../../lib/array-polyfill")
+require("../../lib/optional")
+
 import * as React from 'react'
 import { hydrate } from 'react-dom'
 import { Provider } from 'react-redux';

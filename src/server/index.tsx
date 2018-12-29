@@ -1,3 +1,6 @@
+require("../../lib/array-polyfill")
+require("../../lib/optional")
+
 import * as express from "express"
 import * as React from "react"
 import { renderToString } from "react-dom/server"

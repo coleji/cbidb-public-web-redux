@@ -6,7 +6,7 @@
   "scripts": {
     "server": "webpack --env.platform=server",
     "web": "webpack --env.platform=web",
-    "build": "npm run web && npm run server",
+    "build": "./build.sh",
     "start": "nodejs dist/js/server.js"
   },
   "author": "",
