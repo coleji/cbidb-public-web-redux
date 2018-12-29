@@ -1,9 +1,9 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-import JoomlaMainPage from "../../components/JoomlaMainPage";
+import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import { RootState } from "../../reducer/rootReducer";
-import JoomlaArticleRegion from "../../components/JoomlaArticleRegion";
+import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import PlaceholderLink from "../../components/PlaceholderLink";
 import { Link } from "redux-little-router";
 

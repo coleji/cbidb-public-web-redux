@@ -2,12 +2,12 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { push } from 'redux-little-router';
 
-import JoomlaMainPage from "../../components/JoomlaMainPage";
+import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import { RootState } from "../../reducer/rootReducer";
-import JoomlaArticleRegion from "../../components/JoomlaArticleRegion";
+import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import {placeholderAction} from "../../components/PlaceholderLink";
-import Joomla8_4 from "../../components/Joomla8_4";
-import JoomlaSidebarRegion from "../../components/JoomlaSidebarRegion";
+import Joomla8_4 from "../../theme/joomla/Joomla8_4";
+import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
 import FormWrappedTextInput from "../../components/FormWrappedTextInput";
 import {dispatchFormUpdate} from "../../form/form"
 import Button from "../../components/Button";

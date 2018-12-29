@@ -1,12 +1,12 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-import JoomlaTwoColumns from "../components/JoomlaTwoColumns";
+import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
 import Currency from "../util/Currency"
 import { RootState } from '../reducer/rootReducer'
-import JoomlaMainPage from "../components/JoomlaMainPage";
-import JoomlaArticleRegion from "../components/JoomlaArticleRegion";
-import JoomlaReport from "../components/JoomlaReport";
+import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
+import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
+import JoomlaReport from "../theme/joomla/JoomlaReport";
 
 interface StateProps {
 

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from "react-redux";
 
-import JoomlaBase from '../components/JoomlaBase'
+import JoomlaBase from '../theme/joomla/JoomlaBase'
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
 import {RootState} from '../reducer/rootReducer'

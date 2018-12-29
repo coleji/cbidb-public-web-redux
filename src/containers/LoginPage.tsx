@@ -2,9 +2,9 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from 'redux-little-router';
 
-import JoomlaTwoColumns from "../components/JoomlaTwoColumns";
+import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
 import PlaceholderLink from "../components/PlaceholderLink"
-import JoomlaArticleRegion from "../components/JoomlaArticleRegion";
+import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import Currency from "../util/Currency"
 import FormWrappedTextInput from "../components/FormWrappedTextInput";
 import Button from "../components/Button";
