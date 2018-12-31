@@ -56,7 +56,7 @@ class LoginPage extends React.PureComponent<Props> {
 					for classes and view his/her progression throughout the summer.
 					<br />
 					<br />
-					If you were looking for <b>{"Adult Program"}</b> registration, please <PlaceholderLink text={"click here!"} />
+					If you were looking for <b>{"Adult Program"}</b> registration, please <PlaceholderLink>click here!</PlaceholderLink>
 				</div>
 			</JoomlaArticleRegion>
 		);
@@ -113,7 +113,7 @@ class LoginPage extends React.PureComponent<Props> {
 							onChange={(ev: React.ChangeEvent<HTMLInputElement>) => self.props.updateField("password", ev.target.value)} onEnter={loginFunction}
 						/>
 						<tr><td></td><td><span>
-							<PlaceholderLink text="I forgot my password!" />
+							<PlaceholderLink >I forgot my password!</PlaceholderLink>
 						</span></td></tr>
 					</tbody></table>
 				</div>

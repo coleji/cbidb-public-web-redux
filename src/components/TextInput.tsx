@@ -3,7 +3,7 @@ import * as React from "react";
 interface Props {
 	id: string,
 	label?: string,
-	isPassword: boolean,
+	isPassword?: boolean,
 	extraCells?: React.ReactNode,
 	innerRef?: React.RefObject<any>,
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,

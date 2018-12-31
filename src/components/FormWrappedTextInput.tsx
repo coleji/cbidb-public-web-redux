@@ -5,7 +5,7 @@ import TextInput from './TextInput';
 interface Props<T> {
 	id: string & keyof T,
 	label?: string,
-	isPassword: boolean,
+	isPassword?: boolean,
 	extraCells?: React.ReactNode,
 	innerRef?: React.RefObject<any>,
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,

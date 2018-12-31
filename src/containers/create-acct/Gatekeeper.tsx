@@ -33,7 +33,7 @@ class Gatekeeper extends React.PureComponent<Props> {
 				<li><Link href="/create-acct">
 				I am a parent/legal guardian of all juniors I am about to register (or have registered) under my name.
 					</Link></li>
-				<li><PlaceholderLink text="I'm in the wrong place!  Please take me to Adult Program signups."></PlaceholderLink></li>
+				<li><PlaceholderLink >I'm in the wrong place!  Please take me to Adult Program signups.</PlaceholderLink></li>
 			</ul>
 		</div>
 
