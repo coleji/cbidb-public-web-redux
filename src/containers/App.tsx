@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import JoomlaBase from '../theme/joomla/JoomlaBase'
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
-import RequiredInfo from './registration/required-info';
+import RequiredInfo from './registration/RequiredInfo';
 import {RootState} from '../reducer/rootReducer'
 import {LoginState} from "../reducer/loginStateReducer"
 import Gatekeeper from "../containers/create-acct/Gatekeeper";
