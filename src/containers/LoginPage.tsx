@@ -6,7 +6,7 @@ import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
 import PlaceholderLink from "../components/PlaceholderLink"
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import Currency from "../util/Currency"
-import FormWrappedTextInput from "../components/FormWrappedTextInput";
+import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer'
 import { loginAction } from '../async/login'
@@ -15,7 +15,7 @@ import {formReducer, dispatchFormUpdate} from "../form/form"
 // TODO: duplicated in App and here
 export const FORM_NAME = "login"
 
-export interface LoginForm {
+export interface Form {
 	username: string,
 	password: string
 }
@@ -23,12 +23,12 @@ export interface LoginForm {
 export type StateProps = {
 	jpPrice: Currency,
 	lastSeason: number,
-	form: LoginForm
+	form: Form
 }
 
 interface DispatchProps {
-	login: (form: LoginForm) => void,
-	updateField: (name: keyof LoginForm, value: string) => void
+	login: (form: Form) => void,
+	updateField: (name: keyof Form, value: string) => void
 }
 
 interface StaticProps {
@@ -37,7 +37,7 @@ interface StaticProps {
 
 type Props = StateProps & DispatchProps & StaticProps
 
-class FormInput extends FormWrappedTextInput<LoginForm> {}
+class FormInput extends TextInput<Form> {}
 
 class LoginPage extends React.PureComponent<Props> {	
 	render() {
@@ -147,7 +147,7 @@ class LoginPage extends React.PureComponent<Props> {
 	}
 }
 
-const standardFormReducer = formReducer<LoginForm>(FORM_NAME);
+const standardFormReducer = formReducer<Form>(FORM_NAME);
 
 export const loginFormReducer = (state: any = {}, action: any) => {
 	const modifiedState = 
@@ -167,9 +167,9 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		}
 	}),
 	dispatch => ({
-		login: (form: LoginForm) => {
+		login: (form: Form) => {
 			loginAction(dispatch, form.username, form.password)
 		},
-		updateField: (name: keyof LoginForm, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	})
 )(LoginPage)

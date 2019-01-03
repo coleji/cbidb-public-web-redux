@@ -8,13 +8,13 @@ import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import {placeholderAction} from "../../components/PlaceholderLink";
 import Joomla8_4 from "../../theme/joomla/Joomla8_4";
 import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
-import FormWrappedTextInput from "../../components/FormWrappedTextInput";
+import TextInput from "../../components/TextInput";
 import {dispatchFormUpdate} from "../../form/form"
 import Button from "../../components/Button";
 
 export const FORM_NAME = "create-acct"
 
-export interface CreateAccountForm {
+export interface Form {
 	firstName: string
 	lastName: string
 	email: string
@@ -23,7 +23,7 @@ export interface CreateAccountForm {
 }
 
 interface StateProps {
-	form: CreateAccountForm
+	form: Form
 }
 
 interface DispatchProps {
@@ -38,7 +38,7 @@ interface StaticProps {
 type Props = StateProps & DispatchProps & StaticProps
 
 
-class FormInput extends FormWrappedTextInput<CreateAccountForm> {}
+class FormInput extends TextInput<Form> {}
 
 class CreateAccount extends React.PureComponent<Props> {
 	constructor(props: Props) {
@@ -107,7 +107,7 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		form: state.createAcctForm
 	}),
 	dispatch => ({
-		updateField: (name: string, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value),
+		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value),
 		cancel: () => dispatch(push("/"))
 	})
 )(CreateAccount)

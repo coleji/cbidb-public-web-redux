@@ -25,7 +25,6 @@ export const formReducer: <T extends object>(formName: string) => Reducer<T> = <
     }
 }
 
-
 type FormActionType =
 	| "UPDATE_FORM"
 
@@ -35,5 +34,3 @@ interface FormAction extends Action {
 	fieldName: string,
 	fieldValue: string
 }
-
-type FormDispatch = (action: FormAction) => void;
