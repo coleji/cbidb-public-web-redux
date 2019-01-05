@@ -20,7 +20,27 @@ export interface Form {
 	lastName: string,
 	dobMonth: string,
 	dobDate: string,
-	dobYear: string
+	dobYear: string,
+	childEmail: string,
+	addr_1: string,
+	addr_2: string,
+	addr_3: string,
+	city: string,
+	state: string,
+	zip: string,
+	country: string,
+	primaryPhoneFirst: string,
+	primaryPhoneSecond: string,
+	primaryPhoneThird: string,
+	primaryPhoneType: string,
+	alternatePhoneFirst: string,
+	alternatePhoneSecond: string,
+	alternatePhoneThird: string,
+	alternatePhoneType: string,
+	allergies: string,
+	medications: string,
+	specialNeeds: string
+	
 }
 
 
@@ -46,8 +66,6 @@ const leadingZero = (n: number) => n<10 ? String("0" + n) : String(n);
 const dobMonthValues: KeyAndDisplay[] = months.map((m, i) => ({key: leadingZero(i+1), display: m}))
 
 const days = range(1,31).map(i => ({key: String(i), display: String(i)}))
-
-// const years = 
 
 class RequiredInfo extends React.PureComponent<Props> {
 	render() {
