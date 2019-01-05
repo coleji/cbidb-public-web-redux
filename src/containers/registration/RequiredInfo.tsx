@@ -9,20 +9,27 @@ import {formReducer, dispatchFormUpdate} from "../../form/form"
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import {KeyAndDisplay, Select} from "../../components/Select"
+import range from "../../util/range"
+import * as moment from "moment";
 
 export const FORM_NAME = "registrationRequiredInfo"
 
 export interface Form {
 	firstName: string
 	middleInitial: string
-	lastName: string
+	lastName: string,
+	dobMonth: string,
+	dobDate: string,
+	dobYear: string
 }
 
 
 class FormInput extends TextInput<Form> {}
+class FormSelect extends Select<Form> {}
 
 interface StateProps {
-	form: Form
+	form: Form,
+	getMoment: () => moment.Moment
 }
 
 interface DispatchProps {
@@ -36,30 +43,78 @@ type Props = StateProps & DispatchProps & StaticProps
 const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 const leadingZero = (n: number) => n<10 ? String("0" + n) : String(n);
 
-const dobMonthValues: KeyAndDisplay[] = months.map((m, i) => ({key: leadingZero(i), display: m}))
+const dobMonthValues: KeyAndDisplay[] = months.map((m, i) => ({key: leadingZero(i+1), display: m}))
+
+const days = range(1,31).map(i => ({key: String(i), display: String(i)}))
+
+// const years = 
 
 class RequiredInfo extends React.PureComponent<Props> {
 	render() {
 		const self = this;
+		const reduxAction = self.props.updateField;
+
+		const dobDateAndYear = (function() {
+			const thisYear = Number(self.props.getMoment().format("YYYY"))
+			const years = range(thisYear-20, thisYear).reverse().map(i => ({key: String(i), display: String(i)}))
+			const date = <FormSelect
+				id="dobDate"
+				justElement={true}
+				value={self.props.form.dobMonth}
+				reduxAction={reduxAction}
+				options={days}
+				nullDisplay="- Day -"
+			/>
+			const year = <FormSelect
+				id="dobYear"
+				justElement={true}
+				value={self.props.form.dobMonth}
+				reduxAction={reduxAction}
+				options={years}
+				nullDisplay="- Year -"
+			/>
+
+			return (
+				<span>
+					{" / "}
+					{date}
+					{" / "}
+					{year}
+				</span>
+			)
+		}());
+
+		// TODO: DOB constituent dropdowns could react to each others changes
+		// e.g. pick day=31, then month=feb, day should blank out
+		// TODO: Move the whole DOB thing into its own component
 		const reqFields = (
 			<table><tbody>
 				<FormInput
 					id="firstName"
 					label="First Name"
 					value={self.props.form.firstName}
-					reduxAction={self.props.updateField}
+					reduxAction={reduxAction}
 				/>
 				<FormInput
 					id="middleInitial"
 					label="Middle Initial"
 					value={self.props.form.middleInitial}
-					reduxAction={self.props.updateField}
+					reduxAction={reduxAction}
 				/>
 				<FormInput
 					id="lastName"
 					label="Last Initial"
 					value={self.props.form.lastName}
-					reduxAction={self.props.updateField}
+					reduxAction={reduxAction}
+				/>
+				<FormSelect
+					id="dobMonth"
+					label="Date of Birth"
+					value={self.props.form.dobMonth}
+					reduxAction={reduxAction}
+					options={dobMonthValues}
+					appendToElementCell={dobDateAndYear}
+					nullDisplay="- Month -"
 				/>
 			</tbody></table>
 		)
@@ -76,6 +131,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
+		getMoment: state.getMoment,
 		form: {
 			...state.registrationRequiredInfoForm
 		}

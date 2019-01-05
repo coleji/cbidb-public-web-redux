@@ -5,14 +5,13 @@ import * as React from 'react'
 import { hydrate } from 'react-dom'
 import { Provider } from 'react-redux';
 import { routerForBrowser } from 'redux-little-router';
+import * as moment from "moment"
 
 import createStore from '../createStore'
 import App from '../containers/App'
 
 import {makeRootReducer} from '../reducer/rootReducer'
 import routes from '../routes'
-
-
 
 const { reducer, middleware, enhancer } = routerForBrowser({
   // The configured routes. Required.
@@ -21,7 +20,7 @@ const { reducer, middleware, enhancer } = routerForBrowser({
 
 const seedState = (window as any).initialStateFromServer
 
-const rootReducer = makeRootReducer(reducer, false)
+const rootReducer = makeRootReducer(reducer, false, () => moment())
 
 export const {store, initialState} = createStore({
   rootReducer,

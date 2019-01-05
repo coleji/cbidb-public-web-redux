@@ -9,6 +9,7 @@ import { routerForExpress } from 'redux-little-router';
 import { Helmet } from "react-helmet";
 import * as httpProxy from 'http-proxy';
 import * as cookieParser from 'cookie-parser';
+import * as moment from "moment";
 
 import App from '../containers/App'
 import createStore from '../createStore'
@@ -96,7 +97,7 @@ app.get("*", (req, res, next) => {
 		Promise.resolve({})
 	})
 	.then(seedState => {
-		const rootReducer = makeRootReducer(reducer, true)
+		const rootReducer = makeRootReducer(reducer, true, () => moment())
 
 		const {store, initialState}  = createStore({
 			rootReducer,
