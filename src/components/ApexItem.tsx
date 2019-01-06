@@ -8,7 +8,7 @@ export interface ApexItemProps<T> {
 	innerRef?: React.RefObject<any>,
 	prependToElementCell?: React.ReactNode,
 	appendToElementCell?: React.ReactNode,
-	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
+	onChange?: (event: React.ChangeEvent) => void,
 	onEnter?: () => void,
 	reduxAction?: (name: string, value: string) => void,
 	justElement?: boolean,

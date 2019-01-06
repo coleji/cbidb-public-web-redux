@@ -14,6 +14,7 @@ import range from "../../util/range"
 import DateTriPicker, {DateTriPickerProps} from "../../components/DateTriPicker"
 import {states, countries} from "../../lov"
 import PhoneTriBox, {PhoneTriBoxProps} from "../../components/PhoneTriBox";
+import TextArea from "../../components/TextArea";
 
 export const FORM_NAME = "registrationRequiredInfo"
 
@@ -50,6 +51,7 @@ export interface Form {
 
 class FormInput extends TextInput<Form> {}
 class FormSelect extends Select<Form> {}
+class FormTextArea extends TextArea<Form> {}
 
 interface StateProps {
 	form: Form,
@@ -204,13 +206,51 @@ class RequiredInfo extends React.PureComponent<Props> {
 					reduxAction={reduxAction}
 				/>
 			</tbody></table>
-		)
+		);
+
+		const specNeedsFields = (
+			<table><tbody>
+				<FormTextArea
+					id="allergies"
+					label="Allergies"
+					rows={4}
+					cols={60}
+					value={self.props.form.allergies}
+					reduxAction={reduxAction}
+					placeholder="Please leave blank if none"
+				/>
+				<FormTextArea
+					id="medications"
+					label="Medications"
+					rows={4}
+					cols={60}
+					value={self.props.form.medications}
+					reduxAction={reduxAction}
+					placeholder="Please leave blank if none"
+				/>
+				<FormTextArea
+					id="specialNeeds"
+					label="Special Needs"
+					rows={4}
+					cols={60}
+					value={self.props.form.specialNeeds}
+					reduxAction={reduxAction}
+					placeholder="Please leave blank if none"
+				/>
+			</tbody></table>
+		);
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
 				<ProgressThermometer />
 			</JoomlaNotitleRegion>
 			<JoomlaArticleRegion title="All information on this page is required (if applicable).">
 				{reqFields}
+			</JoomlaArticleRegion>
+			<JoomlaArticleRegion title="Does your child have any allergies, medications, or special needs we should be aware of?">
+				{"If not, please leave the following fields blank." }
+				<br />
+				<br />
+				{specNeedsFields}
 			</JoomlaArticleRegion>
 		</JoomlaMainPage>
 	}

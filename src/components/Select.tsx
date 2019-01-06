@@ -19,7 +19,7 @@ export class Select<T> extends ApexItem<T, Props & ApexItemProps<T>> {
 
 		const nullOption: React.ReactNode[] = this.props.nullDisplay === undefined
 		? []
-		: [<option key={null}>{this.props.nullDisplay}</option>];
+		: [<option key={null} value="">{this.props.nullDisplay}</option>];
 
 		this.element = (<select
 			id={this.props.id}
