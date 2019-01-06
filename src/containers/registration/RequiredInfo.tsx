@@ -12,6 +12,8 @@ import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import {KeyAndDisplay, Select} from "../../components/Select"
 import range from "../../util/range"
 import DateTriPicker, {DateTriPickerProps} from "../../components/DateTriPicker"
+import {states, countries} from "../../lov"
+import PhoneTriBox, {PhoneTriBoxProps} from "../../components/PhoneTriBox";
 
 export const FORM_NAME = "registrationRequiredInfo"
 
@@ -33,17 +35,18 @@ export interface Form {
 	primaryPhoneFirst: string,
 	primaryPhoneSecond: string,
 	primaryPhoneThird: string,
+	primaryPhoneExt: string,
 	primaryPhoneType: string,
 	alternatePhoneFirst: string,
 	alternatePhoneSecond: string,
 	alternatePhoneThird: string,
+	alternatePhoneExt: string,
 	alternatePhoneType: string,
 	allergies: string,
 	medications: string,
 	specialNeeds: string
 	
 }
-
 
 class FormInput extends TextInput<Form> {}
 class FormSelect extends Select<Form> {}
@@ -59,7 +62,7 @@ interface DispatchProps {
 
 interface StaticProps { }
 
-type Props = StateProps & DispatchProps & StaticProps
+type Props = StateProps & DispatchProps & StaticProps;
 
 class RequiredInfo extends React.PureComponent<Props> {
 	render() {
@@ -105,6 +108,101 @@ class RequiredInfo extends React.PureComponent<Props> {
 					yearValue={self.props.form.dobYear}
 					reduxAction={reduxAction}
 				/>
+				<FormInput
+					id="childEmail"
+					label="Child Email"
+					value={self.props.form.childEmail}
+					reduxAction={reduxAction}
+				/>
+				<tr>
+					<td style={{ textAlign: "right" }}>
+						<label>
+							<span className="optional">Parent Email</span>
+						</label>
+					</td>
+					<td style={{ textAlign: "left" }}>
+						abcd@efg.com
+					</td>
+				</tr>
+				<FormInput
+					id="addr_1"
+					label="Address 1"
+					isRequired={true}
+					value={self.props.form.addr_1}
+					reduxAction={reduxAction}
+				/>
+				<FormInput
+					id="addr_2"
+					label="Address 2"
+					value={self.props.form.addr_2}
+					reduxAction={reduxAction}
+				/>
+				<FormInput
+					id="addr_3"
+					label="Address 3"
+					value={self.props.form.addr_3}
+					reduxAction={reduxAction}
+				/>
+				<FormInput
+					id="city"
+					label="City"
+					isRequired={true}
+					value={self.props.form.addr_2}
+					reduxAction={reduxAction}
+				/>
+				<FormSelect
+					id="state"
+					label="State"
+					isRequired={true}
+					value={self.props.form.state}
+					reduxAction={reduxAction}
+					options={states}
+					nullDisplay="- Select -"
+				/>
+				<FormInput
+					id="zip"
+					label="Zip"
+					isRequired={true}
+					value={self.props.form.zip}
+					reduxAction={reduxAction}
+				/>
+				<FormSelect		// TODO: default to US
+					id="country"
+					label="Country"
+					isRequired={true}
+					value={self.props.form.country}
+					reduxAction={reduxAction}
+					options={countries}
+					nullDisplay="- Select -"
+				/>
+				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
+					label="Parent Primary Phone"
+					firstID="primaryPhoneFirst"
+					secondID="primaryPhoneSecond"
+					thirdID="primaryPhoneThird"
+					extID="primaryPhoneExt"
+					typeID="primaryPhoneType"
+					firstValue={self.props.form.primaryPhoneFirst}
+					secondValue={self.props.form.primaryPhoneSecond}
+					thirdValue={self.props.form.primaryPhoneThird}
+					extValue={self.props.form.primaryPhoneExt}
+					typeValue={self.props.form.primaryPhoneType}
+					reduxAction={reduxAction}
+				/>
+				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
+					label="Parent Alternate Phone"
+					firstID="alternatePhoneFirst"
+					secondID="alternatePhoneSecond"
+					thirdID="alternatePhoneThird"
+					extID="alternatePhoneExt"
+					typeID="alternatePhoneType"
+					firstValue={self.props.form.alternatePhoneFirst}
+					secondValue={self.props.form.alternatePhoneSecond}
+					thirdValue={self.props.form.alternatePhoneThird}
+					extValue={self.props.form.alternatePhoneExt}
+					typeValue={self.props.form.alternatePhoneType}
+					reduxAction={reduxAction}
+				/>
 			</tbody></table>
 		)
 		return <JoomlaMainPage>
@@ -126,6 +224,9 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		}
 	}),
 	dispatch => ({
-		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+		updateField: (name: keyof Form, value: string) => {
+			console.log("updating field!")
+			dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+		}
 	})
 )(RequiredInfo)

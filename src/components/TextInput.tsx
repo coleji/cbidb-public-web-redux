@@ -3,6 +3,8 @@ import {ApexItemProps, ApexItem} from "./ApexItem"
 
 interface Props {
 	isPassword?: boolean
+	size?: number
+	maxLength?: number
 }
 
 export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T>> {
@@ -24,8 +26,9 @@ export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T>> 
 			className="text_field apex-item-text"
 			type={this.props.isPassword ? "password" : "text"}
 			name={this.props.id}
-			size={25} maxLength={100}
-			onChange={this.props.onChange}
+			size={this.props.size || 25}
+			maxLength={this.props.maxLength || 100}
+			onChange={onChange}
 			onKeyPress={onKeyPress}
 			value={this.props.value}
 		/>

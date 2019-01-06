@@ -6,6 +6,7 @@ export interface ApexItemProps<T> {
 	label?: string,
 	extraCells?: React.ReactNode,
 	innerRef?: React.RefObject<any>,
+	prependToElementCell?: React.ReactNode,
 	appendToElementCell?: React.ReactNode,
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
 	onEnter?: () => void,
@@ -25,6 +26,7 @@ export abstract class ApexItem<T, U> extends React.PureComponent<U & ApexItemPro
 				</label>
 			</td>
 			<td style={{ textAlign: "left" }}>
+				{this.props.prependToElementCell}
 				{this.element}
 				{this.props.appendToElementCell}
 			</td>
