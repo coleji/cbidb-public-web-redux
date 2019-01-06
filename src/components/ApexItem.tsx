@@ -10,7 +10,8 @@ export interface ApexItemProps<T> {
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
 	onEnter?: () => void,
 	reduxAction?: (name: string, value: string) => void,
-	justElement?: boolean
+	justElement?: boolean,
+	isRequired?: boolean
 }
 
 export abstract class ApexItem<T, U> extends React.PureComponent<U & ApexItemProps<T>> {
@@ -19,6 +20,7 @@ export abstract class ApexItem<T, U> extends React.PureComponent<U & ApexItemPro
 		return (<tr>
 			<td style={{ textAlign: "right" }}>
 				<label id={this.props.id + "_LABEL"} htmlFor={this.props.id}>
+					{this.props.isRequired ? <img src="/images/required.png" alt="Value Required" tabIndex={999} />: ""}
 					<span className="optional">{this.props.label || ""}</span>
 				</label>
 			</td>
