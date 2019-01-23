@@ -5,6 +5,7 @@ import JoomlaBase from '../theme/joomla/JoomlaBase'
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
 import RequiredInfo from './registration/RequiredInfo';
+import EmergencyContact from './registration/EmergencyContact';
 import {RootState} from '../reducer/rootReducer'
 import {LoginState} from "../reducer/loginStateReducer"
 import Gatekeeper from "../containers/create-acct/Gatekeeper";
@@ -45,7 +46,7 @@ class App extends React.PureComponent<Props> {
 					return <CreateAccount formName="create-acct"/>
 				default:
 					if (self.props.login && self.props.login.authenticatedUserName) {
-						return <RequiredInfo />
+						return <EmergencyContact />
 					} else {
 						return <LoginPage formName="login"/>
 					}

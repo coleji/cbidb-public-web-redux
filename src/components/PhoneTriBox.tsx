@@ -62,7 +62,7 @@ export default class PhoneTriBox<U, T extends PhoneTriBoxProps<U>> extends React
                 prependToElementCell="("
                 appendToElementCell={(
                     <span>
-                        {") -"}
+                        {") - "}
                         {second}
                         {" - "}
                         {third}
@@ -74,7 +74,7 @@ export default class PhoneTriBox<U, T extends PhoneTriBoxProps<U>> extends React
             <Select<U>
                 id={self.props.typeID}
                 label="Type"
-                isRequired={true}
+                isRequired={self.props.isRequired}
                 value={self.props.typeValue}
                 reduxAction={self.props.reduxAction}
                 options={["Home", "Work", "Cell"].map(k => ({key: k, display: k}))}
