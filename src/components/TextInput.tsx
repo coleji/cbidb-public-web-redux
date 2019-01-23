@@ -8,8 +8,7 @@ interface Props {
 }
 
 export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T>> {
-	constructor(props: Props & ApexItemProps<T>) {
-		super(props)
+	getElement() {
 		const onKeyPress = (e: React.KeyboardEvent) => {
 			if (this.props.onEnter && (e.keyCode || e.which) == 13) {
 				this.props.onEnter();
@@ -20,8 +19,7 @@ export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T>> 
 			this.props.reduxAction
 			? (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value)
 			: this.props.onChange;
-	
-		this.element = <input 
+		return (<input 
 			id={this.props.id} ref={this.props.innerRef}
 			className="text_field apex-item-text"
 			type={this.props.isPassword ? "password" : "text"}
@@ -31,7 +29,7 @@ export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T>> 
 			onChange={onChange}
 			onKeyPress={onKeyPress}
 			value={this.props.value}
-		/>
+		/>);
 	}
 }
 

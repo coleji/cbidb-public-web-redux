@@ -16,7 +16,7 @@ export interface ApexItemProps<T> {
 }
 
 export abstract class ApexItem<T, U> extends React.PureComponent<U & ApexItemProps<T>> {
-	element: React.ReactNode
+	abstract getElement(): React.ReactNode
 	renderAsTableRow(): React.ReactNode {
 		return (<tr>
 			<td style={{ textAlign: "right" }}>
@@ -27,7 +27,7 @@ export abstract class ApexItem<T, U> extends React.PureComponent<U & ApexItemPro
 			</td>
 			<td style={{ textAlign: "left" }}>
 				{this.props.prependToElementCell}
-				{this.element}
+				{this.getElement()}
 				{this.props.appendToElementCell}
 			</td>
 			{this.props.extraCells ? <td>{this.props.extraCells}</td> : null}
@@ -35,7 +35,7 @@ export abstract class ApexItem<T, U> extends React.PureComponent<U & ApexItemPro
 	}
 	render() {
 		return this.props.justElement
-		? this.element
+		? this.getElement()
 		: this.renderAsTableRow()
 	}
 }

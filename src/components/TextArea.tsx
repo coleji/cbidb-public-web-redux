@@ -10,8 +10,7 @@ interface Props {
 }
 
 export default class TextArea<T> extends ApexItem<T, Props & ApexItemProps<T>> {
-	constructor(props: Props & ApexItemProps<T>) {
-		super(props)
+	getElement() {
 		const onKeyPress = (e: React.KeyboardEvent) => {
 			if (this.props.onEnter && (e.keyCode || e.which) == 13) {
 				this.props.onEnter();
@@ -23,7 +22,7 @@ export default class TextArea<T> extends ApexItem<T, Props & ApexItemProps<T>> {
 			? (ev: React.ChangeEvent<HTMLTextAreaElement>) => this.props.reduxAction(this.props.id, ev.target.value)
 			: this.props.onChange;
 	
-		this.element = <textarea 
+		return (<textarea 
 			id={this.props.id} ref={this.props.innerRef}
 			className="text_field apex-item-text"
 			name={this.props.id}
@@ -34,7 +33,7 @@ export default class TextArea<T> extends ApexItem<T, Props & ApexItemProps<T>> {
 			rows={this.props.rows}
 			cols={this.props.cols}
 			placeholder={this.props.placeholder}
-		/>
+		/>);
 	}
 }
 

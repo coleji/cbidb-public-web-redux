@@ -12,16 +12,14 @@ interface Props {
 }
 
 export class Select<T> extends ApexItem<T, Props & ApexItemProps<T>> {
-	constructor(props: Props & ApexItemProps<T>) {
-		super(props)
-
+	getElement() {
 		const onChange = (ev: React.ChangeEvent<HTMLSelectElement>) => this.props.reduxAction(this.props.id, ev.target.value);
 
 		const nullOption: React.ReactNode[] = this.props.nullDisplay === undefined
 		? []
 		: [<option key={null} value="">{this.props.nullDisplay}</option>];
 
-		this.element = (<select
+		return (<select
 			id={this.props.id}
 			name={this.props.id}
 			className="selectlist apex-item-select"

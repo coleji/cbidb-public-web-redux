@@ -110,7 +110,8 @@ class LoginPage extends React.PureComponent<Props> {
 							isPassword={true}
 							extraCells={ <Button text="LOGIN" onClick={loginFunction} /> }
 							value={self.props.form.password}
-							onChange={(ev: React.ChangeEvent<HTMLInputElement>) => self.props.updateField("password", ev.target.value)} onEnter={loginFunction}
+							onChange={(ev: React.ChangeEvent<HTMLInputElement>) => self.props.updateField("password", ev.target.value)}
+							onEnter={loginFunction}
 						/>
 						<tr><td></td><td><span>
 							<PlaceholderLink >I forgot my password!</PlaceholderLink>
