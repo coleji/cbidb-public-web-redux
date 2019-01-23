@@ -160,7 +160,7 @@ export const loginFormReducer = (state: any = {}, action: any) => {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	rootState => ({
-		jpPrice: Currency.cents(32500),
+		jpPrice: Currency.cents(32500),	//TODO: moce to static state
 		lastSeason: 2018,
 		form: {
 			username: rootState.loginForm.username,

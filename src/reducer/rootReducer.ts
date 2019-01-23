@@ -10,11 +10,18 @@ import {Form as SwimProofForm, FORM_NAME as swimProofFormName} from "../containe
 import {Form as CreateAccountForm, FORM_NAME as createAccountFormName} from "../containers/create-acct/CreateAccount"
 import * as moment from "moment";
 
-export interface RootState {
+export interface StaticState {
 	getMoment: () => moment.Moment,
+	isServer: boolean,
+	jpDirectorNameFirst: string,
+	jpDirectorNameLast: string,
+	jpDirectorEmail: string,
+}
+
+export interface RootState {
+	staticState: StaticState,
 	login: LoginState,
 	router: Location,
-	isServer: boolean,
 	loginForm: LoginForm,
 	createAcctForm: CreateAccountForm,
 	registrationRequiredInfoForm: RegistrationRequiredInfoForm,
@@ -24,12 +31,11 @@ export interface RootState {
 
 export type RootReducer = (state: RootState, action: Action) => RootState
 
-export const makeRootReducer: (router: Reducer, isServer: boolean, getMoment: () => moment.Moment) => RootReducer = 
-(router, isServer, getMoment) => {
+export const makeRootReducer: (router: Reducer, staticState: StaticState) => RootReducer = 
+(router, staticState) => {
 	return combineReducers({
-		getMoment: () => getMoment,
+		staticState: () => staticState,
 		router,
-		isServer: () => isServer,
 		login: loginReducer,
 		loginForm: loginFormReducer,
 		createAcctForm: formReducer<CreateAccountForm>(createAccountFormName),

@@ -10,7 +10,7 @@ import * as moment from "moment"
 import createStore from '../createStore'
 import App from '../containers/App'
 
-import {makeRootReducer} from '../reducer/rootReducer'
+import {makeRootReducer, StaticState} from '../reducer/rootReducer'
 import routes from '../routes'
 
 const { reducer, middleware, enhancer } = routerForBrowser({
@@ -20,7 +20,13 @@ const { reducer, middleware, enhancer } = routerForBrowser({
 
 const seedState = (window as any).initialStateFromServer
 
-const rootReducer = makeRootReducer(reducer, false, () => moment())
+const staticState: StaticState = {
+  ...seedState.staticState,
+  isServer: false,
+  getMoment: () => moment(),
+}
+
+const rootReducer = makeRootReducer(reducer, staticState)
 
 export const {store, initialState} = createStore({
   rootReducer,

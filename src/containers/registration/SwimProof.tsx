@@ -26,7 +26,10 @@ export interface Form {
 class FormRadio extends RadioGroup<Form> {}
 
 interface StateProps {
-	form: Form
+    form: Form,
+    jpDirectorNameFirst: string,
+	jpDirectorNameLast: string,
+	jpDirectorEmail: string,
 }
 
 interface DispatchProps {
@@ -64,9 +67,9 @@ class SwimProof extends React.PureComponent<Props> {
         }]
 
         const noProofRegion = (<JoomlaNotitleRegion>
-            <div>
-                Getting written proof of swimming ability is easy and can be done at any YMCA or local pool.
-                <a href="http://www.ymcaboston.org/find-your-y" target="_blank">Click here</a> to find your local YMCA.
+            <div style={({padding: "8px 50px", border: "1px solid #999", margin: "0px 30px"})}>
+                Getting written proof of swimming ability is easy and can be done at any YMCA or local pool.   <a href="http://www.ymcaboston.org/find-your-y" target="_blank">Click here</a> to
+                find your local YMCA.
                 You can schedule your test by appointment for $5 or less. Simply let the Y know that your child needs to be tested to swim 50 yards without stopping,
                 and that you require a signed letter at the completion of your test. Taking the test at the Y will give you the "written proof of swimming
                 ability on Pool Letterhead" swim proof option for your child.
@@ -74,6 +77,8 @@ class SwimProof extends React.PureComponent<Props> {
         </JoomlaNotitleRegion>)
 
         console.log("swim proof id is " + self.props.form.swimProofID)
+
+        const mailto = "mailto:" + self.props.jpDirectorEmail
 
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
@@ -87,6 +92,13 @@ class SwimProof extends React.PureComponent<Props> {
                 <FormRadio id="swimProofID" values={swimProofValues} reduxAction={reduxAction} value={self.props.form.swimProofID}/>
 			</JoomlaArticleRegion>
             {self.props.form.swimProofID == "" ? noProofRegion : ""}
+            <JoomlaNotitleRegion>
+                <span>
+                If you believe you have a proof of swimming ability not on the above list,
+                <br />
+                please email {self.props.jpDirectorNameFirst} {self.props.jpDirectorNameLast} at <a href={mailto}>{self.props.jpDirectorEmail}</a>.
+                </span>
+			</JoomlaNotitleRegion>
 		</JoomlaMainPage>
 	}
 }
@@ -95,7 +107,10 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
 		form: {
             ...state.swimProofForm
-		}
+        },
+        jpDirectorNameFirst: state.staticState.jpDirectorNameFirst,
+        jpDirectorNameLast: state.staticState.jpDirectorNameLast,
+        jpDirectorEmail: state.staticState.jpDirectorEmail,
 	}),
 	dispatch => ({
 		updateField: (name: keyof Form, value: string) => {

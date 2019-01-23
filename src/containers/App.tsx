@@ -67,7 +67,7 @@ class App extends React.PureComponent<Props> {
 export default connect<StateProps, DispatchProps, SelfProps, RootState>(
 	state => ({
 		router: state.router,
-		isServer: state.isServer,
+		isServer: state.staticState.isServer,
 		login: state.login
 	}),
 	dispatch => ({})

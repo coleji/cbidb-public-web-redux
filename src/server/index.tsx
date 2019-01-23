@@ -13,7 +13,7 @@ import * as moment from "moment";
 
 import App from '../containers/App'
 import createStore from '../createStore'
-import { makeRootReducer } from '../reducer/rootReducer'
+import { makeRootReducer, StaticState } from '../reducer/rootReducer'
 import routes from '../routes'
 import { makeAPIRequest } from '../async/async';
 
@@ -97,13 +97,23 @@ app.get("*", (req, res, next) => {
 		Promise.resolve({})
 	})
 	.then(seedState => {
-		const rootReducer = makeRootReducer(reducer, true, () => moment())
+		const staticState: StaticState = {
+			getMoment:  () => moment(),
+			isServer: true,
+			jpDirectorNameFirst: "Niko",
+			jpDirectorNameLast: "Kotsatos",
+			jpDirectorEmail: "niko@community-boating.org"
+		}
+		const rootReducer = makeRootReducer(reducer, staticState)
 
 		const {store, initialState}  = createStore({
 			rootReducer,
 			enhancers: [enhancer],
 			middlewares: [middleware],
-			seedState
+			seedState: {
+				...seedState,
+				staticState
+			}
 		});
 
 
