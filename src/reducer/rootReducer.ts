@@ -6,6 +6,7 @@ import {LoginState, loginReducer} from "./loginStateReducer"
 import {loginFormReducer, Form as LoginForm} from "../containers/LoginPage"
 import {Form as RegistrationRequiredInfoForm, FORM_NAME as registrationRequiredInfoFormName} from "../containers/registration/RequiredInfo"
 import {Form as EmergencyContactForm, FORM_NAME as emergencyContactFormName} from "../containers/registration/EmergencyContact"
+import {Form as SwimProofForm, FORM_NAME as swimProofFormName} from "../containers/registration/SwimProof"
 import {Form as CreateAccountForm, FORM_NAME as createAccountFormName} from "../containers/create-acct/CreateAccount"
 import * as moment from "moment";
 
@@ -17,7 +18,8 @@ export interface RootState {
 	loginForm: LoginForm,
 	createAcctForm: CreateAccountForm,
 	registrationRequiredInfoForm: RegistrationRequiredInfoForm,
-	emergencyContactForm: EmergencyContactForm
+	emergencyContactForm: EmergencyContactForm,
+	swimProofForm: SwimProofForm
 }
 
 export type RootReducer = (state: RootState, action: Action) => RootState
@@ -33,5 +35,6 @@ export const makeRootReducer: (router: Reducer, isServer: boolean, getMoment: ()
 		createAcctForm: formReducer<CreateAccountForm>(createAccountFormName),
 		registrationRequiredInfoForm: formReducer<RegistrationRequiredInfoForm>(registrationRequiredInfoFormName),
 		emergencyContactForm: formReducer<EmergencyContactForm>(emergencyContactFormName),
+		swimProofForm: formReducer<SwimProofForm>(swimProofFormName),
 	})	
 }

@@ -10,6 +10,7 @@ import {RootState} from '../reducer/rootReducer'
 import {LoginState} from "../reducer/loginStateReducer"
 import Gatekeeper from "../containers/create-acct/Gatekeeper";
 import CreateAccount from './create-acct/CreateAccount';
+import SwimProof from './registration/SwimProof';
 
 interface StateProps {
 	router: Location,
@@ -46,7 +47,7 @@ class App extends React.PureComponent<Props> {
 					return <CreateAccount formName="create-acct"/>
 				default:
 					if (self.props.login && self.props.login.authenticatedUserName) {
-						return <EmergencyContact />
+						return <SwimProof />
 					} else {
 						return <LoginPage formName="login"/>
 					}
