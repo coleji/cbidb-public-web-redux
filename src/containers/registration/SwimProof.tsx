@@ -15,7 +15,7 @@ import DateTriPicker, {DateTriPickerProps} from "../../components/DateTriPicker"
 import {states, countries} from "../../lov"
 import PhoneTriBox, {PhoneTriBoxProps} from "../../components/PhoneTriBox";
 import TextArea from "../../components/TextArea";
-import  RadioGroup  from "../../components/RadioGroup";
+import  {RadioGroup}  from "../../components/RadioGroup";
 
 export const FORM_NAME = "swimProofForm"
 
@@ -89,7 +89,7 @@ class SwimProof extends React.PureComponent<Props> {
                 <br /><br />
                 {"Which of these do you possess?"}
                 <br /><br />
-                <FormRadio id="swimProofID" values={swimProofValues} reduxAction={reduxAction} value={self.props.form.swimProofID}/>
+                <FormRadio id="swimProofID" justElement={true} values={swimProofValues} reduxAction={reduxAction} value={self.props.form.swimProofID}/>
 			</JoomlaArticleRegion>
             {self.props.form.swimProofID == "" ? noProofRegion : ""}
             <JoomlaNotitleRegion>

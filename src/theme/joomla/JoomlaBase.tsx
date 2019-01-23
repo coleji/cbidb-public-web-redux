@@ -38,6 +38,8 @@ class JoomlaHelmet extends React.Component {
                     <link rel="stylesheet" href={fileRoot + "/template-webkit.css"} type="text/css" />
                     <link rel="stylesheet" href={fileRoot + "/fusionmenu.css"} type="text/css" />
 
+                    <link rel="stylesheet" href="/i/app_ui/css/Core.min.css" type="text/css" />
+
 
                     <script type="text/javascript" src={fileRoot + "/jq_last.js"}></script>
                     <script type="text/javascript" src={fileRoot + "/j.e.js"}></script>
