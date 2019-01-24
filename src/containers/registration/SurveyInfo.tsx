@@ -15,7 +15,7 @@ import DateTriPicker, {DateTriPickerProps} from "../../components/DateTriPicker"
 import {states, countries} from "../../lov"
 import PhoneTriBox, {PhoneTriBoxProps} from "../../components/PhoneTriBox";
 import TextArea from "../../components/TextArea";
-import { RadioGroup } from "../../components/RadioGroup";
+import { RadioGroup, CheckboxGroup } from "../../components/RadioGroup";
 
 export const FORM_NAME = "registrationRequiredInfo"
 
@@ -23,8 +23,43 @@ export interface Form {
     genderID: string
 }
 
-class FormRadio extends RadioGroup<Form> {}
+const genders = [{
+	key: "M",
+	display: "Male"
+}, {
+	key: "F",
+	display: "Female"
+}, {
+	key: "O",
+	display: "Other"
+}];
 
+const referralSources = [{
+	key: "Friend",
+	display: "Friend/Family"
+}, {
+	key: "Google"
+}, {
+	key: "Youtube"
+}, {
+	key: "School"
+}, {
+	key: "Facebook"
+}, {
+	key: "Groupon"
+}, {
+	key: "MBTA"
+}, {
+	key: "Twitter"
+}, {
+	key: "Walking By"
+}, {
+	key: "Other"
+}]
+
+
+class FormRadio extends RadioGroup<Form> {}
+class FormCheckbox extends CheckboxGroup<Form>{}
 interface StateProps {
 	form: Form
 }
@@ -53,16 +88,15 @@ class SurveyInfo extends React.PureComponent<Props> {
                         id="genderID"
                         label="Gender"
                         columns={3}
-                        values={[{
-                            key: "M",
-                            display: "Male"
-                        }, {
-                            key: "F",
-                            display: "Female"
-                        }, {
-                            key: "O",
-                            display: "Other"
-                        }]}
+                        values={genders}
+                        reduxAction={reduxAction}
+                        value={self.props.form.genderID}
+                    />
+					<FormCheckbox
+                        id="genderID"
+                        label="Gender"
+                        columns={3}
+                        values={genders}
                         reduxAction={reduxAction}
                         value={self.props.form.genderID}
                     />

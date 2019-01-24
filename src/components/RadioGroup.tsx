@@ -3,7 +3,7 @@ import { ApexItem, ApexItemProps } from "./ApexItem";
 
 interface Props {
     id: string,
-    values: {key: string, display: string}[],
+    values: {key: string, display?: string}[],
     reduxAction?: (name: string, value: string) => void
     columns?: number
 }
@@ -26,7 +26,7 @@ abstract class InputGroup<T> extends ApexItem<T, Props & ApexItemProps<T>> {
                     {cells.map(({key, display}) => (
                         <div className="apex-item-option" key={key}>
                             <input type={type} id={this.props.id + "_" + key} name={this.props.id} value={key} onChange={onClick} />
-                            <label htmlFor={this.props.id + "_" + key}>{display}</label>
+                            <label htmlFor={this.props.id + "_" + key}>{display || key}</label>
                         </div>
                     ))}
                 </div>
