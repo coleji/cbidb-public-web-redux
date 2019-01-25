@@ -20,7 +20,8 @@ import { RadioGroup, CheckboxGroup } from "../../components/RadioGroup";
 export const FORM_NAME = "registrationRequiredInfo"
 
 export interface Form {
-    genderID: string
+    genderID: string,
+    referral: string
 }
 
 const genders = [{
@@ -93,12 +94,12 @@ class SurveyInfo extends React.PureComponent<Props> {
                         value={self.props.form.genderID}
                     />
 					<FormCheckbox
-                        id="genderID"
-                        label="Gender"
+                        id="referral"
+                        label="How did you hear about us?"
                         columns={3}
-                        values={genders}
+                        values={referralSources}
                         reduxAction={reduxAction}
-                        value={self.props.form.genderID}
+                        value={self.props.form.referral}
                     />
                 </tbody></table>
             </JoomlaArticleRegion>
@@ -109,7 +110,8 @@ class SurveyInfo extends React.PureComponent<Props> {
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
         form: {
-            genderID: null
+            genderID: null,
+            referral: null
         }
 	}),
 	dispatch => ({
