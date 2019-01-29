@@ -3,7 +3,7 @@ import * as React from "react";
 export interface ApexItemProps<T_Form, T_ValueType> {
 	id: string & keyof T_Form,
 	value: T_ValueType,
-	label?: string,
+	label?: string | JSX.Element,
 	extraCells?: React.ReactNode,
 	innerRef?: React.RefObject<any>,
 	prependToElementCell?: React.ReactNode,

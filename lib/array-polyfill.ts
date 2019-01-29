@@ -3,6 +3,7 @@ interface Array<T> {
 	flatten<U>(): Array<U>
 	zipWithIndex(): [T, number][]
 	grouped(size: number): T[][]
+	contains(e: T): boolean
 }
 	
 // Array.prototype.find = function(p: any) {
@@ -36,4 +37,11 @@ Array.prototype.grouped = function(size: number) {
 	}
 	groups.push(group);
 	return groups;
+}
+
+Array.prototype.contains = function(e: any) {
+	for (var i=0; i<this.length; i++) {
+		if (this[i] == e) return true;
+	}
+	return false;
 }
