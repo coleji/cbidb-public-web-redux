@@ -29,7 +29,7 @@ export default class TextArea<T> extends ApexItem<T, Props & ApexItemProps<T, st
 			maxLength={this.props.maxLength || 100}
 			onChange={onChange}
 			onKeyPress={onKeyPress}
-			value={this.props.value}
+			value={this.props.value || ""}
 			rows={this.props.rows}
 			cols={this.props.cols}
 			placeholder={this.props.placeholder}

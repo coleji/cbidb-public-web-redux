@@ -28,7 +28,7 @@ export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T, s
 			maxLength={this.props.maxLength || 100}
 			onChange={onChange}
 			onKeyPress={onKeyPress}
-			value={this.props.value}
+			value={this.props.value || ""}
 		/>);
 	}
 }
