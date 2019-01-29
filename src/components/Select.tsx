@@ -11,7 +11,7 @@ interface Props {
 	nullDisplay?: string
 }
 
-export class Select<T> extends ApexItem<T, Props & ApexItemProps<T>> {
+export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, string>, string> {
 	getElement() {
 		const onChange = (ev: React.ChangeEvent<HTMLSelectElement>) => this.props.reduxAction(this.props.id, ev.target.value);
 

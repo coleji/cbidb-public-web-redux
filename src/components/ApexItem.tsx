@@ -1,8 +1,8 @@
 import * as React from "react";
 
-export interface ApexItemProps<T> {
-	id: string & keyof T,
-	value: string,
+export interface ApexItemProps<T_Form, T_ValueType> {
+	id: string & keyof T_Form,
+	value: T_ValueType,
 	label?: string,
 	extraCells?: React.ReactNode,
 	innerRef?: React.RefObject<any>,
@@ -15,7 +15,7 @@ export interface ApexItemProps<T> {
 	isRequired?: boolean
 }
 
-export abstract class ApexItem<T, U> extends React.PureComponent<U & ApexItemProps<T>> {
+export abstract class ApexItem<T_Form, T_OwnProps, T_ValueType> extends React.PureComponent<T_OwnProps & ApexItemProps<T_Form, T_ValueType>> {
 	abstract getElement(): React.ReactNode
 	renderAsTableRow(): React.ReactNode {
 		return (<tr>

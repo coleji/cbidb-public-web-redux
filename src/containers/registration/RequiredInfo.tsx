@@ -259,9 +259,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
 		getMoment: state.staticState.getMoment,
-		form: {
-			...state.registrationRequiredInfoForm
-		}
+		form: state.registrationRequiredInfoForm
 	}),
 	dispatch => ({
 		updateField: (name: keyof Form, value: string) => {

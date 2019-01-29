@@ -4,9 +4,8 @@ import { ApexItem, ApexItemProps } from "./ApexItem";
 interface Props {
     id: string,
     values: {key: string, display?: string}[],
-    reduxAction?: (name: string, value: string) => void
-    columns?: number,
-  //  delimiter: string             // TODO
+    reduxAction?: (name: string, value: any) => void
+    columns?: number
 }
 
 
@@ -14,14 +13,14 @@ interface Props {
 
 // todo: checkbox needs to add or remove value from running agg, return new agg
 
-abstract class InputGroup<T> extends ApexItem<T, Props & ApexItemProps<T>> {
-    abstract isCheckbox: boolean
+abstract class InputGroup<T_Form, T_ValueType> extends ApexItem<T_Form, Props & ApexItemProps<T_Form, T_ValueType>, T_ValueType> {
+	abstract isCheckbox: boolean
+	abstract onClick: (ev: React.ChangeEvent<HTMLInputElement>) => void;
     // private toggle(existingValues: string, newValue: string): string {
     //     const values = existingValues.split(this.props.delimiter);
         
     // }
     getElement() {
-        const onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value)
         const columns = this.props.columns || 1;
 
         console.log(this.isCheckbox)
@@ -35,7 +34,7 @@ abstract class InputGroup<T> extends ApexItem<T, Props & ApexItemProps<T>> {
                 return <div className="apex-item-grid-row" key={"row_" + i}>
                     {cells.map(({key, display}) => (
                         <div className="apex-item-option" key={key}>
-                            <input type={type} id={this.props.id + "_" + key} name={this.props.id} value={key} onChange={onClick} />
+                            <input type={type} id={this.props.id + "_" + key} name={this.props.id} value={key} onChange={this.onClick} />
                             <label htmlFor={this.props.id + "_" + key}>{display || key}</label>
                         </div>
                     ))}
@@ -45,10 +44,20 @@ abstract class InputGroup<T> extends ApexItem<T, Props & ApexItemProps<T>> {
     }
 }
 
-export class RadioGroup<T> extends InputGroup<T> {
-    isCheckbox = false;
+export class RadioGroup<T_Form> extends InputGroup<T_Form, string> {
+	isCheckbox = false;
+	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value);
 }
 
-export class CheckboxGroup<T> extends InputGroup<T> {
-    isCheckbox = true;
+// TODO: what if an element has the delimiter in it (escape by doubling?)
+export class CheckboxGroup<T_Form> extends InputGroup<T_Form, string[]> {
+	isCheckbox = true;
+	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => {
+		if (ev.target.checked) {
+			this.props.reduxAction(this.props.id, (this.props.value || []).concat([ev.target.value]));
+		} else {
+			const newValues = this.props.value.filter(e => e != ev.target.value)
+			this.props.reduxAction(this.props.id, newValues);
+		}
+	}
 }

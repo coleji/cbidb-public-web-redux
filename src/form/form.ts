@@ -2,7 +2,7 @@ import { Dispatch, Action, Reducer } from "redux";
 
 export const UPDATE_FORM_DISPATCH_TYPE = "UPDATE_FORM";
 
-export const dispatchFormUpdate: (dispatch: Dispatch<FormAction>, formName: string) => (fieldName: string, fieldValue: string) => void = 
+export const dispatchFormUpdate: (dispatch: Dispatch<FormAction>, formName: string) => (fieldName: string, fieldValue: any) => void = 
 (dispatch, formName) => (fieldName, fieldValue) => dispatch({
     type: UPDATE_FORM_DISPATCH_TYPE, formName, fieldName, fieldValue
 })
@@ -32,5 +32,5 @@ interface FormAction extends Action {
     type: FormActionType,
     formName: string,
 	fieldName: string,
-	fieldValue: string
+	fieldValue: any
 }

@@ -15,7 +15,7 @@ import DateTriPicker, {DateTriPickerProps} from "../../components/DateTriPicker"
 import {states, countries} from "../../lov"
 import PhoneTriBox, {PhoneTriBoxProps} from "../../components/PhoneTriBox";
 import TextArea from "../../components/TextArea";
-import  {RadioGroup}  from "../../components/RadioGroup";
+import  {RadioGroup}  from "../../components/InputGroup";
 
 export const FORM_NAME = "swimProofForm"
 
@@ -105,9 +105,7 @@ class SwimProof extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-		form: {
-            ...state.swimProofForm
-        },
+		form: state.swimProofForm,
         jpDirectorNameFirst: state.staticState.jpDirectorNameFirst,
         jpDirectorNameLast: state.staticState.jpDirectorNameLast,
         jpDirectorEmail: state.staticState.jpDirectorEmail,

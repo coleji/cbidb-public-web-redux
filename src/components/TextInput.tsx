@@ -7,7 +7,7 @@ interface Props {
 	maxLength?: number
 }
 
-export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T>> {
+export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T, string>, string> {
 	getElement() {
 		const onKeyPress = (e: React.KeyboardEvent) => {
 			if (this.props.onEnter && (e.keyCode || e.which) == 13) {

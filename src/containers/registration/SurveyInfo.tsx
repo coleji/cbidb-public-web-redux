@@ -15,13 +15,13 @@ import DateTriPicker, {DateTriPickerProps} from "../../components/DateTriPicker"
 import {states, countries} from "../../lov"
 import PhoneTriBox, {PhoneTriBoxProps} from "../../components/PhoneTriBox";
 import TextArea from "../../components/TextArea";
-import { RadioGroup, CheckboxGroup } from "../../components/RadioGroup";
+import { RadioGroup, CheckboxGroup } from "../../components/InputGroup";
 
-export const FORM_NAME = "registrationRequiredInfo"
+export const FORM_NAME = "surveyInfoForm"
 
 export interface Form {
     genderID: string,
-    referral: string
+    referral: string[]
 }
 
 const genders = [{
@@ -66,7 +66,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-	updateField: (name: keyof Form, value: string) => void
+	updateField: (name: keyof Form, value: any) => void
 }
 
 interface StaticProps { }
@@ -99,7 +99,7 @@ class SurveyInfo extends React.PureComponent<Props> {
                         columns={3}
                         values={referralSources}
                         reduxAction={reduxAction}
-                        value={self.props.form.referral}
+						value={self.props.form.referral}
                     />
                 </tbody></table>
             </JoomlaArticleRegion>
@@ -109,13 +109,10 @@ class SurveyInfo extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-        form: {
-            genderID: null,
-            referral: null
-        }
+        form: state.surveyInfoForm
 	}),
 	dispatch => ({
-		updateField: (name: keyof Form, value: string) => {
+		updateField: function(name: keyof Form, value: any) {
 			console.log("updating field!")
 			dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 		}
