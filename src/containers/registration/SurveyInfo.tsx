@@ -101,6 +101,8 @@ class SurveyInfo extends React.PureComponent<Props> {
 		const self = this;
 		const reduxAction = self.props.updateField;
 
+		// TODO: blank out the "other" fields in state when the toggling checkbox is unchecked
+
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
 				<ProgressThermometer />
@@ -149,7 +151,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 					/>
 					<FormCheckbox
                         id="ethnicity"
-                        label="Ethnicity?"
+                        label="Ethnicity"
                         columns={3}
                         values={ethnicities}
                         reduxAction={reduxAction}
@@ -165,6 +167,12 @@ class SurveyInfo extends React.PureComponent<Props> {
 						/>
 						: null
 					}
+					<FormInput
+						id="school"
+						label="School"
+						value={self.props.form.school}
+						reduxAction={reduxAction}
+					/>
 					<FormBoolean
 						id="freeLunch"
 						label={
