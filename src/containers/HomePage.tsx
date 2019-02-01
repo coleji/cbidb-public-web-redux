@@ -10,7 +10,7 @@ import JoomlaReport from "../theme/joomla/JoomlaReport";
 import PlaceholderLink from "../components/PlaceholderLink";
 import { WelcomePackageState } from "../reducer/welcomePackageReducer";
 import { Fragment } from "redux-little-router";
-import HomePageActions from "./HomePageActions";
+import homePageActions from "./HomePageActions";
 
 interface StateProps {
 	welcomePackage: WelcomePackageState
@@ -41,7 +41,7 @@ class HomePage extends React.PureComponent<Props> {
 		}[] = this.props.welcomePackage.children.map(c => ({
 			name: c.nameFirst + " " + c.nameLast,
 			status: <span dangerouslySetInnerHTML={{__html: c.status}}/>,
-			actions: <ul>{HomePageActions(Number(c.actions))}</ul>,
+			actions: <ul>{homePageActions(Number(c.actions))}</ul>,
 		}))
 
 		const mainTable = <JoomlaArticleRegion title="My Junior Program Memberships">

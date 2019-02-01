@@ -8,53 +8,53 @@ function testBit(num: number, bit: number){
 export default (bv: number) => {
     const actions = [{
         place: 3,
-        text: "Edit Information"
+        element: <PlaceholderLink>{"Edit Information"}</PlaceholderLink>
     }, {
         place: 4,
-        text: "View Ratings"
+        element: <PlaceholderLink>{"View Ratings"}</PlaceholderLink>
     }, {
         place: 5,
-        text: "Signup for Summer Classes"
+        element: <PlaceholderLink>{"Signup for Summer Classes"}</PlaceholderLink>
     }, {
         place: 6,
-        text: "Signup for Fall Classes"
+        element: <PlaceholderLink>{"Signup for Fall Classes"}</PlaceholderLink>
     }, {
         place: 7,
-        text: "Signup for Spring Classes"
+        element: <PlaceholderLink>{"Signup for Spring Classes"}</PlaceholderLink>
     }, {
         place: 8,
-        text: "Cancel Membership Purchase"
+        element: <PlaceholderLink>{"Cancel Membership Purchase"}</PlaceholderLink>
     }, {
         place: 9,
-        text: "Cancel Class Purchase"
+        element: <PlaceholderLink>{"Cancel Class Purchase"}</PlaceholderLink>
     }, {
         place: 10,
-        text: "Enroll and Pay for Fall Class"
+        element: <PlaceholderLink>{"Enroll and Pay for Fall Class"}</PlaceholderLink>
     }, {
         place: 11,
-        text: "Enroll and Pay for Spring Class"
+        element: <PlaceholderLink>{"Enroll and Pay for Spring Class"}</PlaceholderLink>
     }, {
         place: 12,
-        text: "Cancel Fall Class Waitlist"
+        element: <PlaceholderLink>{"Cancel Fall Class Waitlist"}</PlaceholderLink>
     }, {
         place: 13,
-        text: "Cancel Spring Class Waitlist"
+        element: <PlaceholderLink>{"Cancel Spring Class Waitlist"}</PlaceholderLink>
     }, {
         place: 14,
-        text: "Rejoin Waitlist"
+        element: <PlaceholderLink>{"Rejoin Waitlist"}</PlaceholderLink>
     }, {
         place: 15,
-        text: "Buy 4th of July Tickets"
+        element: <PlaceholderLink>{"Buy 4th of July Tickets"}</PlaceholderLink>
     }]
 
     return (function() {
         if (testBit(bv, 0)) {
-            return ["Purchase Summer Membership and/or Spring Class"];
+            return [<PlaceholderLink>{"Purchase Summer Membership and/or Spring Class"}</PlaceholderLink>];
         } else if (testBit(bv, 1)) {
-            return ["Purchase Summer Membership"];
+            return [<PlaceholderLink>{"Purchase Summer Membership"}</PlaceholderLink>];
         } else if (testBit(bv, 2)) {
-            return ["Edit Registration"]
+            return [<PlaceholderLink>{"Edit Registration"}</PlaceholderLink>]
         } else return [];
-    }()).concat(actions.filter(({place}) => testBit(bv, place)).map(({text}) => text))
-    .map(text => <li><PlaceholderLink>{text}</PlaceholderLink></li>)
+    }()).concat(actions.filter(({place}) => testBit(bv, place)).map(({element}) => element))
+    .map((element, i) => <li key={i}>{element}</li>)
 }
