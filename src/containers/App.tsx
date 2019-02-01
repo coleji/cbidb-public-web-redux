@@ -12,6 +12,7 @@ import Gatekeeper from "../containers/create-acct/Gatekeeper";
 import CreateAccount from './create-acct/CreateAccount';
 import SwimProof from './registration/SwimProof';
 import SurveyInfo from './registration/SurveyInfo';
+import RatingsPage from './RatingsPage';
 
 interface StateProps {
 	router: Location,
@@ -46,6 +47,8 @@ class App extends React.PureComponent<Props> {
 					return <Gatekeeper />
 				case "/create-acct":
 					return <CreateAccount formName="create-acct"/>
+				case "/ratings":
+					return <RatingsPage/>
 				default:
 					if (self.props.login && self.props.login.authenticatedUserName) {
 						return <HomePage />

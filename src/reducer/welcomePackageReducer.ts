@@ -8,7 +8,8 @@ interface WelcomePackageState {
 		nameFirst: string,
 		nameLast: string,
 		status: string,
-		actions: string
+		actions: string,
+		ratings: string
 	}[]
 }
 
