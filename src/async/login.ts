@@ -1,7 +1,7 @@
 import {createActionFromAPIResponse} from './async'
 import { LoginDispatch } from '../reducer/loginStateReducer';
 
-export const loginAction = (dispatch: LoginDispatch, userName: string, password: string) => createActionFromAPIResponse({
+export const loginAction = (dispatch: (action: any) => void, userName: string, password: string) => createActionFromAPIResponse({
 	https: true,
     apiEndpoint: "/api/authenticate-member",
     httpMethod: "POST",
@@ -36,6 +36,7 @@ export const loginAction = (dispatch: LoginDispatch, userName: string, password:
 		}).then(data => {
 			console.log("welcome package: ", data)
 			dispatch({type: "LOGIN_SUCCESS", userName})
+			dispatch({type: "WELCOME_PKG_UPDATE", ...data})
 		})	
 	}
 })

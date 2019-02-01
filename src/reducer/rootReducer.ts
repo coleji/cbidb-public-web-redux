@@ -10,6 +10,7 @@ import {Form as SwimProofForm, FORM_NAME as swimProofFormName} from "../containe
 import {Form as SurveyInfoForm, FORM_NAME as surveyInfoFormName} from "../containers/registration/SurveyInfo"
 import {Form as CreateAccountForm, FORM_NAME as createAccountFormName} from "../containers/create-acct/CreateAccount"
 import * as moment from "moment";
+import { WelcomePackageState, welcomePackageReducer } from "./welcomePackageReducer";
 
 export interface StaticState {
 	getMoment: () => moment.Moment,
@@ -28,7 +29,8 @@ export interface RootState {
 	registrationRequiredInfoForm: RegistrationRequiredInfoForm,
 	emergencyContactForm: EmergencyContactForm,
 	swimProofForm: SwimProofForm,
-	surveyInfoForm: SurveyInfoForm
+	surveyInfoForm: SurveyInfoForm,
+	welcomePackage: WelcomePackageState
 }
 
 export type RootReducer = (state: RootState, action: Action) => RootState
@@ -45,5 +47,6 @@ export const makeRootReducer: (router: Reducer, staticState: StaticState) => Roo
 		emergencyContactForm: formReducer<EmergencyContactForm>(emergencyContactFormName),
 		swimProofForm: formReducer<SwimProofForm>(swimProofFormName),
 		surveyInfoForm: formReducer<SurveyInfoForm>(surveyInfoFormName),
+		welcomePackage: welcomePackageReducer
 	})	
 }

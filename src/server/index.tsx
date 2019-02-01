@@ -90,8 +90,12 @@ app.get("*", (req, res, next) => {
 	// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
 	.then((json: any) => {
 		console.log("got ", json)
-		if (json && json.data && json.data.userName) return Promise.resolve({login: {authenticatedUserName: json.data.userName}});
-		else Promise.resolve({})
+		if (json && json.data && json.data.userName) {
+			return Promise.resolve({
+				login: {authenticatedUserName: json.data.userName},
+				welcomePackage: json.data
+			});
+		} else Promise.resolve({})
 	}, (e) => {
 		console.log("server side get welcome pkg failed", e)
 		Promise.resolve({})

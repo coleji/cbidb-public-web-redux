@@ -48,7 +48,7 @@ class App extends React.PureComponent<Props> {
 					return <CreateAccount formName="create-acct"/>
 				default:
 					if (self.props.login && self.props.login.authenticatedUserName) {
-						return <SurveyInfo />
+						return <HomePage />
 					} else {
 						return <LoginPage formName="login"/>
 					}
