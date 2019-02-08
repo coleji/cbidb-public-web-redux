@@ -5,11 +5,12 @@ import * as express from "express"
 import * as React from "react"
 import { renderToString } from "react-dom/server"
 import { Provider } from 'react-redux';
-import { routerForExpress } from 'redux-little-router';
 import { Helmet } from "react-helmet";
 import * as httpProxy from 'http-proxy';
 import * as cookieParser from 'cookie-parser';
 import * as moment from "moment";
+import { routerMiddleware } from 'connected-react-router'
+import { createMemoryHistory } from 'history'
 
 import App from '../containers/App'
 import createStore from '../createStore'
@@ -23,6 +24,8 @@ const app = express();
 app.use(cookieParser(""));
 
 const apiDirectConnection = false
+
+export const history = createMemoryHistory()
 
 const targetUrl = 'http://localhost:3000'
 
@@ -70,10 +73,6 @@ app.use(express.static("dist"))
 app.use(express.static("public"))
 
 app.get("*", (req, res, next) => {
-	const { reducer, middleware, enhancer } = routerForExpress({
-		routes,
-		request: req
-	});
 	console.log("cookie is " + req.cookies["CBIDB-SEC"])
 	makeAPIRequest({
 		https: false,
@@ -108,12 +107,12 @@ app.get("*", (req, res, next) => {
 			jpDirectorNameLast: "Kotsatos",
 			jpDirectorEmail: "niko@community-boating.org"
 		}
-		const rootReducer = makeRootReducer(reducer, staticState)
+		const rootReducer = makeRootReducer(history, staticState)
 
 		const {store, initialState}  = createStore({
 			rootReducer,
-			enhancers: [enhancer],
-			middlewares: [middleware],
+			enhancers: [],
+			middlewares: [routerMiddleware(history)],
 			seedState: {
 				...seedState,
 				staticState
@@ -123,7 +122,7 @@ app.get("*", (req, res, next) => {
 
 		const markup = renderToString(
 			<Provider store={store}>
-				<App />
+				<App history={history}/>
 			</Provider>
 		)
 		const helmet = Helmet.renderStatic();

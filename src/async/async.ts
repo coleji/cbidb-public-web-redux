@@ -58,6 +58,8 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 
 		const method = params.https ? https : http;
 
+		console.log("making request to " + options.hostname + ":" + options.port + options.path)
+
 		let req = (method as any).request(options, (res: any) => {
 			let resData = '';
 			//console.log("API RESPONSE: ", res)

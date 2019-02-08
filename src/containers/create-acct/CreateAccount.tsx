@@ -1,6 +1,5 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { push } from 'redux-little-router';
 
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import { RootState } from "../../reducer/rootReducer";
@@ -108,6 +107,6 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	}),
 	dispatch => ({
 		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value),
-		cancel: () => dispatch(push("/"))
+		cancel: () => dispatch({} as any) // TODO: routing
 	})
 )(CreateAccount)

@@ -4,8 +4,9 @@ require("../../lib/optional")
 import * as React from 'react'
 import { hydrate } from 'react-dom'
 import { Provider } from 'react-redux';
-import { routerForBrowser } from 'redux-little-router';
 import * as moment from "moment"
+import { routerMiddleware } from 'connected-react-router'
+import { createBrowserHistory } from 'history'
 
 import createStore from '../createStore'
 import App from '../containers/App'
@@ -13,10 +14,7 @@ import App from '../containers/App'
 import {makeRootReducer, StaticState} from '../reducer/rootReducer'
 import routes from '../routes'
 
-const { reducer, middleware, enhancer } = routerForBrowser({
-  // The configured routes. Required.
-  routes
-});
+export const history = createBrowserHistory()
 
 const seedState = (window as any).initialStateFromServer
 
@@ -26,19 +24,19 @@ const staticState: StaticState = {
   getMoment: () => moment(),
 }
 
-const rootReducer = makeRootReducer(reducer, staticState)
+const rootReducer = makeRootReducer(history, staticState)
 
 export const {store, initialState} = createStore({
   rootReducer,
-  enhancers: [enhancer],
-  middlewares: [middleware],
+  enhancers: [],
+  middlewares: [routerMiddleware(history)],
   seedState
 });
 
 
 hydrate(
   <Provider store={store}>
-      <App />
+      <App history={history}/>
   </Provider>,
   document.getElementById('app')
 );

@@ -1,4 +1,5 @@
 import { Action, Reducer, combineReducers } from "redux";
+import { connectRouter } from 'connected-react-router'
 
 import {formReducer} from "../form/form"
 import {LoginState, loginReducer} from "./loginStateReducer"
@@ -23,7 +24,7 @@ export interface StaticState {
 export interface RootState {
 	staticState: StaticState,
 	login: LoginState,
-	router: Location,
+	router: any,
 	loginForm: LoginForm,
 	createAcctForm: CreateAccountForm,
 	registrationRequiredInfoForm: RegistrationRequiredInfoForm,
@@ -35,11 +36,11 @@ export interface RootState {
 
 export type RootReducer = (state: RootState, action: Action) => RootState
 
-export const makeRootReducer: (router: Reducer, staticState: StaticState) => RootReducer = 
-(router, staticState) => {
+export const makeRootReducer: (history: any, staticState: StaticState) => RootReducer = 
+(history, staticState) => {
 	return combineReducers({
+		router: connectRouter(history),
 		staticState: () => staticState,
-		router,
 		login: loginReducer,
 		loginForm: loginFormReducer,
 		createAcctForm: formReducer<CreateAccountForm>(createAccountFormName),

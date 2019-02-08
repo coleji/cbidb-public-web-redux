@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { connect } from "react-redux";
+import { Route, Switch } from 'react-router' // react-router v4
+import { ConnectedRouter } from 'connected-react-router'
 
 import JoomlaBase from '../theme/joomla/JoomlaBase'
 import LoginPage from './LoginPage';
@@ -25,7 +27,7 @@ interface DispatchProps {
 }
 
 interface SelfProps {
-
+	history: any
 }
 
 type Props = StateProps & DispatchProps & SelfProps
@@ -58,10 +60,15 @@ class App extends React.PureComponent<Props> {
 			}
 		}())
 		return (
+			
 			<div>
 				<JoomlaBase>
-						{toRender}
-						{devTools}
+					<ConnectedRouter history={this.props.history}>
+						<Switch>
+							<Route render={() => toRender} />
+						</Switch>
+					</ConnectedRouter>
+					{devTools}
 				</JoomlaBase>
 			</div>
 		)

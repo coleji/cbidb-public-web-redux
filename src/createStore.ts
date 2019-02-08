@@ -1,3 +1,4 @@
+import { createBrowserHistory } from 'history'
 import { createStore as reduxCreateStore, applyMiddleware, compose, Action } from 'redux';
 import { RootReducer, RootState } from './reducer/rootReducer'
 
@@ -15,18 +16,6 @@ export default function createStore(params: CreateStoreParameters) {
 
 	//TODO: prod vs dev mode, i.e. dont initialize DevTools stuff
 
-/*
-	let finalCreateStore;
-	if (true){ // __DEVELOPMENT__ && __CLIENT__ && __DEVTOOLS__) {
-		const { persistState } = require('redux-devtools');
-		
-		finalCreateStore = compose(
-//			applyMiddleware(...middleware),
-			DevTools.instrument()
-		)(_createStore);
-	} else {
-		finalCreateStore = applyMiddleware(...middleware)(_createStore);
-	}*/
 
 	const rootReducer: (state: RootState, action: Action) => RootState = function(state: RootState, action: Action) {
 		return params.rootReducer(state, action);

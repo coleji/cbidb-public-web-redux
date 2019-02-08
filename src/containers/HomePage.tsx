@@ -9,7 +9,6 @@ import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaReport from "../theme/joomla/JoomlaReport";
 import PlaceholderLink from "../components/PlaceholderLink";
 import { WelcomePackageState } from "../reducer/welcomePackageReducer";
-import { Fragment } from "redux-little-router";
 import homePageActions from "./HomePageActions";
 
 interface StateProps {
