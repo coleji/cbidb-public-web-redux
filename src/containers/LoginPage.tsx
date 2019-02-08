@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom"
 
 import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
 import PlaceholderLink from "../components/PlaceholderLink"
@@ -79,9 +80,9 @@ class LoginPage extends React.PureComponent<Props> {
 			<JoomlaArticleRegion title="My child and I are new to Community Boating.">
 				<div>
 					<ul style={{ fontSize: "0.92em", marginLeft: "20px" }}>
-						<li><PlaceholderLink href="/precreate">
+						<li><Link to="/precreate">
 							Click here to create a parent account.
-						</PlaceholderLink></li>
+						</Link></li>
 					</ul>
 					<br />
 					{`If your child was a member in ${self.props.lastSeason}, please use your email and password from last season, ` + 

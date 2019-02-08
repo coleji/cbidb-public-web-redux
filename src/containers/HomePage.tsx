@@ -34,13 +34,15 @@ class HomePage extends React.PureComponent<Props> {
 
 		//TODO
 		const rowData: {
+			personId: number,
 			name: string,
 			status: React.ReactNode,
 			actions: React.ReactNode
 		}[] = this.props.welcomePackage.children.map(c => ({
+			personId: c.personId,
 			name: c.nameFirst + " " + c.nameLast,
 			status: <span dangerouslySetInnerHTML={{__html: c.status}}/>,
-			actions: <ul>{homePageActions(Number(c.actions))}</ul>,
+			actions: <ul>{homePageActions(Number(c.actions), c.personId)}</ul>,
 		}))
 
 		const mainTable = <JoomlaArticleRegion title="My Junior Program Memberships">

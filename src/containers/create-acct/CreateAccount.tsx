@@ -31,7 +31,7 @@ interface DispatchProps {
 }
 
 interface StaticProps {
-	formName: string
+
 }
 
 type Props = StateProps & DispatchProps & StaticProps

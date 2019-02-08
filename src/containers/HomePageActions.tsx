@@ -1,17 +1,18 @@
 import * as React from 'react'
 import PlaceholderLink from "../components/PlaceholderLink";
+import { Link } from 'react-router-dom';
 
 function testBit(num: number, bit: number){
     return ((num>>bit) % 2 != 0)
 }
 
-export default (bv: number) => {
+export default (bv: number, juniorId: number) => {
     const actions = [{
         place: 3,
         element: <PlaceholderLink>{"Edit Information"}</PlaceholderLink>
     }, {
         place: 4,
-        element: <PlaceholderLink>{"View Ratings"}</PlaceholderLink>
+        element: <Link to={"/ratings/" + juniorId}>{"View Ratings"}</Link>
     }, {
         place: 5,
         element: <PlaceholderLink>{"Signup for Summer Classes"}</PlaceholderLink>

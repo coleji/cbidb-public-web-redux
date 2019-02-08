@@ -18,7 +18,7 @@ export interface StaticState {
 	isServer: boolean,
 	jpDirectorNameFirst: string,
 	jpDirectorNameLast: string,
-	jpDirectorEmail: string,
+	jpDirectorEmail: string
 }
 
 export interface RootState {

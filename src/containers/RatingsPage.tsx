@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { matchPath } from 'react-router-dom';
 
 import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
 import Currency from "../util/Currency"
@@ -12,7 +13,8 @@ import { WelcomePackageState } from "../reducer/welcomePackageReducer";
 import homePageActions from "./HomePageActions";
 
 interface StateProps {
-	welcomePackage: WelcomePackageState
+	welcomePackage: WelcomePackageState,
+	router: any
 }
 
 interface DispatchProps {
@@ -23,16 +25,25 @@ interface StaticProps { }
 
 type Props = StateProps & DispatchProps & StaticProps
 
-
+export const path = '/ratings/:personId'
 
 class RatingsPage extends React.PureComponent<Props> {
 	render() {
 		const self = this;
 
+		// TODO: typesafe? 
+		const match = matchPath(
+			self.props.router.location.pathname,
+			{ path }
+		  ) || {params: {}};
+		const personId = (match.params as any).personId;
+
+		console.log("scraped from the url: " + personId)
+
+		const kid = this.props.welcomePackage.children.find(e => e.personId == personId)
+
 		// TODO: specific kid.  Also welcome package seems to sometimes be empty
-		const ratings = this.props.welcomePackage.children[0]
-		? this.props.welcomePackage.children[0].ratings
-		: "<span></span>"
+		const ratings = kid ? kid.ratings : "<span></span>"
 
 		// TODO: grab specific child based on url
 		return <JoomlaMainPage>
@@ -53,9 +64,11 @@ class RatingsPage extends React.PureComponent<Props> {
 	}
 }
 
+
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-		welcomePackage: state.welcomePackage
+		welcomePackage: state.welcomePackage,
+		router: state.router
 	}),
 	dispatch => ({
 

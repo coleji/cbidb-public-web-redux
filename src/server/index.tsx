@@ -25,8 +25,6 @@ app.use(cookieParser(""));
 
 const apiDirectConnection = false
 
-export const history = createMemoryHistory()
-
 const targetUrl = 'http://localhost:3000'
 
 if (!apiDirectConnection) {
@@ -100,6 +98,9 @@ app.get("*", (req, res, next) => {
 		Promise.resolve({})
 	})
 	.then(seedState => {
+		const history = createMemoryHistory({
+			initialEntries: [req.path]
+		});
 		const staticState: StaticState = {
 			getMoment:  () => moment(),
 			isServer: true,

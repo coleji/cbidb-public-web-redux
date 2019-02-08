@@ -14,7 +14,7 @@ import Gatekeeper from "../containers/create-acct/Gatekeeper";
 import CreateAccount from './create-acct/CreateAccount';
 import SwimProof from './registration/SwimProof';
 import SurveyInfo from './registration/SurveyInfo';
-import RatingsPage from './RatingsPage';
+import RatingsPage, {path as ratingsPagePath} from './RatingsPage';
 
 interface StateProps {
 	router: Location,
@@ -41,31 +41,30 @@ class App extends React.PureComponent<Props> {
 		}()) : undefined;
 		console.log(this.props)
 		const path = this.props.router.pathname
+
+		const mustNotBeLoggedIn = [
+			<Route path="/precreate" component={Gatekeeper} />,
+			<Route path="/create-acct" component={CreateAccount} />,
+			<Route component={LoginPage} />
+		]
+
+		const mustBeLoggedIn = [
+			<Route exact path={ratingsPagePath} component={RatingsPage} />,
+			<Route component={HomePage} />
+		]
+
+		const isLoggedIn = self.props.login && self.props.login.authenticatedUserName;
 		
-		const toRender = (function() {
-			switch (path) {
-				case "/precreate":
-					//TODO: dont allow this path etc if authenticated
-					return <Gatekeeper />
-				case "/create-acct":
-					return <CreateAccount formName="create-acct"/>
-				case "/ratings":
-					return <RatingsPage/>
-				default:
-					if (self.props.login && self.props.login.authenticatedUserName) {
-						return <HomePage />
-					} else {
-						return <LoginPage formName="login"/>
-					}
-			}
-		}())
+		const authedDependedRoutes = isLoggedIn ? mustBeLoggedIn : mustNotBeLoggedIn
+
 		return (
 			
 			<div>
 				<JoomlaBase>
 					<ConnectedRouter history={this.props.history}>
 						<Switch>
-							<Route render={() => toRender} />
+							
+							{...authedDependedRoutes}
 						</Switch>
 					</ConnectedRouter>
 					{devTools}

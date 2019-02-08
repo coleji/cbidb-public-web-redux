@@ -6,6 +6,7 @@ import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import { RootState } from "../../reducer/rootReducer";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import PlaceholderLink from "../../components/PlaceholderLink";
+import { Link } from "react-router-dom";
 
 interface StateProps {
 
@@ -30,9 +31,9 @@ class Gatekeeper extends React.PureComponent<Props> {
 			If you would like to pay for the membership of a child for whom you are not the parent or legal guardian, please call the boathouse at 617-523-1038 and inquire about purchasing a gift certificate.<br />
 			<br />
 			<ul>
-				<li><PlaceholderLink href="/create-acct">
-				I am a parent/legal guardian of all juniors I am about to register (or have registered) under my name.
-					</PlaceholderLink></li>
+				<li><Link to="/create-acct">
+					I am a parent/legal guardian of all juniors I am about to register (or have registered) under my name.
+				</Link></li>
 				<li><PlaceholderLink >I'm in the wrong place!  Please take me to Adult Program signups.</PlaceholderLink></li>
 			</ul>
 		</div>
