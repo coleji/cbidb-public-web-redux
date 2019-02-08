@@ -1,6 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { matchPath } from 'react-router-dom';
+import { push } from 'connected-react-router'
 
 import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
 import Currency from "../util/Currency"
@@ -11,6 +12,7 @@ import JoomlaReport from "../theme/joomla/JoomlaReport";
 import PlaceholderLink from "../components/PlaceholderLink";
 import { WelcomePackageState } from "../reducer/welcomePackageReducer";
 import homePageActions from "./HomePageActions";
+import Button from "../components/Button";
 
 interface StateProps {
 	welcomePackage: WelcomePackageState,
@@ -18,7 +20,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-
+	cancel: () => void
 }
 
 interface StaticProps { }
@@ -59,6 +61,7 @@ class RatingsPage extends React.PureComponent<Props> {
 				<p style={{fontSize: "0.9em", color: "#777", fontStyle: "italic"}}>
 					*Expired ratings can be renewed in the first days of your class
 				</p>
+				<Button text="< Back" onClick={this.props.cancel}/>
 			</JoomlaArticleRegion>
 		</JoomlaMainPage>
 	}
@@ -71,6 +74,6 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		router: state.router
 	}),
 	dispatch => ({
-
+		cancel: () => dispatch(push('/'))
 	})
 )(RatingsPage)
