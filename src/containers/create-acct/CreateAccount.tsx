@@ -1,16 +1,15 @@
+import { push } from 'connected-react-router';
 import * as React from "react";
 import { connect } from "react-redux";
-import { push } from 'connected-react-router'
-
-import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
-import { RootState } from "../../reducer/rootReducer";
-import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
-import {placeholderAction} from "../../components/PlaceholderLink";
-import Joomla8_4 from "../../theme/joomla/Joomla8_4";
-import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
-import TextInput from "../../components/TextInput";
-import {dispatchFormUpdate} from "../../form/form"
 import Button from "../../components/Button";
+import { placeholderAction } from "../../components/PlaceholderLink";
+import TextInput from "../../components/TextInput";
+import { dispatchFormUpdate } from "../../form/form";
+import { RootState } from "../../reducer/rootReducer";
+import Joomla8_4 from "../../theme/joomla/Joomla8_4";
+import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
+import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
+
 
 export const FORM_NAME = "create-acct"
 

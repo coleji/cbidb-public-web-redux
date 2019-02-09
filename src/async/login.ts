@@ -1,5 +1,4 @@
 import {createActionFromAPIResponse} from './async'
-import { LoginDispatch } from '../reducer/loginStateReducer';
 
 export const loginAction = (dispatch: (action: any) => void, userName: string, password: string) => createActionFromAPIResponse({
 	https: true,

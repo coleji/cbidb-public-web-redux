@@ -12,7 +12,7 @@ import createStore from '../createStore'
 import App from '../containers/App'
 
 import {makeRootReducer, StaticState} from '../reducer/rootReducer'
-import routes from '../routes'
+
 
 export const history = createBrowserHistory()
 

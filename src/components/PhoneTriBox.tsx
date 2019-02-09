@@ -1,7 +1,6 @@
 import * as React from "react";
 
-import {Select, KeyAndDisplay} from "./Select"
-import range from "../util/range"
+import {Select} from "./Select"
 import TextInput from "./TextInput";
 
 export interface PhoneTriBoxProps<U> {

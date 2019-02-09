@@ -1,18 +1,13 @@
+import { push } from 'connected-react-router';
 import * as React from "react";
 import { connect } from "react-redux";
 import { matchPath } from 'react-router-dom';
-import { push } from 'connected-react-router'
-
-import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
-import Currency from "../util/Currency"
-import { RootState } from '../reducer/rootReducer'
-import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
-import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
-import JoomlaReport from "../theme/joomla/JoomlaReport";
-import PlaceholderLink from "../components/PlaceholderLink";
-import { WelcomePackageState } from "../reducer/welcomePackageReducer";
-import homePageActions from "./HomePageActions";
 import Button from "../components/Button";
+import { RootState } from '../reducer/rootReducer';
+import { WelcomePackageState } from "../reducer/welcomePackageReducer";
+import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
+import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
+
 
 interface StateProps {
 	welcomePackage: WelcomePackageState,

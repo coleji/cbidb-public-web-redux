@@ -1,20 +1,16 @@
-import * as React from 'react'
+import { ConnectedRouter } from 'connected-react-router';
+import * as React from 'react';
 import { connect } from "react-redux";
-import { Route, Switch } from 'react-router' // react-router v4
-import { ConnectedRouter } from 'connected-react-router'
-
-import JoomlaBase from '../theme/joomla/JoomlaBase'
-import LoginPage from './LoginPage';
-import HomePage from './HomePage';
-import RequiredInfo from './registration/RequiredInfo';
-import EmergencyContact from './registration/EmergencyContact';
-import {RootState} from '../reducer/rootReducer'
-import {LoginState} from "../reducer/loginStateReducer"
+import { Route, Switch } from 'react-router'; // react-router v4
 import Gatekeeper from "../containers/create-acct/Gatekeeper";
+import { LoginState } from "../reducer/loginStateReducer";
+import { RootState } from '../reducer/rootReducer';
+import JoomlaBase from '../theme/joomla/JoomlaBase';
 import CreateAccount from './create-acct/CreateAccount';
-import SwimProof from './registration/SwimProof';
-import SurveyInfo from './registration/SurveyInfo';
-import RatingsPage, {path as ratingsPagePath} from './RatingsPage';
+import HomePage from './HomePage';
+import LoginPage from './LoginPage';
+import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
+
 
 interface StateProps {
 	router: Location,
@@ -40,7 +36,7 @@ class App extends React.PureComponent<Props> {
 			return <DevTools />;
 		}()) : undefined;
 		console.log(this.props)
-		const path = this.props.router.pathname
+		//const path = this.props.router.pathname
 
 		const mustNotBeLoggedIn = [
 			<Route path="/precreate" component={Gatekeeper} />,
@@ -80,5 +76,5 @@ export default connect<StateProps, DispatchProps, SelfProps, RootState>(
 		isServer: state.staticState.isServer,
 		login: state.login
 	}),
-	dispatch => ({})
+	() => ({})
 )(App)

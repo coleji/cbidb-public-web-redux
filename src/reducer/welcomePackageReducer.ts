@@ -27,7 +27,7 @@ type WeclomePackageAction = Action & WelcomePackageState & {
 	type: WeclomePackageActionType
 }
 
-type WeclomePackageDispatch = (action: WeclomePackageAction) => void;
+//type WeclomePackageDispatch = (action: WeclomePackageAction) => void;
 
 type WeclomePackageReducer = (state: WelcomePackageState, action: WeclomePackageAction) => WelcomePackageState
 

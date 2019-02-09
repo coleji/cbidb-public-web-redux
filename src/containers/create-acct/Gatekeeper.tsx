@@ -1,12 +1,11 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import * as ReactRouter from "react-router"
-
-import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
+import { Link } from "react-router-dom";
+import PlaceholderLink from "../../components/PlaceholderLink";
 import { RootState } from "../../reducer/rootReducer";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
-import PlaceholderLink from "../../components/PlaceholderLink";
-import { Link } from "react-router-dom";
+import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
+
 
 interface StateProps {
 
@@ -47,10 +46,10 @@ class Gatekeeper extends React.PureComponent<Props> {
 }
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
-	state => ({
+	() => ({
 
 	}),
-	dispatch => ({
+	() => ({
 
 	})
 )(Gatekeeper)

@@ -1,15 +1,12 @@
 import * as React from "react";
 import { connect } from "react-redux";
-
-import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
-import Currency from "../util/Currency"
-import { RootState } from '../reducer/rootReducer'
-import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
-import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
-import JoomlaReport from "../theme/joomla/JoomlaReport";
-import PlaceholderLink from "../components/PlaceholderLink";
+import { RootState } from '../reducer/rootReducer';
 import { WelcomePackageState } from "../reducer/welcomePackageReducer";
+import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
+import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
+import JoomlaReport from "../theme/joomla/JoomlaReport";
 import homePageActions from "./HomePageActions";
+
 
 interface StateProps {
 	welcomePackage: WelcomePackageState
@@ -30,7 +27,7 @@ class HomePage extends React.PureComponent<Props> {
 		super(props);
 	}
 	render() {
-		const self = this;
+		//const self = this;
 
 		//TODO
 		const rowData: {
@@ -59,7 +56,7 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
 		welcomePackage: state.welcomePackage
 	}),
-	dispatch => ({
+	() => ({
 
 	})
 )(HomePage)

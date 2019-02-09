@@ -1,4 +1,4 @@
-import { Action, Reducer, combineReducers } from "redux";
+import { Action, combineReducers } from "redux";
 import { connectRouter } from 'connected-react-router'
 
 import {formReducer} from "../form/form"

@@ -5,7 +5,7 @@ interface JoomlaSidebarRegionProps {
 }
 // TODO: some craptastic joomla JS keeps nuking the little accent mark on the sidebar title.
 // re-setting in on cDM doesn't work
-const BORDER_CSS = "12px solid transparent !important";
+// const BORDER_CSS = "12px solid transparent !important";
 
 export default class JoomlaSidebarRegion extends React.Component<JoomlaSidebarRegionProps> {
 	render() {

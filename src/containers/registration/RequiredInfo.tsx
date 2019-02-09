@@ -1,20 +1,20 @@
+import * as moment from "moment";
 import * as React from "react";
 import { connect } from "react-redux";
-import * as moment from "moment";
-
-import { RootState } from '../../reducer/rootReducer'
-import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
+import DateTriPicker, { DateTriPickerProps } from "../../components/DateTriPicker";
+import PhoneTriBox, { PhoneTriBoxProps } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
-import TextInput from "../../components/TextInput";
-import {formReducer, dispatchFormUpdate} from "../../form/form"
-import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
-import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import {KeyAndDisplay, Select} from "../../components/Select"
-import range from "../../util/range"
-import DateTriPicker, {DateTriPickerProps} from "../../components/DateTriPicker"
-import {states, countries} from "../../lov"
-import PhoneTriBox, {PhoneTriBoxProps} from "../../components/PhoneTriBox";
+import { Select } from "../../components/Select";
 import TextArea from "../../components/TextArea";
+import TextInput from "../../components/TextInput";
+import { dispatchFormUpdate } from "../../form/form";
+import { countries, states } from "../../lov";
+import { RootState } from '../../reducer/rootReducer';
+import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
+import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
+import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
+import range from "../../util/range";
+
 
 export const FORM_NAME = "registrationRequiredInfo"
 

@@ -15,7 +15,6 @@ import { createMemoryHistory } from 'history'
 import App from '../containers/App'
 import createStore from '../createStore'
 import { makeRootReducer, StaticState } from '../reducer/rootReducer'
-import routes from '../routes'
 import { makeAPIRequest } from '../async/async';
 
 

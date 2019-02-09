@@ -1,20 +1,14 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import * as moment from "moment";
-
-import { RootState } from '../../reducer/rootReducer'
-import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
+import PhoneTriBox, { PhoneTriBoxProps } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import TextInput from "../../components/TextInput";
-import {formReducer, dispatchFormUpdate} from "../../form/form"
+import { dispatchFormUpdate } from "../../form/form";
+import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
+import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import {KeyAndDisplay, Select} from "../../components/Select"
-import range from "../../util/range"
-import DateTriPicker, {DateTriPickerProps} from "../../components/DateTriPicker"
-import {states, countries} from "../../lov"
-import PhoneTriBox, {PhoneTriBoxProps} from "../../components/PhoneTriBox";
-import TextArea from "../../components/TextArea";
+
 
 export const FORM_NAME = "emergencyContact"
 
@@ -49,7 +43,7 @@ export interface Form {
 }
 
 class FormInput extends TextInput<Form> {}
-class FormSelect extends Select<Form> {}
+// class FormSelect extends Select<Form> {}
 
 interface StateProps {
 	form: Form
