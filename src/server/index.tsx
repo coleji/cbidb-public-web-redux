@@ -16,6 +16,7 @@ import App from '../containers/App'
 import createStore from '../createStore'
 import { makeRootReducer, StaticState } from '../reducer/rootReducer'
 import { makeAPIRequest } from '../async/async';
+import Currency from "../util/Currency";
 
 
 const app = express();
@@ -105,7 +106,9 @@ app.get("*", (req, res, next) => {
 			isServer: true,
 			jpDirectorNameFirst: "Niko",
 			jpDirectorNameLast: "Kotsatos",
-			jpDirectorEmail: "niko@community-boating.org"
+			jpDirectorEmail: "niko@community-boating.org",
+			jpPriceCents: 32500,	// TODO: get from welcome pkg
+			currentSeason: 2019
 		}
 		const rootReducer = makeRootReducer(history, staticState)
 

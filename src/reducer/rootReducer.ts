@@ -10,15 +10,19 @@ import {Form as EmergencyContactForm, FORM_NAME as emergencyContactFormName} fro
 import {Form as SwimProofForm, FORM_NAME as swimProofFormName} from "../containers/registration/SwimProof"
 import {Form as SurveyInfoForm, FORM_NAME as surveyInfoFormName} from "../containers/registration/SurveyInfo"
 import {Form as CreateAccountForm, FORM_NAME as createAccountFormName} from "../containers/create-acct/CreateAccount"
+import {Form as ScholarshipForm, FORM_NAME as scholarshipFormName} from "../containers/Scholarship"
 import * as moment from "moment";
 import { WelcomePackageState, welcomePackageReducer } from "./welcomePackageReducer";
+import Currency from "../util/Currency";
 
 export interface StaticState {
 	getMoment: () => moment.Moment,
 	isServer: boolean,
 	jpDirectorNameFirst: string,
 	jpDirectorNameLast: string,
-	jpDirectorEmail: string
+	jpDirectorEmail: string,
+	jpPriceCents: number,
+	currentSeason: number
 }
 
 export interface RootState {
@@ -31,6 +35,7 @@ export interface RootState {
 	emergencyContactForm: EmergencyContactForm,
 	swimProofForm: SwimProofForm,
 	surveyInfoForm: SurveyInfoForm,
+	scholarshipForm: ScholarshipForm,
 	welcomePackage: WelcomePackageState
 }
 
@@ -48,6 +53,7 @@ export const makeRootReducer: (history: any, staticState: StaticState) => RootRe
 		emergencyContactForm: formReducer<EmergencyContactForm>(emergencyContactFormName),
 		swimProofForm: formReducer<SwimProofForm>(swimProofFormName),
 		surveyInfoForm: formReducer<SurveyInfoForm>(surveyInfoFormName),
+		scholarshipForm: formReducer<ScholarshipForm>(scholarshipFormName),
 		welcomePackage: welcomePackageReducer
 	})	
 }

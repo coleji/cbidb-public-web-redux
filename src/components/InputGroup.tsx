@@ -3,13 +3,13 @@ import { ApexItem, ApexItemProps } from "./ApexItem";
 
 interface KeyValuePair {
 	key: string,
-	display?: string
+	display?: string | JSX.Element
 }
 
 interface Props {
 	id: string,
     reduxAction?: (name: string, value: any) => void
-    columns?: number
+	columns?: number
 }
 
 type PropsWithValues = Props & {
@@ -74,6 +74,6 @@ export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, s
 
 export class SingleCheckbox<T_Form> extends InputGroup<T_Form, Props, boolean> {
 	isCheckbox = true;
-	values = [{key: "isTrue", display: ""}];
+	values = [{key: "isTrue", display: this.props.justElement ? this.props.label : ""}];
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.checked);
 }

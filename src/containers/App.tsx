@@ -10,6 +10,7 @@ import CreateAccount from './create-acct/CreateAccount';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
+import Scholarship from './Scholarship';
 
 
 interface StateProps {
@@ -39,14 +40,15 @@ class App extends React.PureComponent<Props> {
 		//const path = this.props.router.pathname
 
 		const mustNotBeLoggedIn = [
-			<Route path="/precreate" component={Gatekeeper} />,
-			<Route path="/create-acct" component={CreateAccount} />,
-			<Route component={LoginPage} />
+			<Route key="/precreate" path="/precreate" component={Gatekeeper} />,
+			<Route key="/create-acct" path="/create-acct" component={CreateAccount} />,
+			<Route key="default" component={LoginPage} />
 		]
 
 		const mustBeLoggedIn = [
-			<Route exact path={ratingsPagePath} component={RatingsPage} />,
-			<Route component={HomePage} />
+			<Route key={ratingsPagePath} exact path={ratingsPagePath} component={RatingsPage} />,
+	//		<Route key="default" component={HomePage} />
+			<Route key="default" component={Scholarship} />
 		]
 
 		const isLoggedIn = self.props.login && self.props.login.authenticatedUserName;
@@ -59,7 +61,6 @@ class App extends React.PureComponent<Props> {
 				<JoomlaBase>
 					<ConnectedRouter history={this.props.history}>
 						<Switch>
-							
 							{...authedDependedRoutes}
 						</Switch>
 					</ConnectedRouter>
