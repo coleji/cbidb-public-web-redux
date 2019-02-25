@@ -67,8 +67,14 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 				resData += chunk;
 			});
 			res.on('end', () => {
-				let response = JSON.parse(resData);
-				resolve(response);
+				try {
+					// TODO: better way to deal with this.  maybe we shouldnt parse JSON here
+					let response = JSON.parse(resData);
+					resolve(response);
+				} catch (e) {
+					reject(e)
+				}
+				
 			});
 		});
 		req.on('error', (e: string) => {
