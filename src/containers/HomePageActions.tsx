@@ -6,10 +6,11 @@ function testBit(num: number, bit: number){
     return ((num>>bit) % 2 != 0)
 }
 
+//TODO: paths are duplicated here
 export default (bv: number, juniorId: number) => {
     const actions = [{
         place: 3,
-        element: <PlaceholderLink>{"Edit Information"}</PlaceholderLink>
+        element: <Link to={"/required/" + juniorId}>{"Edit Information"}</Link>
     }, {
         place: 4,
         element: <Link to={"/ratings/" + juniorId}>{"View Ratings"}</Link>
@@ -50,11 +51,11 @@ export default (bv: number, juniorId: number) => {
 
     return (function() {
         if (testBit(bv, 0)) {
-            return [<PlaceholderLink>{"Purchase Summer Membership and/or Spring Class"}</PlaceholderLink>];
+            return [<Link to={"/required/" + juniorId}>{"Purchase Summer Membership and/or Spring Class"}</Link>];
         } else if (testBit(bv, 1)) {
-            return [<PlaceholderLink>{"Purchase Summer Membership"}</PlaceholderLink>];
+            return [<Link to={"/required/" + juniorId}>{"Purchase Summer Membership"}</Link>];
         } else if (testBit(bv, 2)) {
-            return [<PlaceholderLink>{"Edit Registration"}</PlaceholderLink>]
+            return [<Link to={"/required/" + juniorId}>{"Edit Registration"}</Link>]
         } else return [];
     }()).concat(actions.filter(({place}) => testBit(bv, place)).map(({element}) => element))
     .map((element, i) => <li key={i}>{element}</li>)

@@ -1,9 +1,10 @@
 interface Array<T> {
 	// find(p: (t: T) => boolean): Optional<T>
-	flatten<U>(): Array<U>
+	flatten<U>(): U[]
 	zipWithIndex(): [T, number][]
 	grouped(size: number): T[][]
 	contains(e: T): boolean
+	flatMap<U>(f: (e: T, i: number) => U[]): U[]
 }
 	
 // Array.prototype.find = function(p: any) {
@@ -44,4 +45,13 @@ Array.prototype.contains = function(e: any) {
 		if (this[i] == e) return true;
 	}
 	return false;
+}
+
+Array.prototype.flatMap = function<U>(f: (e: any, i: number) => Array<U>) {
+	var ret: U[] = [];
+	for (var i=0; i<this.length; i++) {
+		var element = this[i];
+		ret = ret.concat(f(element, i))
+	}
+	return ret;
 }

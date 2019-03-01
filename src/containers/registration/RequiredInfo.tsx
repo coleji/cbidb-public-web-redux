@@ -1,6 +1,7 @@
 import * as moment from "moment";
 import * as React from "react";
 import { connect } from "react-redux";
+import { matchPath } from 'react-router-dom';
 import DateTriPicker, { DateTriPickerProps } from "../../components/DateTriPicker";
 import PhoneTriBox, { PhoneTriBoxProps } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
@@ -18,34 +19,36 @@ import range from "../../util/range";
 
 export const FORM_NAME = "registrationRequiredInfo"
 
+export const path = '/required/:personId'
+
 export interface Form {
 	firstName: string
 	middleInitial: string
 	lastName: string,
-	dobMonth: string,
-	dobDate: string,
-	dobYear: string,
-	childEmail: string,
-	addr_1: string,
-	addr_2: string,
-	addr_3: string,
-	city: string,
-	state: string,
-	zip: string,
-	country: string,
-	primaryPhoneFirst: string,
-	primaryPhoneSecond: string,
-	primaryPhoneThird: string,
-	primaryPhoneExt: string,
-	primaryPhoneType: string,
-	alternatePhoneFirst: string,
-	alternatePhoneSecond: string,
-	alternatePhoneThird: string,
-	alternatePhoneExt: string,
-	alternatePhoneType: string,
-	allergies: string,
-	medications: string,
-	specialNeeds: string
+	// dobMonth: string,
+	// dobDate: string,
+	// dobYear: string,
+	// childEmail: string,
+	// addr_1: string,
+	// addr_2: string,
+	// addr_3: string,
+	// city: string,
+	// state: string,
+	// zip: string,
+	// country: string,
+	// primaryPhoneFirst: string,
+	// primaryPhoneSecond: string,
+	// primaryPhoneThird: string,
+	// primaryPhoneExt: string,
+	// primaryPhoneType: string,
+	// alternatePhoneFirst: string,
+	// alternatePhoneSecond: string,
+	// alternatePhoneThird: string,
+	// alternatePhoneExt: string,
+	// alternatePhoneType: string,
+	// allergies: string,
+	// medications: string,
+	// specialNeeds: string
 	
 }
 
@@ -55,6 +58,7 @@ class FormTextArea extends TextArea<Form> {}
 
 interface StateProps {
 	form: Form,
+	router: any,
 	getMoment: () => moment.Moment
 }
 
@@ -70,6 +74,15 @@ class RequiredInfo extends React.PureComponent<Props> {
 	render() {
 		const self = this;
 		const reduxAction = self.props.updateField;
+
+		// TODO: typesafe? 
+		const match = matchPath(
+			self.props.router.location.pathname,
+			{ path }
+		  ) || {params: {}};
+		const personId = (match.params as any).personId;
+
+		console.log("scraped from the url: " + personId)
 
 		const thisYear = Number(self.props.getMoment().format("YYYY"))
 		const years = range(thisYear-20, thisYear)
@@ -99,7 +112,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 					value={self.props.form.lastName}
 					reduxAction={reduxAction}
 				/>
-				<DateTriPicker<Form, DateTriPickerProps<Form>>
+				{/* <DateTriPicker<Form, DateTriPickerProps<Form>>
 					years={years}
 					monthID="dobMonth"
 					dayID="dobDate"
@@ -204,13 +217,13 @@ class RequiredInfo extends React.PureComponent<Props> {
 					extValue={self.props.form.alternatePhoneExt}
 					typeValue={self.props.form.alternatePhoneType}
 					reduxAction={reduxAction}
-				/>
+				/> */}
 			</tbody></table>
 		);
 
 		const specNeedsFields = (
 			<table><tbody>
-				<FormTextArea
+				{/* <FormTextArea
 					id="allergies"
 					label="Allergies"
 					rows={4}
@@ -236,7 +249,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 					value={self.props.form.specialNeeds}
 					reduxAction={reduxAction}
 					placeholder="Please leave blank if none"
-				/>
+				/> */}
 			</tbody></table>
 		);
 		return <JoomlaMainPage>
@@ -259,7 +272,8 @@ class RequiredInfo extends React.PureComponent<Props> {
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
 		getMoment: state.staticState.getMoment,
-		form: state.registrationRequiredInfoForm
+		form: state.registrationRequiredInfoForm,
+		router: state.router
 	}),
 	dispatch => ({
 		updateField: (name: keyof Form, value: string) => {

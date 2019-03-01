@@ -14,6 +14,7 @@ import {Form as ScholarshipForm, FORM_NAME as scholarshipFormName} from "../cont
 import * as moment from "moment";
 import { WelcomePackageState, welcomePackageReducer } from "./welcomePackageReducer";
 import Currency from "../util/Currency";
+import {ServerConfig} from "../server/config"
 
 export interface StaticState {
 	getMoment: () => moment.Moment,
@@ -22,7 +23,8 @@ export interface StaticState {
 	jpDirectorNameLast: string,
 	jpDirectorEmail: string,
 	jpPriceCents: number,
-	currentSeason: number
+	currentSeason: number,
+	serverConfig: ServerConfig
 }
 
 export interface RootState {

@@ -11,6 +11,7 @@ import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
 import Scholarship from './Scholarship';
+import RequiredInfo, {path as requiredInfoPath} from './registration/RequiredInfo';
 
 
 interface StateProps {
@@ -47,8 +48,8 @@ class App extends React.PureComponent<Props> {
 
 		const mustBeLoggedIn = [
 			<Route key={ratingsPagePath} exact path={ratingsPagePath} component={RatingsPage} />,
-	//		<Route key="default" component={HomePage} />
-			<Route key="default" component={Scholarship} />
+			<Route key={requiredInfoPath} exact path={requiredInfoPath} component={RequiredInfo} />,
+			<Route key="default" component={HomePage} />
 		]
 
 		const isLoggedIn = self.props.login && self.props.login.authenticatedUserName;

@@ -17,6 +17,7 @@ import createStore from '../createStore'
 import { makeRootReducer, StaticState } from '../reducer/rootReducer'
 import { makeAPIRequest } from '../async/async';
 import Currency from "../util/Currency";
+import getConfig from './config'
 
 
 const app = express();
@@ -70,87 +71,94 @@ if (!apiDirectConnection) {
 app.use(express.static("dist"))
 app.use(express.static("public"))
 
-app.get("*", (req, res, next) => {
-	console.log("cookie is " + req.cookies["CBIDB-SEC"])
-	makeAPIRequest({
-		https: false,
-		apiEndpoint: "/member-welcome",
-		httpMethod: "GET",
-		host: "localhost", //TODO: make into config
-		port: 3000, //TODO: make into config
-		isBehindReverseProxy: false, //TODO: make into config
-		extraHeaders: {
-			"Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"]
-		}
-	})
-	// TODO: dont autodetect if the response is a JSON with a `data` property
-	// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
-	.then((json: any) => {
-		console.log("got ", json)
-		if (json && json.data && json.data.userName) {
-			return Promise.resolve({
-				login: {authenticatedUserName: json.data.userName},
-				welcomePackage: json.data
-			});
-		} else Promise.resolve({})
-	}, (e) => {
-		console.log("server side get welcome pkg failed", e)
-		Promise.resolve({})
-	})
-	.then(seedState => {
-		const history = createMemoryHistory({
-			initialEntries: [req.path]
-		});
-		const staticState: StaticState = {
-			getMoment:  () => moment(),
-			isServer: true,
-			jpDirectorNameFirst: "Niko",
-			jpDirectorNameLast: "Kotsatos",
-			jpDirectorEmail: "niko@community-boating.org",
-			jpPriceCents: 32500,	// TODO: get from welcome pkg
-			currentSeason: 2019
-		}
-		const rootReducer = makeRootReducer(history, staticState)
-
-		const {store, initialState}  = createStore({
-			rootReducer,
-			enhancers: [],
-			middlewares: [routerMiddleware(history)],
-			seedState: {
-				...seedState,
-				staticState
+getConfig.then(serverConfig => {
+	app.get("*", (req, res, next) => {
+		console.log("cookie is " + req.cookies["CBIDB-SEC"])
+		makeAPIRequest({
+			https: serverConfig.API.https,
+			apiEndpoint: "/member-welcome",
+			httpMethod: "GET",
+			host: serverConfig.API.host,
+			port: Number(serverConfig.API.port),
+			extraHeaders: {
+				"Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"]
 			}
-		});
-
-
-		const markup = renderToString(
-			<Provider store={store}>
-				<App history={history}/>
-			</Provider>
-		)
-		const helmet = Helmet.renderStatic();
-
-		res.send(`
-	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb">
-		<head>
-		${helmet.title.toString()}
-		${helmet.meta.toString()}
-		${helmet.link.toString()}
-		${helmet.script.toString()}
-		<script src="/js/client.js" defer></script>
-		<script>
-		var initialStateFromServer = ${JSON.stringify(initialState)}
-		</script>
-		</head>
-		<body class="main-overlay-dark primary-overlay-dark readonstyle-button font-family-momentum font-size-is-default logo-enabled-1 logo-style-light menu-type-fusionmenu typography-style-light col12 menu-resources  option-com-content view-article">
-		<div id="app">${markup}</div>
-		</body>
-	</html>
-	`)
+		})
+		.then((response: any) => JSON.parse(response))
+		// TODO: dont autodetect if the response is a JSON with a `data` property
+		// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
+		.then((json: any) => {
+			console.log("got ", json)
+			if (json && json.data && json.data.userName) {
+				return Promise.resolve({
+					login: {authenticatedUserName: json.data.userName},
+					welcomePackage: json.data
+				});
+			} else Promise.resolve({})
+		}, (e) => {
+			console.log("server side get welcome pkg failed", e)
+			Promise.resolve({})
+		})
+		.then(seedState => {
+			const history = createMemoryHistory({
+				initialEntries: [req.path]
+			});
+			const staticState: StaticState = {
+				getMoment:  () => moment(),
+				isServer: true,
+				jpDirectorNameFirst: "Niko",
+				jpDirectorNameLast: "Kotsatos",
+				jpDirectorEmail: "niko@community-boating.org",
+				jpPriceCents: 32500,	// TODO: get from welcome pkg
+				currentSeason: 2019,
+				serverConfig
+			}
+			const rootReducer = makeRootReducer(history, staticState)
+	
+			const {store, initialState}  = createStore({
+				rootReducer,
+				enhancers: [],
+				middlewares: [routerMiddleware(history)],
+				seedState: {
+					...seedState,
+					staticState
+				}
+			});
+	
+			const markup = renderToString(
+				<Provider store={store}>
+					<App history={history}/>
+				</Provider>
+			)
+			const helmet = Helmet.renderStatic();
+	
+			res.send(`
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb">
+			<head>
+			${helmet.title.toString()}
+			${helmet.meta.toString()}
+			${helmet.link.toString()}
+			${helmet.script.toString()}
+			<script src="/js/client.js" defer></script>
+			<script>
+			var initialStateFromServer = ${JSON.stringify(initialState)}
+			</script>
+			</head>
+			<body class="main-overlay-dark primary-overlay-dark readonstyle-button font-family-momentum font-size-is-default logo-enabled-1 logo-style-light menu-type-fusionmenu typography-style-light col12 menu-resources  option-com-content view-article">
+			<div id="app">${markup}</div>
+			</body>
+		</html>
+		`)
+		})
+		.catch(e => {
+			console.log("Error: ", e)
+		})
 	})
-})
-
-app.listen(8080, () => {
-	console.log(`Server is listening on port: 8080`)
+	app.listen(8080, () => {
+		console.log(`Server is listening on port: 8080`)
+	})
+	
+}, err => {
+	console.log("Config parse failed: ", err)
 })

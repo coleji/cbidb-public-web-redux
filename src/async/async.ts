@@ -5,7 +5,6 @@ interface MakeAPIRequestParams {
 	https: boolean,
 	host: string,
 	port: number,
-	isBehindReverseProxy: boolean,
 	apiEndpoint: string,
 	httpMethod: string,
 	postData?: any,
@@ -35,7 +34,7 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 	return new Promise((resolve, reject) => {
 		let options = {
 			hostname: params.host,
-			port: (params.isBehindReverseProxy ? 80 : params.port),
+			port: (params.port ? params.port : (params.https ? 443 : 80)),
 			path: params.apiEndpoint,
 			method: params.httpMethod,
 			headers: <any>{ }
@@ -67,14 +66,7 @@ var makeAPIRequest = function(params: MakeAPIRequestParams) {
 				resData += chunk;
 			});
 			res.on('end', () => {
-				try {
-					// TODO: better way to deal with this.  maybe we shouldnt parse JSON here
-					let response = JSON.parse(resData);
-					resolve(response);
-				} catch (e) {
-					reject(e)
-				}
-				
+				resolve(resData);
 			});
 		});
 		req.on('error', (e: string) => {
@@ -102,9 +94,8 @@ var createActionFromAPIResponse = function(params: CreateActionFromAPIResponsePa
 			postData: params.postData,
 			host : params.config.apiHost || params.config.host,
 			port : params.config.apiPort || params.config.port,
-			isBehindReverseProxy : params.config.isBehindReverseProxy,
 			extraHeaders: params.extraHeaders
-		})
+		}).then((response: any) => JSON.parse(response))
 		// TODO: dont autodetect if the response is a JSON with a `data` property
 		// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
 		.then((json: any) => {
