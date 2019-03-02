@@ -1,5 +1,5 @@
 import * as t from 'io-ts'
-import { makeAPIRequest } from '../../async/async';
+import { makeHTTPRequest } from '../../async/async';
 
 const validator = t.interface({
 	nameFirst: t.string,

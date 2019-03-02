@@ -1,6 +1,3 @@
-require("../../lib/array-polyfill")
-require("../../lib/optional")
-
 import * as express from "express"
 import * as React from "react"
 import { renderToString } from "react-dom/server"
@@ -15,20 +12,36 @@ import { createMemoryHistory } from 'history'
 import App from '../containers/App'
 import createStore from '../createStore'
 import { makeRootReducer, StaticState } from '../reducer/rootReducer'
-import { makeAPIRequest } from '../async/async';
+import { makeHTTPRequest } from '../async/async';
 import Currency from "../util/Currency";
 import getConfig from './config'
 
+require("../../lib/array-polyfill")
+require("../../lib/optional")
+
+const arr1 = ['a','b','c']
+const arr2 = arr1.zipWithIndex()
+console.log(arr2)
+const s = Some("tssdf")
+const n = None()
+console.log(s.map(e => e.length))
 
 const app = express();
 
 app.use(cookieParser(""));
 
-const apiDirectConnection = false
+app.use(express.static("dist"))
+app.use(express.static("public"))
 
-const targetUrl = 'http://localhost:3000'
+getConfig.then(serverConfig => {
+	const targetUrl = [
+		serverConfig.API.https ? 'https' : 'http',
+		"://",
+		serverConfig.API.host,
+		":",
+		serverConfig.API.port || (serverConfig.API.https ? 443 : 80)
+	].join("")
 
-if (!apiDirectConnection) {
 	const proxy = httpProxy.createProxyServer({
 		target: targetUrl,
 		ws: true
@@ -37,7 +50,6 @@ if (!apiDirectConnection) {
 	//app.use(compression());
 
 	//app.use(Express.static(path.join(__dirname, '..', 'static')));
-
 
 	// Proxy to API server
 	app.use('/api', (req, res) => {
@@ -66,20 +78,12 @@ if (!apiDirectConnection) {
 		json = { error: 'proxy_error', reason: error.message };
 		res.end(JSON.stringify(json));
 	});
-}
 
-app.use(express.static("dist"))
-app.use(express.static("public"))
-
-getConfig.then(serverConfig => {
 	app.get("*", (req, res, next) => {
 		console.log("cookie is " + req.cookies["CBIDB-SEC"])
-		makeAPIRequest({
-			https: serverConfig.API.https,
-			apiEndpoint: "/member-welcome",
+		makeHTTPRequest(serverConfig.API)({
+			path: "/member-welcome",
 			httpMethod: "GET",
-			host: serverConfig.API.host,
-			port: Number(serverConfig.API.port),
 			extraHeaders: {
 				"Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"]
 			}
@@ -105,6 +109,7 @@ getConfig.then(serverConfig => {
 			});
 			const staticState: StaticState = {
 				getMoment:  () => moment(),
+				makeAPIRequest: makeHTTPRequest(serverConfig.API),
 				isServer: true,
 				jpDirectorNameFirst: "Niko",
 				jpDirectorNameLast: "Kotsatos",

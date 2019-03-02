@@ -6,17 +6,14 @@ import optional from '../util/io-ts-optional'
 const apiValidator = t.interface({
 	host: t.string,
 	https: t.boolean,
-	port: optional(t.string),
-	proxyPrefix: t.string,
+	port: optional(t.number),
+	pathPrefix: t.string,
 })
 
 const selfValidator = t.interface({
 	host: t.string,
 	https: t.boolean
 })
-
-type API = t.TypeOf<typeof apiValidator>;
-type Self = t.TypeOf<typeof selfValidator>;
 
 const configValidator = t.interface({
 	SELF: selfValidator,
@@ -26,7 +23,8 @@ const configValidator = t.interface({
 export type ServerConfig = t.TypeOf<typeof configValidator>;
 
 export default new Promise<ServerConfig>((resolve, reject) => {
-	const config = ini.parse(fs.readFileSync('./ini/config.ini', 'utf-8'))
+	var config = ini.parse(fs.readFileSync('./ini/config.ini', 'utf-8'))
+	config.API.port = Number(config.API.port)
 	const result = configValidator.decode(config)
 
 	result.fold(

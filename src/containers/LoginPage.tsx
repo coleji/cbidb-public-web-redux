@@ -11,6 +11,7 @@ import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer'
 import { loginAction } from '../async/login'
 import {formReducer, dispatchFormUpdate} from "../form/form"
+import { MakeAPIRequest } from "../async/async";
 
 // TODO: duplicated in App and here
 export const FORM_NAME = "login"
@@ -23,11 +24,12 @@ export interface Form {
 export type StateProps = {
 	jpPrice: Currency,
 	lastSeason: number,
-	form: Form
+	form: Form,
+	makeAPIRequest: MakeAPIRequest
 }
 
 interface DispatchProps {
-	login: (form: Form) => void,
+	login: (makeAPIRequest: MakeAPIRequest, form: Form) => void,
 	updateField: (name: keyof Form, value: string) => void
 }
 
@@ -43,7 +45,7 @@ class LoginPage extends React.PureComponent<Props> {
 	render() {
 		console.log("login page props: ", this.props)
 		const self = this;
-		const loginFunction = () => self.props.login(self.props.form);
+		const loginFunction = () => self.props.login(self.props.makeAPIRequest, self.props.form);
 		
 		// left column 
 
@@ -165,11 +167,12 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		form: {
 			username: rootState.loginForm.username,
 			password: rootState.loginForm.password
-		}
+		},
+		makeAPIRequest: rootState.staticState.makeAPIRequest
 	}),
 	dispatch => ({
-		login: (form: Form) => {
-			loginAction(dispatch, form.username, form.password)
+		login: (makeAPIRequest: MakeAPIRequest, form: Form) => {
+			loginAction(makeAPIRequest, dispatch, form.username, form.password)
 		},
 		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	})

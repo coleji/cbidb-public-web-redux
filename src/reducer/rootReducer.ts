@@ -3,6 +3,7 @@ import { connectRouter } from 'connected-react-router'
 
 import {formReducer} from "../form/form"
 import {LoginState, loginReducer} from "./loginStateReducer"
+import {RequestParams} from "../async/async"
 
 import {loginFormReducer, Form as LoginForm} from "../containers/LoginPage"
 import {Form as RegistrationRequiredInfoForm, FORM_NAME as registrationRequiredInfoFormName} from "../containers/registration/RequiredInfo"
@@ -18,6 +19,7 @@ import {ServerConfig} from "../server/config"
 
 export interface StaticState {
 	getMoment: () => moment.Moment,
+	makeAPIRequest: (requestParams: RequestParams) => Promise<string>,
 	isServer: boolean,
 	jpDirectorNameFirst: string,
 	jpDirectorNameLast: string,

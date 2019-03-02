@@ -9,11 +9,11 @@ module.exports = function (env, argv) {
 			filename: 'js/server.js',
 			// path needs to be an ABSOLUTE file path
 			path: __dirname + "/dist",
-			publicPath: '/dist/',
+			publicPath: '/dist/'
 		},
 		mode: "development",	
 		// Enable sourcemaps for debugging webpack's output.
-		devtool: 'source-map',
+//		devtool: 'source-map',
 		resolve: {
 			// Add '.ts' and '.tsx' as resolvable extensions.
 			extensions: [".ts", ".tsx", ".js", ".json"],

@@ -1,122 +1,160 @@
 import * as http from 'http';
 import * as https from 'https';
 
-interface MakeAPIRequestParams {
-	https: boolean,
+export interface ServerParams {
 	host: string,
-	port: number,
-	apiEndpoint: string,
-	httpMethod: string,
-	postData?: any,
-	postFormat?: string,
-	extraHeaders?: any
-}
-
-interface CreateActionFromAPIResponseParams {
 	https: boolean,
-	apiEndpoint: string,
-	httpMethod: string,
-	postData?: any,
-	postFormat?: string,
-	extraHeaders?: any,
-	config: {
-		apiHost: string,
-		apiPort: number,
-		host: string,
-		port: number,
-		isBehindReverseProxy: boolean,
-	},
-	dataForEach?: any,
-	dispatch: any
+	port?: number,
+	pathPrefix?: string,
 }
 
-var makeAPIRequest = function(params: MakeAPIRequestParams) {
+export interface RequestParams {
+	httpMethod: "GET" | "POST", // TODO: support others?
+	path: string,
+	postContentIsFormURLEncoded?: boolean,
+	postData?: string | object,
+	extraHeaders?: object
+}
+
+export type MakeAPIRequest = (requestParams: RequestParams) => Promise<string>
+
+export const makeHTTPRequest: (serverParams: ServerParams) => (requestParams: RequestParams) => Promise<string> =
+(serverParams: ServerParams) => (requestParams: RequestParams) => {
 	return new Promise((resolve, reject) => {
+		interface PostValues {content: string, headers: {"Content-Type": string, "Content-Length": string}}
+		const postValues: Optional<PostValues> = (function() {
+			 if (requestParams.httpMethod == 'POST') {
+				if (requestParams.postContentIsFormURLEncoded) {
+					const data = (<string>requestParams.postData)
+					return Some({
+						content: data,
+						headers: {
+							"Content-Type": "application/x-www-form-urlencoded",
+							"Content-Length": String(data.length)
+						}
+					})
+				} else {
+					const json = JSON.stringify(requestParams.postData)
+					return Some({
+						content: json,
+						headers: {
+							"Content-Type": "application/json",
+							"Content-Length": String(json.length)
+						}
+					})
+				}
+			 } else return None();
+		}())
+
 		let options = {
-			hostname: params.host,
-			port: (params.port ? params.port : (params.https ? 443 : 80)),
-			path: params.apiEndpoint,
-			method: params.httpMethod,
-			headers: <any>{ }
-		};
-
-		if (params.httpMethod == 'POST') {
-			if (params.postFormat == "JSON") {
-				options.headers['Content-Type'] = 'application/json';
-				options.headers['Content-Length'] = JSON.stringify(params.postData).length;
-			} else {
-				options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-				options.headers['Content-Length'] = params.postData.length;
+			hostname: serverParams.host,
+			port: (serverParams.port ? serverParams.port : (serverParams.https ? 443 : 80)),
+			path: requestParams.path,
+			method: requestParams.httpMethod,
+			headers: <any>{
+				...requestParams.extraHeaders,
+				...postValues.map(v => v.headers).getOrElse(<any>{})
 			}
-			
-		}
-
-		for (var p in params.extraHeaders || {}) {
-			options.headers[p] = params.extraHeaders[p];
-		}
-
-		const method = params.https ? https : http;
-
+		};
+		
 		console.log("making request to " + options.hostname + ":" + options.port + options.path)
+		console.log(options)
 
-		let req = (method as any).request(options, (res: any) => {
+
+		// TODO: should we embed the special case for logout directive on any response?  Seems heavy handed
+		const reqCallback = (res: any) => {
 			let resData = '';
-			//console.log("API RESPONSE: ", res)
 			res.on('data', (chunk: any) => {
 				resData += chunk;
 			});
 			res.on('end', () => {
 				resolve(resData);
 			});
-		});
+		}
+
+		const req = (
+			serverParams.https
+			? https.request(options, reqCallback)
+			: http.request(options, reqCallback)
+		)
+
 		req.on('error', (e: string) => {
 			reject(e);
 		});
 
-		if (params.httpMethod == 'POST') {
-			if (params.postFormat == "JSON") {
-				req.write(JSON.stringify(params.postData));
-			} else {
-				req.write(params.postData);
-			}
-		}
+		postValues.map(v => v.content).forEach(v => req.write(v))
+
 		req.end();
 	});
-};
+}
 
-var createActionFromAPIResponse = function(params: CreateActionFromAPIResponseParams) {
-	return new Promise((resolve, reject) => {
-		console.log("starting api call")
-		makeAPIRequest({
-			https: params.https,
-			apiEndpoint: params.apiEndpoint,
-			httpMethod: params.httpMethod,
-			postData: params.postData,
-			host : params.config.apiHost || params.config.host,
-			port : params.config.apiPort || params.config.port,
-			extraHeaders: params.extraHeaders
-		}).then((response: any) => JSON.parse(response))
-		// TODO: dont autodetect if the response is a JSON with a `data` property
-		// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
-		.then((json: any) => {
-			console.log("api success", json)
-			let data = json.data;
-			if (params.dataForEach) data.forEach(params.dataForEach);
-			if (params.dispatch && data && data.sessionExpired) {
-				params.dispatch({
-					type: "LOGOUT"
-				});
-				reject("Session expired.");
-			} else if (data) resolve(data);
-			else resolve(json)
-		}).catch((e) => {
-			console.log("api failure")
-			reject(e);
-		});
-	});
-};
 
-export {
-	makeAPIRequest,
-	createActionFromAPIResponse
-};
+// interface MakeAPIRequestParams {
+// 	https: boolean,
+// 	host: string,
+// 	port: number,
+// 	apiEndpoint: string,
+// 	httpMethod: string,
+// 	postData?: any,
+// 	postFormat?: string,
+// 	extraHeaders?: any
+// }
+
+// interface CreateActionFromAPIResponseParams {
+// 	https: boolean,
+// 	apiEndpoint: string,
+// 	httpMethod: string,
+// 	postData?: any,
+// 	postFormat?: string,
+// 	extraHeaders?: any,
+// 	config: {
+// 		apiHost: string,
+// 		apiPort: number,
+// 		host: string,
+// 		port: number,
+// 		isBehindReverseProxy: boolean,
+// 	},
+// 	dataForEach?: any,
+// 	dispatch: any
+// }
+
+// var makeAPIRequest = function(params: MakeAPIRequestParams) {
+
+// };
+
+// var createActionFromAPIResponse = function(params: CreateActionFromAPIResponseParams) {
+// 	return new Promise((resolve, reject) => {
+// 		console.log("starting api call")
+// 		makeAPIRequest({
+// 			https: params.https,
+// 			apiEndpoint: params.apiEndpoint,
+// 			httpMethod: params.httpMethod,
+// 			postData: params.postData,
+// 			host : params.config.apiHost || params.config.host,
+// 			port : params.config.apiPort || params.config.port,
+// 			extraHeaders: params.extraHeaders
+// 		}).then((response: any) => JSON.parse(response))
+// 		// TODO: dont autodetect if the response is a JSON with a `data` property
+// 		// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
+// 		.then((json: any) => {
+// 			console.log("api success", json)
+// 			let data = json.data;
+// 			if (params.dataForEach) data.forEach(params.dataForEach);
+// 			if (params.dispatch && data && data.sessionExpired) {
+// 				params.dispatch({
+// 					type: "LOGOUT"
+// 				});
+// 				reject("Session expired.");
+// 			} else if (data) resolve(data);
+// 			else resolve(json)
+// 		}).catch((e) => {
+// 			console.log("api failure")
+// 			reject(e);
+// 		});
+// 	});
+// };
+
+// export {
+// 	makeAPIRequest,
+// 	createActionFromAPIResponse
+// };
