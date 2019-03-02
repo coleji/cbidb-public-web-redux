@@ -15,21 +15,33 @@ export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T, s
 			}
 		}
 		
-		const onChange = 
+		const onChange = (
 			this.props.reduxAction
 			? (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value)
-			: this.props.onChange;
-		return (<input 
-			id={this.props.id} ref={this.props.innerRef}
-			className="text_field apex-item-text"
-			type={this.props.isPassword ? "password" : "text"}
-			name={this.props.id}
-			size={this.props.size || 25}
-			maxLength={this.props.maxLength || 100}
-			onChange={onChange}
-			onKeyPress={onKeyPress}
-			value={this.props.value || ""}
-		/>);
+			: this.props.onChange
+		);
+
+		const size = this.props.size || 25
+
+		if (this.props.blurBox) {
+			return (<div style={{
+				width: `${size*8.8}px`,
+				height: "20px",
+				backgroundColor: "#eee"
+			}}/>);
+		} else {
+			return (<input 
+				id={this.props.id} ref={this.props.innerRef}
+				className="text_field apex-item-text"
+				type={this.props.isPassword ? "password" : "text"}
+				name={this.props.id}
+				size={size}
+				maxLength={this.props.maxLength || 100}
+				onChange={onChange}
+				onKeyPress={onKeyPress}
+				value={this.props.value || ""}
+			/>);
+		}
 	}
 }
 

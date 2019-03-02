@@ -71,6 +71,11 @@ interface StaticProps { }
 type Props = StateProps & DispatchProps & StaticProps;
 
 class RequiredInfo extends React.PureComponent<Props> {
+	constructor(props: Props) {
+		super(props)
+		console.log("constructor!!!")
+		// put api call
+	}
 	render() {
 		const self = this;
 		const reduxAction = self.props.updateField;
@@ -98,6 +103,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 					isRequired={true}
 					value={self.props.form.firstName}
 					reduxAction={reduxAction}
+					blurBox={true}
 				/>
 				<FormInput
 					id="middleInitial"
