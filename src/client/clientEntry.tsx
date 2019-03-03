@@ -8,6 +8,7 @@ import { createBrowserHistory } from 'history'
 import createStore from '../createStore'
 import App from '../containers/App'
 import {makeHTTPRequest} from "../async/async"
+import {setStore} from "../reducer/store"
 
 import {makeRootReducer, StaticState} from '../reducer/rootReducer'
 
@@ -42,6 +43,7 @@ export const {store, initialState} = createStore({
   seedState
 });
 
+setStore(store)
 
 hydrate(
   <Provider store={store}>

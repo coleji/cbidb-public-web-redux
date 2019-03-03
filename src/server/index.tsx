@@ -15,6 +15,7 @@ import { makeRootReducer, StaticState } from '../reducer/rootReducer'
 import { makeHTTPRequest } from '../async/async';
 import Currency from "../util/Currency";
 import getConfig from './config'
+import {setStore} from "../reducer/store"
 
 require("../../lib/array-polyfill")
 require("../../lib/optional")
@@ -129,6 +130,8 @@ getConfig.then(serverConfig => {
 					staticState
 				}
 			});
+
+			setStore(store);
 	
 			const markup = renderToString(
 				<Provider store={store}>

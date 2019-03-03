@@ -15,6 +15,7 @@ import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import range from "../../util/range";
+import {getReduxState} from "../../reducer/store"
 
 
 export const FORM_NAME = "registrationRequiredInfo"
@@ -77,6 +78,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 		// put api call
 	}
 	render() {
+		console.log("store", getReduxState())
 		const self = this;
 		const reduxAction = self.props.updateField;
 
