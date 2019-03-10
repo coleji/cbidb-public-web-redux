@@ -6,13 +6,13 @@ import optional from '../util/io-ts-optional'
 const apiValidator = t.interface({
 	host: t.string,
 	https: t.boolean,
-	port: optional(t.number),
-	pathPrefix: t.string,
+	port: optional(t.number)
 })
 
 const selfValidator = t.interface({
 	host: t.string,
-	https: t.boolean
+	https: t.boolean,
+	pathPrefix: t.string
 })
 
 const configValidator = t.interface({
@@ -31,7 +31,7 @@ export default new Promise<ServerConfig>((resolve, reject) => {
 		e => {
 			reject({
 				recevied: config,
-				err: e.flatMap(e1 => e1.context.map(e2 => e2))
+				err: e
 			})
 		},
 		c => resolve(c)

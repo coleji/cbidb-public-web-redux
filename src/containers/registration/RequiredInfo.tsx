@@ -16,6 +16,7 @@ import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import range from "../../util/range";
 import {getReduxState} from "../../reducer/store"
+import {get as getRequired} from "../../api/junior/required"
 
 
 export const FORM_NAME = "registrationRequiredInfo"
@@ -72,24 +73,27 @@ interface StaticProps { }
 type Props = StateProps & DispatchProps & StaticProps;
 
 class RequiredInfo extends React.PureComponent<Props> {
+	personId: number
 	constructor(props: Props) {
 		super(props)
 		console.log("constructor!!!")
-		// put api call
+		// TODO: typesafe? 
+		const match = matchPath(
+			props.router.location.pathname,
+			{ path }
+			) || {params: {}};
+		this.personId = (match.params as any).personId;
+
+		console.log("scraped from the url: " + this.personId)
+		
+		getRequired(this.personId)
 	}
 	render() {
 		console.log("store", getReduxState())
 		const self = this;
 		const reduxAction = self.props.updateField;
 
-		// TODO: typesafe? 
-		const match = matchPath(
-			self.props.router.location.pathname,
-			{ path }
-		  ) || {params: {}};
-		const personId = (match.params as any).personId;
 
-		console.log("scraped from the url: " + personId)
 
 		const thisYear = Number(self.props.getMoment().format("YYYY"))
 		const years = range(thisYear-20, thisYear)

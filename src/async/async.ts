@@ -20,6 +20,7 @@ export type MakeAPIRequest = (requestParams: RequestParams) => Promise<string>
 
 export const makeHTTPRequest: (serverParams: ServerParams) => (requestParams: RequestParams) => Promise<string> =
 (serverParams: ServerParams) => (requestParams: RequestParams) => {
+	console.log("server params: ", serverParams)
 	return new Promise((resolve, reject) => {
 		interface PostValues {content: string, headers: {"Content-Type": string, "Content-Length": string}}
 		const postValues: Optional<PostValues> = (function() {
@@ -49,7 +50,7 @@ export const makeHTTPRequest: (serverParams: ServerParams) => (requestParams: Re
 		let options = {
 			hostname: serverParams.host,
 			port: (serverParams.port ? serverParams.port : (serverParams.https ? 443 : 80)),
-			path: requestParams.path,
+			path: (serverParams.pathPrefix || "") + requestParams.path,
 			method: requestParams.httpMethod,
 			headers: <any>{
 				...requestParams.extraHeaders,
