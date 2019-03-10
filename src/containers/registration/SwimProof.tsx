@@ -97,7 +97,7 @@ class SwimProof extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-		form: state.swimProofForm,
+		form: state.swimProofForm.data,
         jpDirectorNameFirst: state.staticState.jpDirectorNameFirst,
         jpDirectorNameLast: state.staticState.jpDirectorNameLast,
         jpDirectorEmail: state.staticState.jpDirectorEmail,

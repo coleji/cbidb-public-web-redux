@@ -202,7 +202,7 @@ class RatingsPage extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-		form: state.scholarshipForm,
+		form: state.scholarshipForm.data,
 		jpPrice: Currency.cents(state.staticState.jpPriceCents),
 		currentSeason: state.staticState.currentSeason
 	}),

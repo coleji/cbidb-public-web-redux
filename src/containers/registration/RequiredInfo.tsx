@@ -17,16 +17,17 @@ import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import range from "../../util/range";
 import {getReduxState} from "../../reducer/store"
 import {get as getRequired} from "../../api/junior/required"
+import {FormState} from "../../form/form"
 
 
 export const FORM_NAME = "registrationRequiredInfo"
 
 export const path = '/required/:personId'
 
-export interface Form {
-	firstName: string
-	middleInitial: string
-	lastName: string,
+export const formDefault = {
+	firstName: "",
+	middleInitial: "",
+	lastName: "",
 	// dobMonth: string,
 	// dobDate: string,
 	// dobYear: string,
@@ -54,12 +55,14 @@ export interface Form {
 	
 }
 
+export type Form = typeof formDefault
+
 class FormInput extends TextInput<Form> {}
 class FormSelect extends Select<Form> {}
 class FormTextArea extends TextArea<Form> {}
 
 interface StateProps {
-	form: Form,
+	form: FormState<Form>,
 	router: any,
 	getMoment: () => moment.Moment
 }
@@ -107,22 +110,24 @@ class RequiredInfo extends React.PureComponent<Props> {
 					id="firstName"
 					label="First Name"
 					isRequired={true}
-					value={self.props.form.firstName}
+					value={self.props.form.data.firstName}
 					reduxAction={reduxAction}
-					blurBox={true}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="middleInitial"
 					label="Middle Initial"
-					value={self.props.form.middleInitial}
+					value={self.props.form.data.middleInitial}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="lastName"
 					label="Last Initial"
 					isRequired={true}
-					value={self.props.form.lastName}
+					value={self.props.form.data.lastName}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				{/* <DateTriPicker<Form, DateTriPickerProps<Form>>
 					years={years}

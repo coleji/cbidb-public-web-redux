@@ -1,7 +1,7 @@
 import { Action, combineReducers } from "redux";
 import { connectRouter } from 'connected-react-router'
 
-import {formReducer} from "../form/form"
+import {FormState, formReducer} from "../form/form"
 import {LoginState, loginReducer} from "./loginStateReducer"
 import {RequestParams} from "../async/async"
 
@@ -12,7 +12,6 @@ import {Form as SwimProofForm, FORM_NAME as swimProofFormName} from "../containe
 import {Form as SurveyInfoForm, FORM_NAME as surveyInfoFormName} from "../containers/registration/SurveyInfo"
 import {Form as CreateAccountForm, FORM_NAME as createAccountFormName} from "../containers/create-acct/CreateAccount"
 import {Form as ScholarshipForm, FORM_NAME as scholarshipFormName} from "../containers/Scholarship"
-import {reducer as juniorRequiredAPI, State as juniorRequiredAPIState} from "../api/junior/required"
 import * as moment from "moment";
 import { WelcomePackageState, welcomePackageReducer } from "./welcomePackageReducer";
 import Currency from "../util/Currency";
@@ -35,14 +34,13 @@ export interface RootState {
 	login: LoginState,
 	router: any,
 	loginForm: LoginForm,
-	createAcctForm: CreateAccountForm,
-	registrationRequiredInfoForm: RegistrationRequiredInfoForm,
-	emergencyContactForm: EmergencyContactForm,
-	swimProofForm: SwimProofForm,
-	surveyInfoForm: SurveyInfoForm,
-	scholarshipForm: ScholarshipForm,
-	welcomePackage: WelcomePackageState,
-	juniorRequiredAPI: juniorRequiredAPIState
+	createAcctForm: FormState<CreateAccountForm>,
+	registrationRequiredInfoForm: FormState<RegistrationRequiredInfoForm>,
+	emergencyContactForm: FormState<EmergencyContactForm>,
+	swimProofForm: FormState<SwimProofForm>,
+	surveyInfoForm: FormState<SurveyInfoForm>,
+	scholarshipForm: FormState<ScholarshipForm>,
+	welcomePackage: WelcomePackageState
 }
 
 export type RootReducer = (state: RootState, action: Action) => RootState
@@ -60,7 +58,6 @@ export const makeRootReducer: (history: any, staticState: StaticState) => RootRe
 		swimProofForm: formReducer<SwimProofForm>(swimProofFormName),
 		surveyInfoForm: formReducer<SurveyInfoForm>(surveyInfoFormName),
 		scholarshipForm: formReducer<ScholarshipForm>(scholarshipFormName),
-		welcomePackage: welcomePackageReducer,
-		juniorRequiredAPI
+		welcomePackage: welcomePackageReducer
 	})	
 }

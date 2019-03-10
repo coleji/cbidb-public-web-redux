@@ -1,7 +1,7 @@
 import { MakeAPIRequest } from "./async";
 
 export const loginAction = (makeAPIRequest: MakeAPIRequest, dispatch: (action: any) => void, userName: string, password: string) => makeAPIRequest({
-    path: "/api/authenticate-member",
+    path: "/authenticate-member",
     httpMethod: "POST",
 	postData: "username=" + encodeURIComponent(userName) + "&password=" + encodeURIComponent(password),
 	extraHeaders: {"dont-redirect": "true"},
@@ -21,7 +21,7 @@ export const loginAction = (makeAPIRequest: MakeAPIRequest, dispatch: (action: a
 	} else {
 		console.log("about to query welcome pkg")
 		return makeAPIRequest({
-			path: "/api/member-welcome",
+			path: "/member-welcome",
 			httpMethod: "GET"
 		})
 		.then(response => new Promise((resolve, reject) => {

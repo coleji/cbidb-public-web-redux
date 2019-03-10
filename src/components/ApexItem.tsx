@@ -18,13 +18,28 @@ export interface ApexItemProps<T_Form, T_ValueType> {
 
 export abstract class ApexItem<T_Form, T_OwnProps, T_ValueType> extends React.PureComponent<T_OwnProps & ApexItemProps<T_Form, T_ValueType>> {
 	abstract getElement(): React.ReactNode
-	renderAsTableRow(): React.ReactNode {
-		return (<tr>
-			<td style={{ textAlign: "right" }}>
+	getLabel() {
+		if (this.props.blurBox) {
+			return (
+				(<div style={{
+					width: `100px`,
+					height: "20px",
+					backgroundColor: "#eee"
+				}}/>)
+			)
+		} else {
+			return (
 				<label id={this.props.id + "_LABEL"} htmlFor={this.props.id}>
 					{this.props.isRequired ? <img src="/images/required.png" alt="Value Required" tabIndex={999} />: ""}
 					<span className="optional">{this.props.label || ""}</span>
 				</label>
+			);
+		}
+	}
+	renderAsTableRow(): React.ReactNode {
+		return (<tr>
+			<td style={{ textAlign: "right" }}>
+				{this.getLabel()}
 			</td>
 			<td style={{ textAlign: "left" }}>
 				{this.props.prependToElementCell}

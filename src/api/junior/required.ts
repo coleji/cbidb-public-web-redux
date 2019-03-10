@@ -2,13 +2,15 @@ import * as t from 'io-ts'
 import { Dispatch, Action, Reducer } from "redux";
 
 import {getDispatch, getReduxState} from "../../reducer/store"
+import { initialize, success } from '../../form/form';
+import {FORM_NAME, formDefault} from "../../containers/registration/RequiredInfo"
 
 const path = "/junior/required"
 
 const validator = t.interface({
-	nameFirst: t.string,
-	nameLast: t.string,
-	nameMiddleInitial: t.string
+	firstName: t.string,
+	middleInitial: t.string,
+	lastName: t.string,
 })
 
 type ApiResponseShape = t.TypeOf<typeof validator>;
@@ -33,44 +35,20 @@ const defaultState: State = {
 
 export function get(personId: number) {
 	const dispatch = getDispatch();
-	dispatch({
-		type: "MAKE_REQ",
-		path
-	})
+	initialize(FORM_NAME, formDefault);
 	const makeAPIRequest = getReduxState().staticState.makeAPIRequest
 	return makeAPIRequest({
 		httpMethod: "GET",
 		path
 	}).then((result: string) => {
-		dispatch({
-			type: "SUCCESS",
-			path,
-			success: JSON.parse(result)
-		})
 		console.log("Got result from api: ", result)
-		console.log("whaddaya know its a json: ", JSON.parse(result))
+		const parsedResult = JSON.parse(result)
+		console.log("whaddaya know its a json: ", parsedResult)
+		// TODO: handle this (found an unexpected field)
+		for (var p in parsedResult) {
+			if (undefined == (<any>formDefault)[p]) return Promise.reject(p)
+		}
+		success(FORM_NAME, parsedResult)
 		return Promise.resolve("blah")
 	})
-}
-
-export const reducer: (state: State, action: ApiAction) => State = (state=defaultState, action) => {
-	if (action.path != path) return state;
-
-	switch (action.type) {
-	case "MAKE_REQ":
-		return {
-			status: "WAITING"
-		}
-	case "SUCCESS":
-		return {
-			status: "SUCCESS",
-			data: action.success
-		}
-	case "FAILURE":
-		return {
-			status: "FAILURE"
-		}
-	default:
-		return state;
-	}
 }

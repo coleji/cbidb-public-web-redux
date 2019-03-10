@@ -183,7 +183,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-        form: state.surveyInfoForm
+        form: state.surveyInfoForm.data
 	}),
 	dispatch => ({
 		updateField: function(name: keyof Form, value: any) {

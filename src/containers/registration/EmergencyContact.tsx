@@ -165,7 +165,7 @@ class EmergencyContact extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-		form: state.emergencyContactForm
+		form: state.emergencyContactForm.data
 	}),
 	dispatch => ({
 		updateField: (name: keyof Form, value: string) => {

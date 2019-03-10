@@ -103,7 +103,7 @@ class CreateAccount extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-		form: state.createAcctForm
+		form: state.createAcctForm.data
 	}),
 	dispatch => ({
 		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value),
