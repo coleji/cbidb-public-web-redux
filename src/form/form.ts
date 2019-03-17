@@ -43,6 +43,35 @@ export function success<T>(formName: string, result: T) {
 	})
 }
 
+export function get<T>(formName: string, formDefault: T, path: string) {
+	initialize(formName, formDefault);
+	return getReduxState().staticState.makeAPIRequest({
+		httpMethod: "GET",
+		path
+	}).then((result: string) => {
+		console.log("Got result from api: ", result)
+		const parsedResult = JSON.parse(result)
+		console.log("whaddaya know its a json: ", parsedResult)
+		// TODO: handle this (found an unexpected field)
+		for (var p in parsedResult) {
+			if (undefined == (formDefault as any)[p]) return Promise.reject(p)
+		}
+		success(formName, parsedResult)
+		return Promise.resolve("blah")
+	})
+}
+
+export function post<T extends object>(formName: string, state: T, path: string) {
+	return getReduxState().staticState.makeAPIRequest({
+		httpMethod: "POST",
+		path,
+		postData: state
+	}).then((result: string) => {
+		console.log("Got result from api: ", result)
+		return Promise.resolve("blah")
+	})
+}
+
 export const formReducer: <T extends object>(formName: string) => Reducer<FormState<T>> = 
 <T extends object>(formName: string) => (state: FormState<T> = defaultState, action: FormAction<T>) => {
     type FormSubSet = {

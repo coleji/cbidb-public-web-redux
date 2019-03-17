@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router';
 import * as moment from "moment";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -8,7 +9,7 @@ import ProgressThermometer from "../../components/ProgressThermometer";
 import { Select } from "../../components/Select";
 import TextArea from "../../components/TextArea";
 import TextInput from "../../components/TextInput";
-import { dispatchFormUpdate } from "../../form/form";
+import { dispatchFormUpdate, post } from "../../form/form";
 import { countries, states } from "../../lov";
 import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
@@ -16,13 +17,16 @@ import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import range from "../../util/range";
 import {getReduxState} from "../../reducer/store"
-import {get as getRequired} from "../../api/junior/required"
-import {FormState} from "../../form/form"
+import {FormState, get} from "../../form/form"
+import { RequestParams } from "../../async/async";
+import Button from "../../components/Button";
 
 
 export const FORM_NAME = "registrationRequiredInfo"
 
 export const path = '/required/:personId'
+
+const apiPath = "/junior/required"
 
 export const formDefault = {
 	firstName: "",
@@ -64,11 +68,13 @@ class FormTextArea extends TextArea<Form> {}
 interface StateProps {
 	form: FormState<Form>,
 	router: any,
-	getMoment: () => moment.Moment
+	getMoment: () => moment.Moment,
+	makeAPIRequest: (requestParams: RequestParams) => Promise<string>
 }
 
 interface DispatchProps {
-	updateField: (name: keyof Form, value: string) => void
+	updateField: (name: keyof Form, value: string) => void,
+	goHome: () => void
 }
 
 interface StaticProps { }
@@ -89,7 +95,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		getRequired(this.personId)
+		get(FORM_NAME, formDefault, apiPath)
 	}
 	render() {
 		console.log("store", getReduxState())
@@ -282,6 +288,10 @@ class RequiredInfo extends React.PureComponent<Props> {
 				<br />
 				{specNeedsFields}
 			</JoomlaArticleRegion>
+			<Button text="Next" onClick={() => {
+				post(FORM_NAME, this.props.form.data, apiPath)
+				this.props.goHome()
+			}}/>
 		</JoomlaMainPage>
 	}
 }
@@ -290,12 +300,14 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
 		getMoment: state.staticState.getMoment,
 		form: state.registrationRequiredInfoForm,
-		router: state.router
+		router: state.router,
+		makeAPIRequest: state.staticState.makeAPIRequest
 	}),
 	dispatch => ({
 		updateField: (name: keyof Form, value: string) => {
 			console.log("updating field!")
 			dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
-		}
+		},
+		goHome: () => dispatch(push('/'))
 	})
 )(RequiredInfo)
