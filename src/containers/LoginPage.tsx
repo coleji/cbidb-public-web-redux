@@ -10,7 +10,7 @@ import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer'
 import { loginAction } from '../async/login'
-import {formReducer, dispatchFormUpdate} from "../form/form"
+import {formReducer, dispatchFormUpdate, defaultState, FormState} from "../form/form"
 import { MakeAPIRequest } from "../async/async";
 
 // TODO: duplicated in App and here
@@ -152,10 +152,10 @@ class LoginPage extends React.PureComponent<Props> {
 
 const standardFormReducer = formReducer<Form>(FORM_NAME);
 
-export const loginFormReducer = (state: any = {}, action: any) => {
+export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<Form> = defaultState, action: any) => {
 	const modifiedState = 
 		action.type == "LOGIN_FAILURE"
-		? {...state, password: ""}
+		? {...state, data: {...state.data, password: ""}}
 		: state;
 	return standardFormReducer(modifiedState, action);
 }
@@ -165,8 +165,8 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		jpPrice: Currency.cents(rootState.staticState.jpPriceCents),
 		lastSeason: rootState.staticState.currentSeason-1,
 		form: {
-			username: rootState.loginForm.username,
-			password: rootState.loginForm.password
+			username: rootState.loginForm.data.username,
+			password: rootState.loginForm.data.password
 		},
 		makeAPIRequest: rootState.staticState.makeAPIRequest
 	}),

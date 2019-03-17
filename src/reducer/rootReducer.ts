@@ -33,7 +33,7 @@ export interface RootState {
 	staticState: StaticState,
 	login: LoginState,
 	router: any,
-	loginForm: LoginForm,
+	loginForm: FormState<LoginForm>,
 	createAcctForm: FormState<CreateAccountForm>,
 	registrationRequiredInfoForm: FormState<RegistrationRequiredInfoForm>,
 	emergencyContactForm: FormState<EmergencyContactForm>,

@@ -20,7 +20,7 @@ export type FormState<T> = {
 	data?: T
 }
 
-const defaultState: FormState<any> = {
+export const defaultState: FormState<any> = {
 	apiState: "UNINITIALIZED",
 	data: {}
 }
