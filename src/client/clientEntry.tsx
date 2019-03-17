@@ -31,7 +31,7 @@ const staticState: StaticState = {
   ...seedState.staticState,
   isServer: false,
   getMoment: () => moment(),
-  makeAPIRequest: makeHTTPRequest(seedState.staticState.serverConfig.SELF)
+  makeAPIRequest: makeHTTPRequest(seedState.staticState.serverConfig.SELF)({})
 }
 
 const rootReducer = makeRootReducer(history, staticState)

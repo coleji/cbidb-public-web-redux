@@ -18,8 +18,8 @@ export interface RequestParams {
 
 export type MakeAPIRequest = (requestParams: RequestParams) => Promise<string>
 
-export const makeHTTPRequest: (serverParams: ServerParams) => (requestParams: RequestParams) => Promise<string> =
-(serverParams: ServerParams) => (requestParams: RequestParams) => {
+export const makeHTTPRequest: (serverParams: ServerParams) => (staticHeaders: object) => (requestParams: RequestParams) => Promise<string> =
+(serverParams: ServerParams) => staticHeaders => (requestParams: RequestParams) => {
 	console.log("server params: ", serverParams)
 	return new Promise((resolve, reject) => {
 		interface PostValues {content: string, headers: {"Content-Type": string, "Content-Length": string}}
@@ -53,6 +53,7 @@ export const makeHTTPRequest: (serverParams: ServerParams) => (requestParams: Re
 			path: (serverParams.pathPrefix || "") + requestParams.path,
 			method: requestParams.httpMethod,
 			headers: <any>{
+				...staticHeaders,
 				...requestParams.extraHeaders,
 				...postValues.map(v => v.headers).getOrElse(<any>{})
 			}

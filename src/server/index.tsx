@@ -83,21 +83,20 @@ getConfig.then(serverConfig => {
 	app.get("*", (req, res, next) => {
 		console.log("cookie is " + req.cookies["CBIDB-SEC"])
 		makeHTTPRequest(serverConfig.API)({
+			"Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"]
+		})({
 			path: "/member-welcome",
-			httpMethod: "GET",
-			extraHeaders: {
-				"Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"]
-			}
+			httpMethod: "GET"
 		})
 		.then((response: any) => JSON.parse(response))
 		// TODO: dont autodetect if the response is a JSON with a `data` property
 		// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
 		.then((json: any) => {
 			console.log("got ", json)
-			if (json && json.data && json.data.userName) {
+			if (json && json.userName) {
 				return Promise.resolve({
-					login: {authenticatedUserName: json.data.userName},
-					welcomePackage: json.data
+					login: {authenticatedUserName: json.userName},
+					homePageForm: { data: json }
 				});
 			} else Promise.resolve({})
 		}, (e) => {
@@ -105,12 +104,15 @@ getConfig.then(serverConfig => {
 			Promise.resolve({})
 		})
 		.then(seedState => {
+			console.log("about to create store server side")
 			const history = createMemoryHistory({
 				initialEntries: [req.path]
 			});
 			const staticState: StaticState = {
 				getMoment:  () => moment(),
-				makeAPIRequest: makeHTTPRequest(serverConfig.API),
+				makeAPIRequest: makeHTTPRequest(serverConfig.API)({
+					"Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"]
+				}),
 				isServer: true,
 				jpDirectorNameFirst: "Niko",
 				jpDirectorNameLast: "Kotsatos",

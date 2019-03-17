@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import { matchPath } from 'react-router-dom';
 import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer';
-import { WelcomePackageState } from "../reducer/welcomePackageReducer";
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
+import {Form as WelcomePackageState} from "../containers/HomePage"
 
 
 interface StateProps {
@@ -65,7 +65,7 @@ class RatingsPage extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-		welcomePackage: state.welcomePackage,
+		welcomePackage: state.homePageForm.data,
 		router: state.router
 	}),
 	dispatch => ({

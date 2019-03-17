@@ -20,11 +20,6 @@ export type FormState<T> = {
 	data?: T
 }
 
-export const defaultState: FormState<any> = {
-	apiState: "UNINITIALIZED",
-	data: {}
-}
-
 export function initialize<T>(formName: string, defaultValue: T) {
 	const dispatch = getDispatch();
 	dispatch({
@@ -54,10 +49,14 @@ export function get<T>(formName: string, formDefault: T, path: string) {
 		console.log("whaddaya know its a json: ", parsedResult)
 		// TODO: handle this (found an unexpected field)
 		for (var p in parsedResult) {
-			if (undefined == (formDefault as any)[p]) return Promise.reject(p)
+			if (undefined === (formDefault as any)[p]) return Promise.reject(p)
 		}
 		success(formName, parsedResult)
 		return Promise.resolve("blah")
+	}).catch(err => {
+		console.log("Error: ", err)
+	}).then(() => {
+		console.log("finished form get")
 	})
 }
 
@@ -72,26 +71,32 @@ export function post<T extends object>(formName: string, state: T, path: string)
 	})
 }
 
-export const formReducer: <T extends object>(formName: string) => Reducer<FormState<T>> = 
-<T extends object>(formName: string) => (state: FormState<T> = defaultState, action: FormAction<T>) => {
+export const formReducer: <T extends object>(formName: string, defaultState: T) => Reducer<FormState<T>> = 
+<T extends object>(formName: string, defaultState: T) => (state: FormState<T>, action: FormAction<T>) => {
+	const startState = state || {
+		apiState: "UNINITIALIZED",
+		data: defaultState
+	}
+
     type FormSubSet = {
         [K in keyof T]: T[K]
     }
 
-    if (action.formName != formName) return state;
+    if (action.formName != formName) return startState;
     
-    console.log(action)
+    console.log("ACTION: ", action)
     switch (action.type) {
 	case "UPDATE_FORM":
 		const updateAction = <FormUpdateAction>action;
         var updated: any = {};
         updated[updateAction.fieldName] = updateAction.fieldValue;
 		return {
-			apiState: state.apiState,
-			data: <T>{...<object>state.data, ...<object>(updated as FormSubSet)}
+			apiState: startState.apiState,
+			data: <T>{...<object>startState.data, ...<object>(updated as FormSubSet)}
 		};
 	case "SET_FORM":
 		const setAction = <FormSetAction<T>>action;
+		console.log("about to return")
 		return {
 			apiState: "SUCCESS",
 			data: setAction.data
@@ -103,7 +108,7 @@ export const formReducer: <T extends object>(formName: string) => Reducer<FormSt
 			data: setAction2.data
 		}
     default:
-        return state;
+        return startState;
     }
 }
 

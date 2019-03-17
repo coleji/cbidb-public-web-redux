@@ -289,8 +289,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 				{specNeedsFields}
 			</JoomlaArticleRegion>
 			<Button text="Next" onClick={() => {
-				post(FORM_NAME, this.props.form.data, apiPath)
-				this.props.goHome()
+				post(FORM_NAME, this.props.form.data, apiPath).then(this.props.goHome)
 			}}/>
 		</JoomlaMainPage>
 	}

@@ -11,9 +11,9 @@ import {Form as EmergencyContactForm, FORM_NAME as emergencyContactFormName} fro
 import {Form as SwimProofForm, FORM_NAME as swimProofFormName} from "../containers/registration/SwimProof"
 import {Form as SurveyInfoForm, FORM_NAME as surveyInfoFormName} from "../containers/registration/SurveyInfo"
 import {Form as CreateAccountForm, FORM_NAME as createAccountFormName} from "../containers/create-acct/CreateAccount"
+import {Form as HomePageForm, formName as homePageFormName, formDefault as homePageDefault} from "../containers/HomePage"
 import {Form as ScholarshipForm, FORM_NAME as scholarshipFormName} from "../containers/Scholarship"
 import * as moment from "moment";
-import { WelcomePackageState, welcomePackageReducer } from "./welcomePackageReducer";
 import Currency from "../util/Currency";
 import {ServerConfig} from "../server/config"
 
@@ -40,7 +40,7 @@ export interface RootState {
 	swimProofForm: FormState<SwimProofForm>,
 	surveyInfoForm: FormState<SurveyInfoForm>,
 	scholarshipForm: FormState<ScholarshipForm>,
-	welcomePackage: WelcomePackageState
+	homePageForm: FormState<HomePageForm>
 }
 
 export type RootReducer = (state: RootState, action: Action) => RootState
@@ -52,12 +52,12 @@ export const makeRootReducer: (history: any, staticState: StaticState) => RootRe
 		staticState: () => staticState,
 		login: loginReducer,
 		loginForm: loginFormReducer,
-		createAcctForm: formReducer<CreateAccountForm>(createAccountFormName),
-		registrationRequiredInfoForm: formReducer<RegistrationRequiredInfoForm>(registrationRequiredInfoFormName),
-		emergencyContactForm: formReducer<EmergencyContactForm>(emergencyContactFormName),
-		swimProofForm: formReducer<SwimProofForm>(swimProofFormName),
-		surveyInfoForm: formReducer<SurveyInfoForm>(surveyInfoFormName),
-		scholarshipForm: formReducer<ScholarshipForm>(scholarshipFormName),
-		welcomePackage: welcomePackageReducer
+		createAcctForm: formReducer<CreateAccountForm>(createAccountFormName, <any>{}),
+		registrationRequiredInfoForm: formReducer<RegistrationRequiredInfoForm>(registrationRequiredInfoFormName, <any>{}),
+		emergencyContactForm: formReducer<EmergencyContactForm>(emergencyContactFormName, <any>{}),
+		swimProofForm: formReducer<SwimProofForm>(swimProofFormName, <any>{}),
+		surveyInfoForm: formReducer<SurveyInfoForm>(surveyInfoFormName, <any>{}),
+		scholarshipForm: formReducer<ScholarshipForm>(scholarshipFormName, <any>{}),
+		homePageForm: formReducer<HomePageForm>(homePageFormName, homePageDefault),
 	})	
 }

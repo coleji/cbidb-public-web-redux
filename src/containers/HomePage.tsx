@@ -1,33 +1,54 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { RootState } from '../reducer/rootReducer';
-import { WelcomePackageState } from "../reducer/welcomePackageReducer";
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import JoomlaReport from "../theme/joomla/JoomlaReport";
 import homePageActions from "./HomePageActions";
+import {FormState, get} from "../form/form"
+import { getReduxState } from "../reducer/store";
 
+interface ChildrenData {
+	personId: number,
+	nameFirst: string,
+	nameLast: string,
+	status: string,
+	actions: string,
+	ratings: string
+}
+
+export const formDefault = {
+	parentPersonId: null as number,
+	userName: null as string,
+	children: [] as ChildrenData[]
+}
+
+export type Form = typeof formDefault
+
+export const formName = "homePageForm"
 
 interface StateProps {
-	welcomePackage: WelcomePackageState
+	homePageData: typeof formDefault
 }
 
-interface DispatchProps {
-
-}
+interface DispatchProps { }
 
 interface StaticProps { }
 
 type Props = StateProps & DispatchProps & StaticProps
 
-
-
 class HomePage extends React.PureComponent<Props> {
 	constructor(props: Props) {
 		super(props);
+		console.log("home page doing get")
+		console.log(getReduxState())
+		get(formName, formDefault, "/member-welcome")
+		console.log("home page did get")
 	}
 	render() {
 		//const self = this;
+
+		console.log(this.props.homePageData)
 
 		//TODO
 		const rowData: {
@@ -35,7 +56,7 @@ class HomePage extends React.PureComponent<Props> {
 			name: string,
 			status: React.ReactNode,
 			actions: React.ReactNode
-		}[] = this.props.welcomePackage.children.map(c => ({
+		}[] = this.props.homePageData.children.map((c: any) => ({
 			personId: c.personId,
 			name: c.nameFirst + " " + c.nameLast,
 			status: <span dangerouslySetInnerHTML={{__html: c.status}}/>,
@@ -54,7 +75,7 @@ class HomePage extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-		welcomePackage: state.welcomePackage
+		homePageData: state.homePageForm.data
 	}),
 	() => ({
 

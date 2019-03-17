@@ -10,16 +10,18 @@ import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer'
 import { loginAction } from '../async/login'
-import {formReducer, dispatchFormUpdate, defaultState, FormState} from "../form/form"
+import {formReducer, dispatchFormUpdate, FormState} from "../form/form"
 import { MakeAPIRequest } from "../async/async";
 
 // TODO: duplicated in App and here
 export const FORM_NAME = "login"
 
-export interface Form {
-	username: string,
-	password: string
+export const formDefault = {
+	username: "",
+	password: ""
 }
+
+export type Form = typeof formDefault
 
 export type StateProps = {
 	jpPrice: Currency,
@@ -150,9 +152,9 @@ class LoginPage extends React.PureComponent<Props> {
 	}
 }
 
-const standardFormReducer = formReducer<Form>(FORM_NAME);
+const standardFormReducer = formReducer<Form>(FORM_NAME, formDefault);
 
-export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<Form> = defaultState, action: any) => {
+export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<Form>, action: any) => {
 	const modifiedState = 
 		action.type == "LOGIN_FAILURE"
 		? {...state, data: {...state.data, password: ""}}
