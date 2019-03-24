@@ -9,7 +9,6 @@ import ProgressThermometer from "../../components/ProgressThermometer";
 import { Select } from "../../components/Select";
 import TextArea from "../../components/TextArea";
 import TextInput from "../../components/TextInput";
-import { dispatchFormUpdate, post } from "../../form/form";
 import { countries, states } from "../../lov";
 import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
@@ -17,7 +16,7 @@ import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import range from "../../util/range";
 import {getReduxState} from "../../reducer/store"
-import {FormState, get} from "../../form/form"
+import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
 import { RequestParams } from "../../async/async";
 import Button from "../../components/Button";
 
@@ -95,7 +94,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, formDefault, apiPath)
+		get(FORM_NAME, apiPath)(x => x, formDefault)
 	}
 	render() {
 		console.log("store", getReduxState())
@@ -289,7 +288,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 				{specNeedsFields}
 			</JoomlaArticleRegion>
 			<Button text="Next" onClick={() => {
-				post(FORM_NAME, this.props.form.data, apiPath).then(this.props.goHome)
+				post(FORM_NAME, apiPath)(this.props.form.data).then(this.props.goHome)
 			}}/>
 		</JoomlaMainPage>
 	}

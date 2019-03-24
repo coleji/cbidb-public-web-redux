@@ -42,7 +42,7 @@ class HomePage extends React.PureComponent<Props> {
 		super(props);
 		console.log("home page doing get")
 		console.log(getReduxState())
-		get(formName, formDefault, "/member-welcome")
+		get(formName, "/member-welcome")(x => x, formDefault)
 		console.log("home page did get")
 	}
 	render() {

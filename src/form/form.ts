@@ -38,8 +38,11 @@ export function success<T>(formName: string, result: T) {
 	})
 }
 
-export function get<T>(formName: string, formDefault: T, path: string) {
-	initialize(formName, formDefault);
+export const get = (formName: string, path: string) => <T_Form, T_API>(mapper: (api: T_API) => T_Form, formDefault: T_Form) => {
+	// set the form to default values
+	if (formDefault) initialize(formName, formDefault);
+
+	// make api call to get form state
 	return getReduxState().staticState.makeAPIRequest({
 		httpMethod: "GET",
 		path
@@ -51,7 +54,8 @@ export function get<T>(formName: string, formDefault: T, path: string) {
 		for (var p in parsedResult) {
 			if (undefined === (formDefault as any)[p]) return Promise.reject(p)
 		}
-		success(formName, parsedResult)
+		// set form to result from api
+		success(formName, mapper(parsedResult))
 		return Promise.resolve("blah")
 	}).catch(err => {
 		console.log("Error: ", err)
@@ -60,11 +64,11 @@ export function get<T>(formName: string, formDefault: T, path: string) {
 	})
 }
 
-export function post<T extends object>(formName: string, state: T, path: string) {
+export const post = (formName: string, path: string) => <T extends object>(dataForAPI: T) => {
 	return getReduxState().staticState.makeAPIRequest({
 		httpMethod: "POST",
 		path,
-		postData: state
+		postData: dataForAPI
 	}).then((result: string) => {
 		console.log("Got result from api: ", result)
 		return Promise.resolve("blah")
