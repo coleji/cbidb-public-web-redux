@@ -31,7 +31,7 @@ export type StateProps = {
 }
 
 interface DispatchProps {
-	login: (makeAPIRequest: MakeAPIRequest, form: Form) => void,
+	login: (makeAPIRequest: MakeAPIRequest, form: Form) => Promise<void>,
 	updateField: (name: keyof Form, value: string) => void
 }
 
@@ -47,7 +47,11 @@ class LoginPage extends React.PureComponent<Props> {
 	render() {
 		console.log("login page props: ", this.props)
 		const self = this;
-		const loginFunction = () => self.props.login(self.props.makeAPIRequest, self.props.form);
+		const loginFunction = () => {
+			self.props.login(self.props.makeAPIRequest, self.props.form)
+			.then(() => self.props.updateField("password", ""))
+			
+		};
 		
 		// left column 
 
@@ -173,9 +177,7 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		makeAPIRequest: rootState.staticState.makeAPIRequest
 	}),
 	dispatch => ({
-		login: (makeAPIRequest: MakeAPIRequest, form: Form) => {
-			loginAction(makeAPIRequest, dispatch, form.username, form.password)
-		},
+		login: (makeAPIRequest: MakeAPIRequest, form: Form) => loginAction(makeAPIRequest, dispatch, form.username, form.password),
 		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	})
 )(LoginPage)

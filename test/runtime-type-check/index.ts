@@ -6,7 +6,7 @@ const shape = t.type({
 	someString: t.string,
 	someNumber: t.number,
 	someBoolean: t.boolean,
-	optionalString: t.union([t.string, t.null])
+	optionalString: t.union([t.string, t.undefined, t.null])
 })
 
 const ok = JSON.stringify({

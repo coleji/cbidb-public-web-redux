@@ -36,7 +36,9 @@ export const makeHTTPRequest: (serverParams: ServerParams) => (staticHeaders: ob
 					})
 				} else {
 					const json = JSON.stringify(requestParams.postData)
-					return Some({
+					console.log(json)
+					if (json == undefined) return None();
+					else return Some({
 						content: json,
 						headers: {
 							"Content-Type": "application/json",
@@ -83,6 +85,7 @@ export const makeHTTPRequest: (serverParams: ServerParams) => (staticHeaders: ob
 		req.on('error', (e: string) => {
 			reject(e);
 		});
+
 
 		postValues.map(v => v.content).forEach(v => req.write(v))
 

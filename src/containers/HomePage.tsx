@@ -7,6 +7,7 @@ import JoomlaReport from "../theme/joomla/JoomlaReport";
 import homePageActions from "./HomePageActions";
 import {FormState, get} from "../form/form"
 import { getReduxState } from "../reducer/store";
+import NavBarLogoutOnly from "../components/NavBarLogoutOnly"
 
 interface ChildrenData {
 	personId: number,
@@ -66,8 +67,8 @@ class HomePage extends React.PureComponent<Props> {
 		const mainTable = <JoomlaArticleRegion title="My Junior Program Memberships">
 			<JoomlaReport headers={["Name", "Status", "Actions"]} rows={rowData.map(r => [r.name, r.status, r.actions])}/>
 		</JoomlaArticleRegion>
-		
-		return <JoomlaMainPage>
+
+		return <JoomlaMainPage navBar={NavBarLogoutOnly()}>
 			{mainTable}
 		</JoomlaMainPage>
 	}
