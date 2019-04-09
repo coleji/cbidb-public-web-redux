@@ -1,27 +1,42 @@
+import * as t from 'io-ts'
 import * as http from 'http';
+import {FailureType, FailureType_BadReturn, FailureType_Unauthorized} from "./FailureType";
+import { Either } from 'fp-ts/lib/Either';
 
 export enum HttpMethod {
 	GET = "GET",
 	POST = "POST"
 }
 
-interface ConfigCommon<T_Success extends HasType, T_Fail extends HasType> {
-	type: string & HttpMethod,
-	path: string,
-	extraHeaders: Optional<object>,
-	parseServerResponse: (res: string) => (T_Success | T_Fail),
-	parseRequestFailure: (err: string) => T_Fail
+interface Success<T_Result> {
+	type: "Success",
+	result: T_Result
 }
 
-export interface GetConfig<T_Success extends HasType, T_Fail extends HasType> extends ConfigCommon<T_Success, T_Fail> {
+interface Failure {
+	type: "Failure",
+	failureType: FailureType
+	err: string
+}
+
+type ApiResult<T_Result> = Success<T_Result> | Failure
+
+interface ConfigCommon<T_Validator extends t.Any> {
+	type: string & HttpMethod,
+	path: string,
+	extraHeaders?: Optional<object>,
+	resultValidator: T_Validator
+}
+
+export interface GetConfig<T_Validator extends t.Any> extends ConfigCommon<T_Validator> {
 	type: HttpMethod.GET,
 }
 
-export interface PostConfig<T_Success extends HasType, T_Fail extends HasType> extends ConfigCommon<T_Success, T_Fail> {
+export interface PostConfig<T_Validator extends t.Any> extends ConfigCommon<T_Validator> {
 	type: HttpMethod.POST
 }
 
-export type Config<T_Success extends HasType, T_Fail extends HasType> = GetConfig<T_Success, T_Fail> | PostConfig<T_Success, T_Fail>;
+export type Config<T_Validator extends t.Any> = GetConfig<T_Validator> | PostConfig<T_Validator>;
 
 export interface ServerParams {
 	host: string,
@@ -30,31 +45,45 @@ export interface ServerParams {
 	pathPrefix?: string,
 }
 
-interface PostString {
+export interface PostString {
 	type: "urlEncoded",
 	urlEncodedData: string
 }
 
-interface PostJSON<T> {
+export const PostString: (urlEncodedData: string) => PostString = urlEncodedData => ({type: "urlEncoded", urlEncodedData})
+
+export interface PostJSON<T_PostJSON> {
 	type: "json",
-	jsonData: T
+	jsonData: T_PostJSON
 }
 
-type PostType<T> = PostString | PostJSON<T>
+export type PostType<T> = PostString | PostJSON<T>
 
-interface HasType {
-	type: string
-}
-
-export default class APIWrapper<T_QueryJSON, T_Success extends HasType, T_Fail extends HasType> {
-	config: Config<T_Success, T_Fail>
-	constructor(config: Config<T_Success, T_Fail>) {
+export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
+	config: Config<T_Validator>
+	constructor(config: Config<T_Validator>) {
 		this.config = config;
 	}
-	send: (serverParams: ServerParams) => (staticHeaders: object) => (data: PostType<T_QueryJSON>) => Promise<(T_Success | T_Fail)>
-	= serverParams => staticHeaders => data => {
+	parseResponse: (response: string) => ApiResult<t.TypeOf<T_Validator>> = response => {
+		type Result = t.TypeOf<T_Validator>;
+
+		let parsed;
+		try {
+			parsed = JSON.parse(response)
+		} catch (e) {
+			return {type: "Failure", failureType: {type: "NotJSON"}, err: response};
+		}
+		
+		if (parsed["error"]) return {type: "Failure", failureType: {type: "Unknown"}, err: response}
+
+		const decoded: Either<t.Errors, Result> = this.config.resultValidator.decode(parsed)
+		if (decoded.isRight()) return {type: "Success", result: decoded.getOrElse(null)}
+		else return {type: "Failure", failureType: {type: "BadReturn"}, err: decoded.swap().getOrElse(null).toString()}
+	}
+	send: (serverParams: ServerParams) => (data: PostType<T_PostJSON>) => Promise<string>
+	= serverParams =>  data => {
 		const self = this;
-		return new Promise((resolve, reject) => {
+		return new Promise<string>((resolve, reject) => {
 			interface PostValues {content: string, headers: {"Content-Type": string, "Content-Length": string}}
 			const postValues: Optional<PostValues> = (function() {
 				if (self.config.type === HttpMethod.POST) {
@@ -88,8 +117,8 @@ export default class APIWrapper<T_QueryJSON, T_Success extends HasType, T_Fail e
 				path: (serverParams.pathPrefix || "") + self.config.path,
 				method: self.config.type,
 				headers: <any>{
-					...staticHeaders,
-					...self.config.extraHeaders.getOrElse({}),
+				//	...staticHeaders,
+					...(self.config.extraHeaders || None()).getOrElse({}),
 					...postValues.map(v => v.headers).getOrElse(<any>{})
 				}
 			};
@@ -118,6 +147,6 @@ export default class APIWrapper<T_QueryJSON, T_Success extends HasType, T_Fail e
 			postValues.map(v => v.content).forEach(v => req.write(v))
 	
 			req.end();
-		}).then(this.config.parseServerResponse, this.config.parseRequestFailure);
+		}) // .then(this.config.parseServerResponse, this.config.parseRequestFailure);
 	}
 }
