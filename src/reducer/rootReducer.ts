@@ -3,7 +3,6 @@ import { connectRouter } from 'connected-react-router'
 
 import {FormState, formReducer} from "../form/form"
 import {LoginState, loginReducer} from "./loginStateReducer"
-import {RequestParams} from "../async/async"
 
 import {loginFormReducer, Form as LoginForm} from "../containers/LoginPage"
 import {Form as RegistrationRequiredInfoForm, FORM_NAME as registrationRequiredInfoFormName} from "../containers/registration/RequiredInfo"
@@ -16,16 +15,18 @@ import {Form as ScholarshipForm, FORM_NAME as scholarshipFormName} from "../cont
 import * as moment from "moment";
 import Currency from "../util/Currency";
 import {ServerConfig} from "../server/config"
+import { ServerParams } from "../async/APIWrapper";
 
 export interface StaticState {
 	getMoment: () => moment.Moment,
-	makeAPIRequest: (requestParams: RequestParams) => Promise<string>,
 	isServer: boolean,
 	jpDirectorNameFirst: string,
 	jpDirectorNameLast: string,
 	jpDirectorEmail: string,
 	jpPriceCents: number,
 	currentSeason: number,
+	apiServerParams: ServerParams,
+	selfSeverParams: ServerParams,
 	serverConfig: ServerConfig
 }
 

@@ -43,6 +43,7 @@ export interface ServerParams {
 	makeRequest: typeof http.request,
 	port: number,
 	pathPrefix?: string,
+	staticHeaders?: object
 }
 
 export interface PostString {
@@ -80,7 +81,8 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 		if (decoded.isRight()) return {type: "Success", result: decoded.getOrElse(null)}
 		else return {type: "Failure", failureType: {type: "BadReturn"}, err: decoded.swap().getOrElse(null).toString()}
 	}
-	send: (serverParams: ServerParams) => (data: PostType<T_PostJSON>) => Promise<string>
+	send: (serverParams: ServerParams) => (data: PostType<T_PostJSON>) => Promise<string> = serverParams => data => this.sendWithHeaders(serverParams, {})(data)
+	sendWithHeaders: (serverParams: ServerParams, extraHeaders: object) => (data: PostType<T_PostJSON>) => Promise<string>
 	= serverParams =>  data => {
 		const self = this;
 		return new Promise<string>((resolve, reject) => {

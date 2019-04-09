@@ -8,14 +8,17 @@ import * as cookieParser from 'cookie-parser';
 import * as moment from "moment";
 import { routerMiddleware } from 'connected-react-router'
 import { createMemoryHistory } from 'history'
+import * as http from "http"
+import * as https from "https"
 
 import App from '../containers/App'
 import createStore from '../createStore'
 import { makeRootReducer, StaticState } from '../reducer/rootReducer'
-import { makeHTTPRequest } from '../async/async';
 import Currency from "../util/Currency";
 import getConfig from './config'
 import {setStore} from "../reducer/store"
+import memberWelcome from "../async/endpoints/member-welcome"
+import { ServerParams } from "../async/APIWrapper";
 
 require("../../lib/array-polyfill")
 require("../../lib/optional")
@@ -82,12 +85,17 @@ getConfig.then(serverConfig => {
 
 	app.get("*", (req, res, next) => {
 		console.log("cookie is " + req.cookies["CBIDB-SEC"])
-		makeHTTPRequest(serverConfig.API)({
-			"Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"]
-		})({
-			path: "/member-welcome",
-			httpMethod: "GET"
-		})
+		const selfServerParams: ServerParams = {
+			...serverConfig.SELF,
+			makeRequest: (serverConfig.SELF.https ? https.request : http.request),
+			port: (serverConfig.SELF.https ? 443 : 80)
+		}
+		const apiServerParams: ServerParams = {
+			...serverConfig.API,
+			makeRequest: (serverConfig.API.https ? https.request : http.request),
+			staticHeaders: { "Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"] }
+		}
+		memberWelcome(apiServerParams)
 		.then((response: any) => JSON.parse(response))
 		// TODO: dont autodetect if the response is a JSON with a `data` property
 		// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
@@ -110,15 +118,14 @@ getConfig.then(serverConfig => {
 			});
 			const staticState: StaticState = {
 				getMoment:  () => moment(),
-				makeAPIRequest: makeHTTPRequest(serverConfig.API)({
-					"Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"]
-				}),
 				isServer: true,
 				jpDirectorNameFirst: "Niko",
 				jpDirectorNameLast: "Kotsatos",
 				jpDirectorEmail: "niko@community-boating.org",
 				jpPriceCents: 32500,	// TODO: get from welcome pkg
 				currentSeason: 2019,
+				apiServerParams: apiServerParams,
+				selfSeverParams: selfServerParams,
 				serverConfig
 			}
 			const rootReducer = makeRootReducer(history, staticState)
