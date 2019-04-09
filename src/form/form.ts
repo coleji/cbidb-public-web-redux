@@ -38,7 +38,7 @@ export function success<T>(formName: string, result: T) {
 	})
 }
 
-export const get = (formName: string, path: string) => <T_Form, T_API>(mapper: (api: T_API) => T_Form, formDefault: T_Form) => {
+export const get = <T_Form, T_API>(formName: string, path: string, mapper: (api: T_API) => T_Form, formDefault: T_Form) => {
 	// set the form to default values
 	if (formDefault) initialize(formName, formDefault);
 
