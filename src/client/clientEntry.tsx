@@ -43,6 +43,8 @@ const staticState: StaticState = {
 	}
 }
 
+console.log("api https? ", seedState.staticState.serverConfig.SELF.https)
+
 const rootReducer = makeRootReducer(history, staticState)
 
 export const { store, initialState } = createStore({

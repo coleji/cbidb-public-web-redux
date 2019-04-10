@@ -1,6 +1,8 @@
 import { Dispatch, Action, Reducer } from "redux";
+import * as t from 'io-ts'
 
 import {getDispatch, getReduxState} from "../reducer/store"
+import APIWrapper, { PostJSON } from "../async/APIWrapper";
 
 export const UPDATE_FORM_DISPATCH_TYPE = "UPDATE_FORM";
 
@@ -38,15 +40,12 @@ export function success<T>(formName: string, result: T) {
 	})
 }
 
-export const get = <T_Form, T_API>(formName: string, path: string, mapper: (api: T_API) => T_Form, formDefault: T_Form) => {
+export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form, formDefault: T_Form) => {
 	// set the form to default values
 	if (formDefault) initialize(formName, formDefault);
 
 	// make api call to get form state
-	return getReduxState().staticState.makeAPIRequest({
-		httpMethod: "GET",
-		path
-	}).then((result: string) => {
+	return apiw.send(getReduxState().staticState.selfSeverParams)(null).then((result: string) => {
 		console.log("Got result from api: ", result)
 		const parsedResult = JSON.parse(result)
 		console.log("whaddaya know its a json: ", parsedResult)
@@ -64,12 +63,8 @@ export const get = <T_Form, T_API>(formName: string, path: string, mapper: (api:
 	})
 }
 
-export const post = (formName: string, path: string) => <T extends object>(dataForAPI: T) => {
-	return getReduxState().staticState.makeAPIRequest({
-		httpMethod: "POST",
-		path,
-		postData: dataForAPI
-	}).then((result: string) => {
+export const post = <T extends object>(formName: string, apiw: APIWrapper<any, T>) => (dataForAPI: T) => {
+	return apiw.send(getReduxState().staticState.apiServerParams)(PostJSON(dataForAPI)).then((result: string) => {
 		console.log("Got result from api: ", result)
 		return Promise.resolve("blah")
 	})

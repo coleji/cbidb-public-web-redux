@@ -18,7 +18,7 @@ type Result = t.TypeOf<typeof validator>
 
 const path = "/member-welcome"
 
-const apiw = new APIWrapper({
+export const apiw = new APIWrapper({
 	path,
 	type: HttpMethod.GET,
 	resultValidator: validator,

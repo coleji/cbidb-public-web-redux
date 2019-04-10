@@ -2,6 +2,7 @@ import * as t from 'io-ts'
 import * as http from 'http';
 import {FailureType, FailureType_BadReturn, FailureType_Unauthorized} from "./FailureType";
 import { Either } from 'fp-ts/lib/Either';
+import * as https from "https"
 
 export enum HttpMethod {
 	GET = "GET",
@@ -24,7 +25,7 @@ type ApiResult<T_Result> = Success<T_Result> | Failure
 interface ConfigCommon<T_Validator extends t.Any> {
 	type: string & HttpMethod,
 	path: string,
-	extraHeaders?: Optional<object>,
+	extraHeaders?: object, 
 	resultValidator: T_Validator
 }
 
@@ -51,12 +52,13 @@ export interface PostString {
 	urlEncodedData: string
 }
 
-export const PostString: (urlEncodedData: string) => PostString = urlEncodedData => ({type: "urlEncoded", urlEncodedData})
-
 export interface PostJSON<T_PostJSON> {
 	type: "json",
 	jsonData: T_PostJSON
 }
+export const PostString: (urlEncodedData: string) => PostString = urlEncodedData => ({type: "urlEncoded", urlEncodedData})
+export const PostJSON: <T_PostJSON>(jsonData: T_PostJSON) => PostJSON<T_PostJSON> = jsonData => ({type: "json", jsonData})
+
 
 export type PostType<T> = PostString | PostJSON<T>
 
@@ -120,7 +122,7 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 				method: self.config.type,
 				headers: <any>{
 				//	...staticHeaders,
-					...(self.config.extraHeaders || None()).getOrElse({}),
+					...(self.config.extraHeaders || {}),
 					...postValues.map(v => v.headers).getOrElse(<any>{})
 				}
 			};
@@ -140,7 +142,9 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 				});
 			}
 	
-			const req = serverParams.makeRequest(options, reqCallback);
+			// FIXME: figure out all this API vs SELF shit and why this function wont carry through
+			//const req = serverParams.makeRequest(options, reqCallback);
+			const req = https.request(options, reqCallback);
 	
 			req.on('error', (e: string) => {
 				reject(e);

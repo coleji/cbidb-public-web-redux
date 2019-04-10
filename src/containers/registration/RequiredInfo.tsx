@@ -17,8 +17,8 @@ import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import range from "../../util/range";
 import {getReduxState} from "../../reducer/store"
 import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
-import { RequestParams } from "../../async/async";
 import Button from "../../components/Button";
+import {getWrapper, postWrapper} from "../../async/endpoints/junior/required"
 
 
 export const FORM_NAME = "registrationRequiredInfo"
@@ -67,8 +67,7 @@ class FormTextArea extends TextArea<Form> {}
 interface StateProps {
 	form: FormState<Form>,
 	router: any,
-	getMoment: () => moment.Moment,
-	makeAPIRequest: (requestParams: RequestParams) => Promise<string>
+	getMoment: () => moment.Moment
 }
 
 interface DispatchProps {
@@ -94,7 +93,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, apiPath, x => x, formDefault)
+		get(FORM_NAME, getWrapper, x => x, formDefault)
 	}
 	render() {
 		console.log("store", getReduxState())
@@ -288,7 +287,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 				{specNeedsFields}
 			</JoomlaArticleRegion>
 			<Button text="Next" onClick={() => {
-				post(FORM_NAME, apiPath)(this.props.form.data).then(this.props.goHome)
+				post(FORM_NAME, postWrapper)(this.props.form.data).then(this.props.goHome)
 			}}/>
 		</JoomlaMainPage>
 	}
@@ -298,8 +297,7 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
 		getMoment: state.staticState.getMoment,
 		form: state.registrationRequiredInfoForm,
-		router: state.router,
-		makeAPIRequest: state.staticState.makeAPIRequest
+		router: state.router
 	}),
 	dispatch => ({
 		updateField: (name: keyof Form, value: string) => {

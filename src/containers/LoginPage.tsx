@@ -9,9 +9,9 @@ import Currency from "../util/Currency"
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer'
-import { loginAction } from '../async/login'
 import {formReducer, dispatchFormUpdate, FormState} from "../form/form"
-import { MakeAPIRequest } from "../async/async";
+import {login} from "../async/endpoints/authenticate-member"
+import { ServerParams } from "../async/APIWrapper";
 
 // TODO: duplicated in App and here
 export const FORM_NAME = "login"
@@ -27,11 +27,11 @@ export type StateProps = {
 	jpPrice: Currency,
 	lastSeason: number,
 	form: Form,
-	makeAPIRequest: MakeAPIRequest
+	selfSeverParams: ServerParams
 }
 
 interface DispatchProps {
-	login: (makeAPIRequest: MakeAPIRequest, form: Form) => Promise<void>,
+	login: (selfSeverParams: ServerParams, form: Form) => Promise<void>,
 	updateField: (name: keyof Form, value: string) => void
 }
 
@@ -48,7 +48,7 @@ class LoginPage extends React.PureComponent<Props> {
 		console.log("login page props: ", this.props)
 		const self = this;
 		const loginFunction = () => {
-			self.props.login(self.props.makeAPIRequest, self.props.form)
+			self.props.login(self.props.selfSeverParams, self.props.form)
 			.then(() => self.props.updateField("password", ""))
 			
 		};
@@ -174,10 +174,10 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 			username: rootState.loginForm.data.username,
 			password: rootState.loginForm.data.password
 		},
-		makeAPIRequest: rootState.staticState.makeAPIRequest
+		selfSeverParams: rootState.staticState.selfSeverParams
 	}),
 	dispatch => ({
-		login: (makeAPIRequest: MakeAPIRequest, form: Form) => loginAction(makeAPIRequest, dispatch, form.username, form.password),
+		login: (selfSeverParams: ServerParams, form: Form) => login(selfSeverParams)(dispatch, form.username, form.password),
 		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	})
 )(LoginPage)

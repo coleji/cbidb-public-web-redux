@@ -1,3 +1,4 @@
+import * as http from "http"
 import * as t from 'io-ts'
 import APIWrapper, { HttpMethod, ServerParams, PostString } from '../APIWrapper';
 import memberWelcome from "./member-welcome"
@@ -8,14 +9,15 @@ const apiw = new APIWrapper({
 	path,
 	type: HttpMethod.POST,
 	resultValidator: t.boolean,
-	extraHeaders: Some({
+	extraHeaders: {
 		"dont-redirect": "true"
-	})
+	}
 })
 
 export const login = (serverParams: ServerParams) => (dispatch: (action: any) => void, userName: string, password: string) => {
 	const payload = PostString("username=" + encodeURIComponent(userName) + "&password=" + encodeURIComponent(password))
-	apiw.send(serverParams)(payload)
+	console.log("here we go")
+	return apiw.send(serverParams)(payload)
 	.then(data => {
 		console.log("login result: ", data)
 		if (String(data) == "false") {

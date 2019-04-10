@@ -8,6 +8,8 @@ import homePageActions from "./HomePageActions";
 import {FormState, get} from "../form/form"
 import { getReduxState } from "../reducer/store";
 import NavBarLogoutOnly from "../components/NavBarLogoutOnly"
+import {apiw} from "../async/endpoints/member-welcome"
+import { ServerParams } from "../async/APIWrapper";
 
 interface ChildrenData {
 	personId: number,
@@ -29,7 +31,8 @@ export type Form = typeof formDefault
 export const formName = "homePageForm"
 
 interface StateProps {
-	homePageData: typeof formDefault
+	homePageData: typeof formDefault,
+	selfSeverParams: ServerParams
 }
 
 interface DispatchProps { }
@@ -43,7 +46,7 @@ class HomePage extends React.PureComponent<Props> {
 		super(props);
 		console.log("home page doing get")
 		console.log(getReduxState())
-		get(formName, "/member-welcome")(x => x, formDefault)
+		get(formName, apiw, x => x, formDefault)
 		console.log("home page did get")
 	}
 	render() {
@@ -76,7 +79,8 @@ class HomePage extends React.PureComponent<Props> {
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
-		homePageData: state.homePageForm.data
+		homePageData: state.homePageForm.data,
+		selfSeverParams: state.staticState.selfSeverParams
 	}),
 	() => ({
 
