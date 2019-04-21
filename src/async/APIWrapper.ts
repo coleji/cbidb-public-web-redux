@@ -1,4 +1,5 @@
 import * as t from 'io-ts'
+import { PathReporter } from 'io-ts/lib/PathReporter'
 import * as http from 'http';
 import {FailureType, FailureType_BadReturn, FailureType_Unauthorized} from "./FailureType";
 import { Either } from 'fp-ts/lib/Either';
@@ -81,7 +82,7 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 
 		const decoded: Either<t.Errors, Result> = this.config.resultValidator.decode(parsed)
 		if (decoded.isRight()) return {type: "Success", result: decoded.getOrElse(null)}
-		else return {type: "Failure", failureType: {type: "BadReturn"}, err: decoded.swap().getOrElse(null).toString()}
+		else return {type: "Failure", failureType: {type: "BadReturn"}, err: PathReporter.report(decoded).join(", ")}
 	}
 	send: (serverParams: ServerParams) => (data: PostType<T_PostJSON>) => Promise<string> = serverParams => data => this.sendWithHeaders(serverParams, {})(data)
 	sendWithHeaders: (serverParams: ServerParams, extraHeaders: object) => (data: PostType<T_PostJSON>) => Promise<string>

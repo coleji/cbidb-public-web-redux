@@ -47,15 +47,17 @@ export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw
 	// make api call to get form state
 	return apiw.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
 		console.log("Got result from api: ", result)
-		const parsedResult = JSON.parse(result)
-		console.log("whaddaya know its a json: ", parsedResult)
-		// TODO: handle this (found an unexpected field)
-		for (var p in parsedResult) {
-			if (undefined === (formDefault as any)[p]) return Promise.reject(p)
+		const parsedResult = apiw.parseResponse(result)
+		if (parsedResult.type == "Success") {
+			success(formName, mapper(parsedResult.result))
+			return Promise.resolve("blah")
+		} else {
+			console.log(parsedResult.failureType)
+			console.log(parsedResult.err)
+			return Promise.reject(parsedResult.failureType)
 		}
 		// set form to result from api
-		success(formName, mapper(parsedResult))
-		return Promise.resolve("blah")
+		
 	}).catch(err => {
 		console.log("Error: ", err)
 	}).then(() => {
