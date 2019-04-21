@@ -41,7 +41,7 @@ export type Config<T_Validator extends t.Any> = GetConfig<T_Validator> | PostCon
 
 export interface ServerParams {
 	host: string,
-	makeRequest: typeof http.request,
+	https: boolean,
 	port: number,
 	pathPrefix?: string,
 	staticHeaders?: object
@@ -121,7 +121,7 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 				path: (serverParams.pathPrefix || "") + self.config.path,
 				method: self.config.type,
 				headers: <any>{
-				//	...staticHeaders,
+					...serverParams.staticHeaders,
 					...(self.config.extraHeaders || {}),
 					...postValues.map(v => v.headers).getOrElse(<any>{})
 				}
@@ -129,6 +129,7 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 			
 			console.log("making request to " + options.hostname + ":" + options.port + options.path)
 			console.log(options)
+			console.log("serverParams: ", serverParams)
 	
 	
 			// TODO: should we embed the special case for logout directive on any response?  Seems heavy handed
@@ -144,7 +145,11 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 	
 			// FIXME: figure out all this API vs SELF shit and why this function wont carry through
 			//const req = serverParams.makeRequest(options, reqCallback);
-			const req = https.request(options, reqCallback);
+			const req = (
+				serverParams.https
+				? https.request(options, reqCallback)
+				: http.request(options, reqCallback)
+			);
 	
 			req.on('error', (e: string) => {
 				reject(e);

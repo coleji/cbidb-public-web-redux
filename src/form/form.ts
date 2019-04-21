@@ -45,7 +45,7 @@ export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw
 	if (formDefault) initialize(formName, formDefault);
 
 	// make api call to get form state
-	return apiw.send(getReduxState().staticState.selfSeverParams)(null).then((result: string) => {
+	return apiw.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
 		console.log("Got result from api: ", result)
 		const parsedResult = JSON.parse(result)
 		console.log("whaddaya know its a json: ", parsedResult)
@@ -64,7 +64,7 @@ export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw
 }
 
 export const post = <T extends object>(formName: string, apiw: APIWrapper<any, T>) => (dataForAPI: T) => {
-	return apiw.send(getReduxState().staticState.apiServerParams)(PostJSON(dataForAPI)).then((result: string) => {
+	return apiw.send(getReduxState().staticState.selfServerParams)(PostJSON(dataForAPI)).then((result: string) => {
 		console.log("Got result from api: ", result)
 		return Promise.resolve("blah")
 	})

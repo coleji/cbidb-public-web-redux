@@ -26,7 +26,7 @@ export interface StaticState {
 	jpPriceCents: number,
 	currentSeason: number,
 	apiServerParams: ServerParams,
-	selfSeverParams: ServerParams,
+	selfServerParams: ServerParams,
 	serverConfig: ServerConfig
 }
 

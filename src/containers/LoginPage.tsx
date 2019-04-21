@@ -27,11 +27,11 @@ export type StateProps = {
 	jpPrice: Currency,
 	lastSeason: number,
 	form: Form,
-	selfSeverParams: ServerParams
+	selfServerParams: ServerParams
 }
 
 interface DispatchProps {
-	login: (selfSeverParams: ServerParams, form: Form) => Promise<void>,
+	login: (selfServerParams: ServerParams, form: Form) => Promise<void>,
 	updateField: (name: keyof Form, value: string) => void
 }
 
@@ -48,7 +48,7 @@ class LoginPage extends React.PureComponent<Props> {
 		console.log("login page props: ", this.props)
 		const self = this;
 		const loginFunction = () => {
-			self.props.login(self.props.selfSeverParams, self.props.form)
+			self.props.login(self.props.selfServerParams, self.props.form)
 			.then(() => self.props.updateField("password", ""))
 			
 		};
@@ -174,10 +174,10 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 			username: rootState.loginForm.data.username,
 			password: rootState.loginForm.data.password
 		},
-		selfSeverParams: rootState.staticState.selfSeverParams
+		selfServerParams: rootState.staticState.selfServerParams
 	}),
 	dispatch => ({
-		login: (selfSeverParams: ServerParams, form: Form) => login(selfSeverParams)(dispatch, form.username, form.password),
+		login: (selfServerParams: ServerParams, form: Form) => login(selfServerParams)(dispatch, form.username, form.password),
 		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	})
 )(LoginPage)

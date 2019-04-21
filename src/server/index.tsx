@@ -87,12 +87,10 @@ getConfig.then(serverConfig => {
 		console.log("cookie is " + req.cookies["CBIDB-SEC"])
 		const selfServerParams: ServerParams = {
 			...serverConfig.SELF,
-			makeRequest: (serverConfig.SELF.https ? https.request : http.request),
 			port: (serverConfig.SELF.https ? 443 : 80)
 		}
 		const apiServerParams: ServerParams = {
 			...serverConfig.API,
-			makeRequest: (serverConfig.API.https ? https.request : http.request),
 			staticHeaders: { "Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"] }
 		}
 		memberWelcome(apiServerParams)
@@ -125,7 +123,7 @@ getConfig.then(serverConfig => {
 				jpPriceCents: 32500,	// TODO: get from welcome pkg
 				currentSeason: 2019,
 				apiServerParams: apiServerParams,
-				selfSeverParams: selfServerParams,
+				selfServerParams: selfServerParams,
 				serverConfig
 			}
 			const rootReducer = makeRootReducer(history, staticState)

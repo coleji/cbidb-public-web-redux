@@ -32,7 +32,7 @@ export const formName = "homePageForm"
 
 interface StateProps {
 	homePageData: typeof formDefault,
-	selfSeverParams: ServerParams
+	selfServerParams: ServerParams
 }
 
 interface DispatchProps { }
@@ -80,7 +80,7 @@ class HomePage extends React.PureComponent<Props> {
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	state => ({
 		homePageData: state.homePageForm.data,
-		selfSeverParams: state.staticState.selfSeverParams
+		selfServerParams: state.staticState.selfServerParams
 	}),
 	() => ({
 
