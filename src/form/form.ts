@@ -22,14 +22,14 @@ export type FormState<T> = {
 	data?: T
 }
 
-export function initialize<T>(formName: string, defaultValue: T) {
-	const dispatch = getDispatch();
-	dispatch({
-		type: "INITIALIZE_FORM",
-		formName,
-		data: defaultValue
-	})
-}
+// export function initialize<T>(formName: string, defaultValue: T) {
+// 	const dispatch = getDispatch();
+// 	dispatch({
+// 		type: "INITIALIZE_FORM",
+// 		formName,
+// 		data: defaultValue
+// 	})
+// }
 
 export function success<T>(formName: string, result: T) {
 	const dispatch = getDispatch();
@@ -40,10 +40,16 @@ export function success<T>(formName: string, result: T) {
 	})
 }
 
-export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form, formDefault: T_Form) => {
-	// set the form to default values
-	if (formDefault) initialize(formName, formDefault);
+export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form) => 
+	getWithDefault(formName, apiw, mapper, {})
 
+export const getWithDefault = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form, defaultState: T_Form) => {
+	const dispatch = getDispatch();
+	dispatch({
+		type: "INITIALIZE_FORM",
+		formName,
+		data: defaultState
+	})
 	// make api call to get form state
 	return apiw.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
 		console.log("Got result from api: ", result)

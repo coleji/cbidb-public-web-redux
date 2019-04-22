@@ -5,7 +5,7 @@ import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import JoomlaReport from "../theme/joomla/JoomlaReport";
 import homePageActions from "./HomePageActions";
-import {FormState, get} from "../form/form"
+import {FormState, get, getWithDefault} from "../form/form"
 import { getReduxState } from "../reducer/store";
 import NavBarLogoutOnly from "../components/NavBarLogoutOnly"
 import {apiw} from "../async/endpoints/member-welcome"
@@ -46,7 +46,7 @@ class HomePage extends React.PureComponent<Props> {
 		super(props);
 		console.log("home page doing get")
 		console.log(getReduxState())
-		get(formName, apiw, x => x, formDefault)
+		getWithDefault(formName, apiw, x => x, formDefault)
 		console.log("home page did get")
 	}
 	render() {

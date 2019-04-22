@@ -1,6 +1,8 @@
 import { push } from 'connected-react-router';
+import * as t from 'io-ts'
 import * as moment from "moment";
 import * as React from "react";
+import {Dispatch} from "redux";
 import { connect } from "react-redux";
 import { matchPath } from 'react-router-dom';
 import DateTriPicker, { DateTriPickerProps } from "../../components/DateTriPicker";
@@ -18,66 +20,35 @@ import range from "../../util/range";
 import {getReduxState} from "../../reducer/store"
 import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
 import Button from "../../components/Button";
-import {getWrapper, postWrapper} from "../../async/endpoints/junior/required"
-
+import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/required"
 
 export const FORM_NAME = "registrationRequiredInfo"
 
 export const path = '/required/:personId'
 
-const apiPath = "/junior/required"
+export type Form = t.TypeOf<typeof validator>
 
-export const formDefault = {
-	firstName: "",
-	middleInitial: "",
-	lastName: "",
-	// dobMonth: string,
-	// dobDate: string,
-	// dobYear: string,
-	// childEmail: string,
-	// addr_1: string,
-	// addr_2: string,
-	// addr_3: string,
-	// city: string,
-	// state: string,
-	// zip: string,
-	// country: string,
-	// primaryPhoneFirst: string,
-	// primaryPhoneSecond: string,
-	// primaryPhoneThird: string,
-	// primaryPhoneExt: string,
-	// primaryPhoneType: string,
-	// alternatePhoneFirst: string,
-	// alternatePhoneSecond: string,
-	// alternatePhoneThird: string,
-	// alternatePhoneExt: string,
-	// alternatePhoneType: string,
-	// allergies: string,
-	// medications: string,
-	// specialNeeds: string
-	
-}
+const mapStateToProps = (state: RootState) => ({
+	getMoment: state.staticState.getMoment,
+	form: state.registrationRequiredInfoForm,
+	router: state.router
+})
 
-export type Form = typeof formDefault
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	updateField: (name: keyof Form, value: string) => {
+		console.log("updating field!")
+		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+	},
+	goHome: () => dispatch(push('/'))
+})
 
 class FormInput extends TextInput<Form> {}
 class FormSelect extends Select<Form> {}
 class FormTextArea extends TextArea<Form> {}
 
-interface StateProps {
-	form: FormState<Form>,
-	router: any,
-	getMoment: () => moment.Moment
-}
-
-interface DispatchProps {
-	updateField: (name: keyof Form, value: string) => void,
-	goHome: () => void
-}
-
 interface StaticProps { }
 
-type Props = StateProps & DispatchProps & StaticProps;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps;
 
 class RequiredInfo extends React.PureComponent<Props> {
 	personId: number
@@ -93,7 +64,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, getWrapper, x => x, formDefault)
+		get(FORM_NAME, getWrapper, x => x)
 	}
 	render() {
 		console.log("store", getReduxState())
@@ -293,17 +264,4 @@ class RequiredInfo extends React.PureComponent<Props> {
 	}
 }
 
-export default connect<StateProps, DispatchProps, StaticProps, RootState>(
-	state => ({
-		getMoment: state.staticState.getMoment,
-		form: state.registrationRequiredInfoForm,
-		router: state.router
-	}),
-	dispatch => ({
-		updateField: (name: keyof Form, value: string) => {
-			console.log("updating field!")
-			dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
-		},
-		goHome: () => dispatch(push('/'))
-	})
-)(RequiredInfo)
+export default connect(mapStateToProps, mapDispatchToProps)(RequiredInfo)
