@@ -104,24 +104,36 @@ class RequiredInfo extends React.PureComponent<Props> {
 					reduxAction={reduxAction}
 					blurBox={self.props.form.apiState=="WAITING"}
 				/>
-				{/* <DateTriPicker<Form, DateTriPickerProps<Form>>
+				<DateTriPicker<Form, DateTriPickerProps<Form>>
 					years={years}
 					monthID="dobMonth"
 					dayID="dobDate"
 					yearID="dobYear"
 					isRequired={true}
-					monthValue={self.props.form.dobMonth}
-					dayValue={self.props.form.dobDate}
-					yearValue={self.props.form.dobYear}
+					monthValue={self.props.form.data.dobMonth}
+					dayValue={self.props.form.data.dobDate}
+					yearValue={self.props.form.data.dobYear}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="childEmail"
 					label="Child Email"
-					value={self.props.form.childEmail}
+					value={self.props.form.data.childEmail}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
-				<tr>
+				{(self.props.form.apiState=="WAITING") ? (
+					// TODO: fake input for blurbox, replace with static blurbox
+					<FormInput
+						id="childEmail"
+						label=""
+						value={self.props.form.data.childEmail}
+						reduxAction={reduxAction}
+						blurBox={true}
+					/>
+				) : (
+					<tr>
 					<td style={{ textAlign: "right" }}>
 						<label>
 							<span className="optional">Parent Email</span>
@@ -131,56 +143,65 @@ class RequiredInfo extends React.PureComponent<Props> {
 						abcd@efg.com
 					</td>
 				</tr>
+				)}
+				
 				<FormInput
 					id="addr_1"
 					label="Address 1"
 					isRequired={true}
-					value={self.props.form.addr_1}
+					value={self.props.form.data.addr_1}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="addr_2"
 					label="Address 2"
-					value={self.props.form.addr_2}
+					value={self.props.form.data.addr_2}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="addr_3"
 					label="Address 3"
-					value={self.props.form.addr_3}
+					value={self.props.form.data.addr_3}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="city"
 					label="City"
 					isRequired={true}
-					value={self.props.form.addr_2}
+					value={self.props.form.data.addr_2}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormSelect
 					id="state"
 					label="State"
 					isRequired={true}
-					value={self.props.form.state}
+					value={self.props.form.data.state}
 					reduxAction={reduxAction}
 					options={states}
 					nullDisplay="- Select -"
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="zip"
 					label="Zip"
 					isRequired={true}
-					value={self.props.form.zip}
+					value={self.props.form.data.zip}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormSelect		// TODO: default to US
 					id="country"
 					label="Country"
 					isRequired={true}
-					value={self.props.form.country}
+					value={self.props.form.data.country}
 					reduxAction={reduxAction}
 					options={countries}
 					nullDisplay="- Select -"
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Parent Primary Phone"
@@ -189,12 +210,13 @@ class RequiredInfo extends React.PureComponent<Props> {
 					thirdID="primaryPhoneThird"
 					extID="primaryPhoneExt"
 					typeID="primaryPhoneType"
-					firstValue={self.props.form.primaryPhoneFirst}
-					secondValue={self.props.form.primaryPhoneSecond}
-					thirdValue={self.props.form.primaryPhoneThird}
-					extValue={self.props.form.primaryPhoneExt}
-					typeValue={self.props.form.primaryPhoneType}
+					firstValue={self.props.form.data.primaryPhoneFirst}
+					secondValue={self.props.form.data.primaryPhoneSecond}
+					thirdValue={self.props.form.data.primaryPhoneThird}
+					extValue={self.props.form.data.primaryPhoneExt}
+					typeValue={self.props.form.data.primaryPhoneType}
 					reduxAction={reduxAction}
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Parent Alternate Phone"
@@ -203,45 +225,49 @@ class RequiredInfo extends React.PureComponent<Props> {
 					thirdID="alternatePhoneThird"
 					extID="alternatePhoneExt"
 					typeID="alternatePhoneType"
-					firstValue={self.props.form.alternatePhoneFirst}
-					secondValue={self.props.form.alternatePhoneSecond}
-					thirdValue={self.props.form.alternatePhoneThird}
-					extValue={self.props.form.alternatePhoneExt}
-					typeValue={self.props.form.alternatePhoneType}
+					firstValue={self.props.form.data.alternatePhoneFirst}
+					secondValue={self.props.form.data.alternatePhoneSecond}
+					thirdValue={self.props.form.data.alternatePhoneThird}
+					extValue={self.props.form.data.alternatePhoneExt}
+					typeValue={self.props.form.data.alternatePhoneType}
 					reduxAction={reduxAction}
-				/> */}
+					blurBox={self.props.form.apiState=="WAITING"}
+				/>
 			</tbody></table>
 		);
 
 		const specNeedsFields = (
 			<table><tbody>
-				{/* <FormTextArea
+				<FormTextArea
 					id="allergies"
 					label="Allergies"
 					rows={4}
 					cols={60}
-					value={self.props.form.allergies}
+					value={self.props.form.data.allergies}
 					reduxAction={reduxAction}
 					placeholder="Please leave blank if none"
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormTextArea
 					id="medications"
 					label="Medications"
 					rows={4}
 					cols={60}
-					value={self.props.form.medications}
+					value={self.props.form.data.medications}
 					reduxAction={reduxAction}
 					placeholder="Please leave blank if none"
+					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormTextArea
 					id="specialNeeds"
 					label="Special Needs"
 					rows={4}
 					cols={60}
-					value={self.props.form.specialNeeds}
+					value={self.props.form.data.specialNeeds}
 					reduxAction={reduxAction}
 					placeholder="Please leave blank if none"
-				/> */}
+					blurBox={self.props.form.apiState=="WAITING"}
+				/>
 			</tbody></table>
 		);
 		return <JoomlaMainPage>

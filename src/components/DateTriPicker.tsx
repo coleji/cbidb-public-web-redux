@@ -12,7 +12,8 @@ export interface DateTriPickerProps<U> {
 	dayValue: string,
 	yearValue: string,
 	reduxAction?: (name: string, value: string) => void,
-	isRequired?: boolean
+	isRequired?: boolean,
+	blurBox: boolean
 }
 
 const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -59,9 +60,10 @@ export default class DateTriPicker<U, T extends DateTriPickerProps<U>> extends R
 			value={self.props.monthValue}
 			reduxAction={self.props.reduxAction}
 			options={dobMonthValues}
-			appendToElementCell={dobDateAndYear}
+			appendToElementCell={self.props.blurBox ? null : dobDateAndYear}
 			nullDisplay="- Month -"
 			isRequired={self.props.isRequired}
+			blurBox={self.props.blurBox}
 		/>
 	}
 }

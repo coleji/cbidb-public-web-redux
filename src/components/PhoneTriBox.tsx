@@ -16,7 +16,8 @@ export interface PhoneTriBoxProps<U> {
     extValue: string
     typeValue: string,
     reduxAction?: (name: string, value: string) => void,
-    isRequired?: boolean
+    isRequired?: boolean,
+	blurBox?: boolean
 }
 
 
@@ -49,7 +50,18 @@ export default class PhoneTriBox<U, T extends PhoneTriBoxProps<U>> extends React
             size={5}
             justElement={true}
         />
-        return (<React.Fragment>
+        return self.props.blurBox ? (
+			<TextInput<U>
+                id={self.props.firstID}
+                label={self.props.label}
+                value={self.props.firstValue}
+                reduxAction={self.props.reduxAction}
+                isRequired={self.props.isRequired}
+                size={3}
+				maxLength={3}
+				blurBox={self.props.blurBox}
+            />
+		) : (<React.Fragment>
             <TextInput<U>
                 id={self.props.firstID}
                 label={self.props.label}

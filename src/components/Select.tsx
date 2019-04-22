@@ -19,14 +19,22 @@ export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, string>, str
 		? []
 		: [<option key={null} value="">{this.props.nullDisplay}</option>];
 
-		return (<select
-			id={this.props.id}
-			name={this.props.id}
-			className="selectlist apex-item-select"
-			onChange={onChange}
-		>
-			{nullOption.concat(this.props.options.map(({key, display}) => <option value={key} key={key}>{display}</option>))}
-		</select>);
+		return this.props.blurBox ? (
+			<div style={{
+				width: `${30*8.8}px`,
+				height: "20px",
+				backgroundColor: "#eee"
+			}}/>
+		) : (
+			<select
+				id={this.props.id}
+				name={this.props.id}
+				className="selectlist apex-item-select"
+				onChange={onChange}
+			>
+				{nullOption.concat(this.props.options.map(({key, display}) => <option value={key} key={key}>{display}</option>))}
+			</select>
+		)
 	}
 }
 
