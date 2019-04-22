@@ -17,6 +17,8 @@ const shape = t.type({
 	optionalString: t.union([t.string, t.null, t.undefined])
 })
 
+type TT = t.TypeOf<typeof shape>
+
 describe("runtime-type-validation", () => {
 	it ("ok thing is ok", () => {
 		const ok = JSON.stringify({
