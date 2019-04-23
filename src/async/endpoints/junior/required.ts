@@ -2,25 +2,25 @@ import * as t from 'io-ts'
 import APIWrapper, { HttpMethod } from '../../APIWrapper';
 
 export const validator = t.type({
-	firstName: t.union([t.string, t.null]),
-	lastName: t.union([t.string, t.null]),
-	middleInitial: t.union([t.string, t.null]),
-	dob: t.union([t.string, t.null]),
-	childEmail: t.union([t.string, t.null]),
-	addr1: t.union([t.string, t.null]),
-	addr2: t.union([t.string, t.null]),
-	addr3: t.union([t.string, t.null]),
-	city: t.union([t.string, t.null]),
-	state: t.union([t.string, t.null]),
-	zip: t.union([t.string, t.null]),
-	country: t.union([t.string, t.null]),
-	primaryPhone: t.union([t.string, t.null]),
-	primaryPhoneType: t.union([t.string, t.null]),
-	alternatePhone: t.union([t.string, t.null]),
-	alternatePhoneType: t.union([t.string, t.null]),
-	allergies: t.union([t.string, t.null]),
-	medications: t.union([t.string, t.null]),
-	specialNeeds: t.union([t.string, t.null])
+	firstName: t.union([t.string, t.undefined]),
+	lastName: t.union([t.string, t.undefined]),
+	middleInitial: t.union([t.string, t.undefined]),
+	dob: t.union([t.string, t.undefined]),
+	childEmail: t.union([t.string, t.undefined]),
+	addr1: t.union([t.string, t.undefined]),
+	addr2: t.union([t.string, t.undefined]),
+	addr3: t.union([t.string, t.undefined]),
+	city: t.union([t.string, t.undefined]),
+	state: t.union([t.string, t.undefined]),
+	zip: t.union([t.string, t.undefined]),
+	country: t.union([t.string, t.undefined]),
+	primaryPhone: t.union([t.string, t.undefined]),
+	primaryPhoneType: t.union([t.string, t.undefined]),
+	alternatePhone: t.union([t.string, t.undefined]),
+	alternatePhoneType: t.union([t.string, t.undefined]),
+	allergies: t.union([t.string, t.undefined]),
+	medications: t.union([t.string, t.undefined]),
+	specialNeeds: t.union([t.string, t.undefined])
 })
 
 const path = "/junior/required"
