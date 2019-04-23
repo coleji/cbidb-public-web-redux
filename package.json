@@ -9,7 +9,7 @@
     "build": "./build.sh",
     "start": "nodejs dist/js/server.js",
     "buildtest": "tsc",
-    "test": "mocha --require ts-node/register test/**/*.ts"
+    "test": "mocha --require ts-node/register lib/**/*.ts test/**/*.ts"
   },
   "author": "",
   "license": "ISC",

@@ -18,7 +18,7 @@ const shape = t.type({
 })
 
 type TT = t.TypeOf<typeof shape>
-
+/*
 describe("runtime-type-validation", () => {
 	it ("ok thing is ok", () => {
 		const ok = JSON.stringify({
@@ -255,3 +255,4 @@ describe("runtime-type-validation", () => {
 		assert.ok(result.isRight())
 	})
 })
+*/
