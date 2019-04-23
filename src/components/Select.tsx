@@ -31,6 +31,7 @@ export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, string>, str
 				name={this.props.id}
 				className="selectlist apex-item-select"
 				onChange={onChange}
+				value={this.props.value == null ? undefined : this.props.value}
 			>
 				{nullOption.concat(this.props.options.map(({key, display}) => <option value={key} key={key}>{display}</option>))}
 			</select>

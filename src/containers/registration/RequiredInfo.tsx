@@ -21,12 +21,53 @@ import {getReduxState} from "../../reducer/store"
 import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/required"
+import splitPhone from "../../util/phone"
 
 export const FORM_NAME = "registrationRequiredInfo"
 
 export const path = '/required/:personId'
 
-export type Form = t.TypeOf<typeof validator>
+type ApiType = t.TypeOf<typeof validator>
+
+export type Form = ApiType & {
+	dobMonth: string,
+	dobDate: string,
+	dobYear: string,
+	primaryPhoneFirst: string,
+	primaryPhoneSecond: string,
+	primaryPhoneThird: string,
+	primaryPhoneExt: string
+	alternatePhoneFirst: string,
+	alternatePhoneSecond: string,
+	alternatePhoneThird: string,
+	alternatePhoneExt: string
+}
+
+const apiToForm: (api: ApiType) => Form = api => {
+	const dobRegex = /(\d{2})\/(\d{2})\/(\d{4})/
+	const dobResult = dobRegex.exec(api.dob)
+	const [dontCare, dobMonth, dobDate, dobYear] = dobResult
+
+	console.log(api.dob)
+	console.log({dobMonth, dobDate, dobYear})
+
+	const {first: primaryPhoneFirst, second: primaryPhoneSecond, third: primaryPhoneThird, ext: primaryPhoneExt} = splitPhone(api.primaryPhone || "")
+	const {first: alternatePhoneFirst, second: alternatePhoneSecond, third: alternatePhoneThird, ext: alternatePhoneExt} = splitPhone(api.alternatePhone || "")
+	return {
+		...api,
+		dobDate,
+		dobMonth,
+		dobYear,
+		primaryPhoneFirst,
+		primaryPhoneSecond,
+		primaryPhoneThird,
+		primaryPhoneExt,
+		alternatePhoneFirst,
+		alternatePhoneSecond,
+		alternatePhoneThird,
+		alternatePhoneExt
+	}
+}
 
 const mapStateToProps = (state: RootState) => ({
 	getMoment: state.staticState.getMoment,
@@ -64,7 +105,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, getWrapper, x => x)
+		get(FORM_NAME, getWrapper, apiToForm)
 	}
 	render() {
 		console.log("store", getReduxState())
@@ -146,24 +187,24 @@ class RequiredInfo extends React.PureComponent<Props> {
 				)}
 				
 				<FormInput
-					id="addr_1"
+					id="addr1"
 					label="Address 1"
 					isRequired={true}
-					value={self.props.form.data.addr_1}
+					value={self.props.form.data.addr1}
 					reduxAction={reduxAction}
 					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
-					id="addr_2"
+					id="addr2"
 					label="Address 2"
-					value={self.props.form.data.addr_2}
+					value={self.props.form.data.addr2}
 					reduxAction={reduxAction}
 					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
-					id="addr_3"
+					id="addr3"
 					label="Address 3"
-					value={self.props.form.data.addr_3}
+					value={self.props.form.data.addr3}
 					reduxAction={reduxAction}
 					blurBox={self.props.form.apiState=="WAITING"}
 				/>
@@ -171,7 +212,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 					id="city"
 					label="City"
 					isRequired={true}
-					value={self.props.form.data.addr_2}
+					value={self.props.form.data.city}
 					reduxAction={reduxAction}
 					blurBox={self.props.form.apiState=="WAITING"}
 				/>

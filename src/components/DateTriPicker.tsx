@@ -26,6 +26,7 @@ const days = range(1,31).map(i => ({key: String(i), display: String(i)}))
 export default class DateTriPicker<U, T extends DateTriPickerProps<U>> extends React.PureComponent<T> {
 	render() {
 		const self = this
+		console.log("here we go datePicker ", self.props)
 		const dobDateAndYear = (function() {
 			const date = <Select<U>
 				id={self.props.dayID}
