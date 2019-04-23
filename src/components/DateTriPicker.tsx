@@ -2,6 +2,7 @@ import * as React from "react";
 
 import {Select, KeyAndDisplay} from "./Select"
 import range from "../util/range"
+import * as moment from 'moment'
 
 export interface DateTriPickerProps<U> {
 	years: number[]
@@ -21,7 +22,19 @@ const leadingZero = (n: number) => n<10 ? String("0" + n) : String(n);
 
 const dobMonthValues: KeyAndDisplay[] = months.map((m, i) => ({key: leadingZero(i+1), display: m}))
 
-const days = range(1,31).map(i => ({key: String(i), display: String(i)}))
+const days = range(1,31).map(i => ({key: String(leadingZero(i)), display: String(i)}))
+
+export function componentsToDate(month: string, date: string, year: string): Optional<string> {
+	if (
+		isNaN(Number(month)) || isNaN(Number(date)) || isNaN(Number(year)) || 
+		month == null || date == null || year == null
+	) return None()
+	const candidate = `${month}/${date}/${year}`
+	const candidateMoment = moment(candidate, "MM/DD/YYYY");
+	console.log(candidateMoment)
+	if (candidateMoment.isValid()) return Some(candidate)
+	else return None()
+}
 
 export default class DateTriPicker<U, T extends DateTriPickerProps<U>> extends React.PureComponent<T> {
 	render() {

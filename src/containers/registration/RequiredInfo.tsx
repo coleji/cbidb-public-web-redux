@@ -5,7 +5,7 @@ import * as React from "react";
 import {Dispatch} from "redux";
 import { connect } from "react-redux";
 import { matchPath } from 'react-router-dom';
-import DateTriPicker, { DateTriPickerProps } from "../../components/DateTriPicker";
+import DateTriPicker, { DateTriPickerProps, componentsToDate } from "../../components/DateTriPicker";
 import PhoneTriBox, { PhoneTriBoxProps } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import { Select } from "../../components/Select";
@@ -46,7 +46,8 @@ export type Form = ApiType & {
 const apiToForm: (api: ApiType) => Form = api => {
 	const dobRegex = /(\d{2})\/(\d{2})\/(\d{4})/
 	const dobResult = dobRegex.exec(api.dob)
-	const [dontCare, dobMonth, dobDate, dobYear] = dobResult
+
+	const [dontCare, dobMonth, dobDate, dobYear] = dobResult || [null, null, null, null]
 
 	console.log(api.dob)
 	console.log({dobMonth, dobDate, dobYear})
@@ -66,6 +67,17 @@ const apiToForm: (api: ApiType) => Form = api => {
 		alternatePhoneSecond,
 		alternatePhoneThird,
 		alternatePhoneExt
+	}
+}
+
+const formToAPI: (form: Form) => ApiType = form => {
+	const dobMaybe = componentsToDate(form.dobMonth, form.dobDate, form.dobYear)
+	console.log(dobMaybe)
+	return {
+		...form,
+		dob: dobMaybe.getOrElse(null),
+		primaryPhone: [form.primaryPhoneFirst, form.primaryPhoneSecond, form.primaryPhoneThird, form.primaryPhoneExt].join(""),
+		alternatePhone: [form.alternatePhoneFirst, form.alternatePhoneSecond, form.alternatePhoneThird, form.alternatePhoneExt].join("")
 	}
 }
 
@@ -325,7 +337,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 				{specNeedsFields}
 			</JoomlaArticleRegion>
 			<Button text="Next" onClick={() => {
-				post(FORM_NAME, postWrapper)(this.props.form.data).then(this.props.goHome)
+				post(FORM_NAME, postWrapper)(formToAPI(this.props.form.data)).then(this.props.goHome)
 			}}/>
 		</JoomlaMainPage>
 	}
