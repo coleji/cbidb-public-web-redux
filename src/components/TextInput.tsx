@@ -1,5 +1,6 @@
 import * as React from "react";
 import {ApexItemProps, ApexItem} from "./ApexItem"
+import { Option } from "fp-ts/lib/Option";
 
 interface Props {
 	isPassword?: boolean
@@ -7,7 +8,7 @@ interface Props {
 	maxLength?: number
 }
 
-export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T, Optional<string>>, Optional<string>> {
+export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T, Option<string>>, Option<string>> {
 	getElement() {
 		const onKeyPress = (e: React.KeyboardEvent) => {
 			if (this.props.onEnter && (e.keyCode || e.which) == 13) {

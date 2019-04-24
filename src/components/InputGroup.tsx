@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ApexItem, ApexItemProps } from "./ApexItem";
+import { Option } from "fp-ts/lib/Option";
 
 interface KeyValuePair {
 	key: string,
@@ -53,7 +54,7 @@ abstract class InputGroup<T_Form, T_Props extends Props, T_ValueType> extends Ap
     }
 }
 
-export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, Optional<string>> {
+export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, Option<string>> {
 	isCheckbox = false;
 	values = this.props.values;
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value);

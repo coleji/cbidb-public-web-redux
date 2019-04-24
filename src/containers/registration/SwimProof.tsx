@@ -7,12 +7,13 @@ import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
+import { Option } from "fp-ts/lib/Option";
 
 
 export const FORM_NAME = "swimProofForm"
 
 export interface Form {
-    swimProofID: Optional<string>
+	swimProofID: Option<string>
 }
 
 class FormRadio extends RadioGroup<Form> {}
@@ -83,7 +84,7 @@ class SwimProof extends React.PureComponent<Props> {
                 <br /><br />
                 <FormRadio id="swimProofID" justElement={true} values={swimProofValues} reduxAction={reduxAction} value={self.props.form.swimProofID}/>
 			</JoomlaArticleRegion>
-            {self.props.form.swimProofID.isDefined() ? "" : noProofRegion}
+            {self.props.form.swimProofID.isSome() ? "" : noProofRegion}
             <JoomlaNotitleRegion>
                 <span>
                 If you believe you have a proof of swimming ability not on the above list,

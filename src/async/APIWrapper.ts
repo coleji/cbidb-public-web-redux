@@ -4,6 +4,7 @@ import * as http from 'http';
 import {FailureType, FailureType_BadReturn, FailureType_Unauthorized} from "./FailureType";
 import { Either } from 'fp-ts/lib/Either';
 import * as https from "https"
+import { Option, some, none } from 'fp-ts/lib/Option';
 
 export enum HttpMethod {
 	GET = "GET",
@@ -90,11 +91,11 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 		const self = this;
 		return new Promise<string>((resolve, reject) => {
 			interface PostValues {content: string, headers: {"Content-Type": string, "Content-Length": string}}
-			const postValues: Optional<PostValues> = (function() {
+			const postValues: Option<PostValues> = (function() {
 				if (self.config.type === HttpMethod.POST) {
 					if (data.type == "urlEncoded") {
 						const postData = data.urlEncodedData
-						return Some({
+						return some({
 							content: postData,
 							headers: {
 								"Content-Type": "application/x-www-form-urlencoded",
@@ -104,8 +105,8 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 					} else {
 						const postData = JSON.stringify(data.jsonData)
 						console.log(postData)
-						if (postData == undefined) return None();
-						else return Some({
+						if (postData == undefined) return none;
+						else return some({
 							content: postData,
 							headers: {
 								"Content-Type": "application/json",
@@ -113,7 +114,7 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 							}
 						})
 					}
-				 } else return None();
+				 } else return none;
 			}())
 	
 			const options = {
@@ -156,7 +157,7 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 				reject(e);
 			});
 
-			postValues.map(v => v.content).forEach(v => req.write(v))
+			postValues.map(v => req.write(v.content))
 	
 			req.end();
 		}) // .then(this.config.parseServerResponse, this.config.parseRequestFailure);

@@ -9,16 +9,17 @@ import { RootState } from "../../reducer/rootReducer";
 import Joomla8_4 from "../../theme/joomla/Joomla8_4";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
+import { Option } from 'fp-ts/lib/Option';
 
 
 export const FORM_NAME = "create-acct"
 
 export interface Form {
-	firstName: Optional<string>
-	lastName: Optional<string>
-	email: Optional<string>
-	pw1: Optional<string>
-	pw2: Optional<string>
+	firstName: Option<string>
+	lastName: Option<string>
+	email: Option<string>
+	pw1: Option<string>
+	pw2: Option<string>
 }
 
 interface StateProps {

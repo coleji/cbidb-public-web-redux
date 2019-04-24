@@ -19,15 +19,15 @@ import getConfig from './config'
 import {setStore} from "../reducer/store"
 import memberWelcome from "../async/endpoints/member-welcome"
 import { ServerParams } from "../async/APIWrapper";
+import { some, none } from "fp-ts/lib/Option";
 
 require("../../lib/array-polyfill")
-require("../../lib/optional")
 
 const arr1 = ['a','b','c']
 const arr2 = arr1.zipWithIndex()
 console.log(arr2)
-const s = Some("tssdf")
-const n = None()
+const s = some("tssdf")
+const n = none
 console.log(s.map(e => e.length))
 
 const app = express();

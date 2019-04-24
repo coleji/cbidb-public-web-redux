@@ -1,5 +1,6 @@
 import { push } from 'connected-react-router';
 import * as t from 'io-ts'
+import {Option, some, none} from 'fp-ts/lib/Option'
 import * as moment from "moment";
 import * as React from "react";
 import {Dispatch} from "redux";
@@ -29,26 +30,26 @@ export const path = '/required/:personId'
 type ApiType = t.TypeOf<typeof validator>
 
 export type Form = ApiType & {
-	dobMonth: Optional<string>,
-	dobDate: Optional<string>,
-	dobYear: Optional<string>,
-	primaryPhoneFirst: Optional<string>,
-	primaryPhoneSecond: Optional<string>,
-	primaryPhoneThird: Optional<string>,
-	primaryPhoneExt: Optional<string>
-	alternatePhoneFirst: Optional<string>,
-	alternatePhoneSecond: Optional<string>,
-	alternatePhoneThird: Optional<string>,
-	alternatePhoneExt: Optional<string>
+	dobMonth: Option<string>,
+	dobDate: Option<string>,
+	dobYear: Option<string>,
+	primaryPhoneFirst: Option<string>,
+	primaryPhoneSecond: Option<string>,
+	primaryPhoneThird: Option<string>,
+	primaryPhoneExt: Option<string>
+	alternatePhoneFirst: Option<string>,
+	alternatePhoneSecond: Option<string>,
+	alternatePhoneThird: Option<string>,
+	alternatePhoneExt: Option<string>
 }
 
 const apiToForm: (api: ApiType) => Form = api => {
 	const {first: primaryPhoneFirst, second: primaryPhoneSecond, third: primaryPhoneThird, ext: primaryPhoneExt} = splitPhone(api.primaryPhone)
 	const {first: alternatePhoneFirst, second: alternatePhoneSecond, third: alternatePhoneThird, ext: alternatePhoneExt} = splitPhone(api.alternatePhone)
-	const [dobDate, dobMonth, dobYear] = dateStringToComponents(api.dob).match({
-		some: a => [Some(a.month), Some(a.date), Some(a.year)],
-		none: () => [None() as Optional<string>, None() as Optional<string>, None() as Optional<string>]
-	})
+	const [dobDate, dobMonth, dobYear] = dateStringToComponents(api.dob).fold(
+		[none, none, none],
+		a => [some(a.month), some(a.date), some(a.year)]
+	)
 	return {
 		...api,
 		dobDate,

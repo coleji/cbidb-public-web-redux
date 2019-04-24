@@ -12,15 +12,15 @@ import App from '../containers/App'
 import { setStore } from "../reducer/store"
 
 import { makeRootReducer, StaticState } from '../reducer/rootReducer'
+import { some, none } from 'fp-ts/lib/Option';
 
 require("../../lib/array-polyfill")
-require("../../lib/optional")
 
 const arr1 = ['a', 'b', 'c']
 const arr2 = arr1.zipWithIndex()
 console.log(arr2)
-const s = Some("tssdf")
-const n = None()
+const s = some("tssdf")
+const n = none
 console.log(s.map(e => e.length))
 
 

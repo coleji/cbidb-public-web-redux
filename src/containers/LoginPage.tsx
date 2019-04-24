@@ -12,13 +12,14 @@ import { RootState } from '../reducer/rootReducer'
 import {formReducer, dispatchFormUpdate, FormState} from "../form/form"
 import {login} from "../async/endpoints/authenticate-member"
 import { ServerParams } from "../async/APIWrapper";
+import { none, Option } from "fp-ts/lib/Option";
 
 // TODO: duplicated in App and here
 export const FORM_NAME = "login"
 
 export const formDefault = {
-	username: None() as Optional<string>,
-	password: None() as Optional<string>
+	username: none as Option<string>,
+	password: none as Option<string>
 }
 
 export type Form = typeof formDefault
@@ -161,7 +162,7 @@ const standardFormReducer = formReducer<Form>(FORM_NAME, formDefault);
 export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<Form>, action: any) => {
 	const modifiedState = 
 		action.type == "LOGIN_FAILURE"
-		? {...state, data: {...state.data, password: None()}}
+		? {...state, data: {...state.data, password: none}}
 		: state;
 	return standardFormReducer(modifiedState, action);
 }

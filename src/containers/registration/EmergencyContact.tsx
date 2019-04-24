@@ -8,38 +8,39 @@ import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
+import { Option } from "fp-ts/lib/Option";
 
 
 export const FORM_NAME = "emergencyContact"
 
 export interface Form {
-	emerg1Name: Optional<string>,
-	emerg1Relation: Optional<string>,
-	emerg1PrimaryPhoneFirst: Optional<string>,
-	emerg1PrimaryPhoneSecond: Optional<string>,
-	emerg1PrimaryPhoneThird: Optional<string>,
-	emerg1PrimaryPhoneExt: Optional<string>,
-	emerg1PrimaryPhoneType: Optional<string>,
+	emerg1Name: Option<string>,
+	emerg1Relation: Option<string>,
+	emerg1PrimaryPhoneFirst: Option<string>,
+	emerg1PrimaryPhoneSecond: Option<string>,
+	emerg1PrimaryPhoneThird: Option<string>,
+	emerg1PrimaryPhoneExt: Option<string>,
+	emerg1PrimaryPhoneType: Option<string>,
 
-	emerg1AlternatePhoneFirst: Optional<string>,
-	emerg1AlternatePhoneSecond: Optional<string>,
-	emerg1AlternatePhoneThird: Optional<string>,
-	emerg1AlternatePhoneExt: Optional<string>,
-	emerg1AlternatePhoneType: Optional<string>,
+	emerg1AlternatePhoneFirst: Option<string>,
+	emerg1AlternatePhoneSecond: Option<string>,
+	emerg1AlternatePhoneThird: Option<string>,
+	emerg1AlternatePhoneExt: Option<string>,
+	emerg1AlternatePhoneType: Option<string>,
 
-	emerg2Name: Optional<string>,
-	emerg2Relation: Optional<string>,
-	emerg2PrimaryPhoneFirst: Optional<string>,
-	emerg2PrimaryPhoneSecond: Optional<string>,
-	emerg2PrimaryPhoneThird: Optional<string>,
-	emerg2PrimaryPhoneExt: Optional<string>,
-	emerg2PrimaryPhoneType: Optional<string>,
+	emerg2Name: Option<string>,
+	emerg2Relation: Option<string>,
+	emerg2PrimaryPhoneFirst: Option<string>,
+	emerg2PrimaryPhoneSecond: Option<string>,
+	emerg2PrimaryPhoneThird: Option<string>,
+	emerg2PrimaryPhoneExt: Option<string>,
+	emerg2PrimaryPhoneType: Option<string>,
 
-	emerg2AlternatePhoneFirst: Optional<string>,
-	emerg2AlternatePhoneSecond: Optional<string>,
-	emerg2AlternatePhoneThird: Optional<string>,
-	emerg2AlternatePhoneExt: Optional<string>,
-	emerg2AlternatePhoneType: Optional<string>,
+	emerg2AlternatePhoneFirst: Option<string>,
+	emerg2AlternatePhoneSecond: Option<string>,
+	emerg2AlternatePhoneThird: Option<string>,
+	emerg2AlternatePhoneExt: Option<string>,
+	emerg2AlternatePhoneType: Option<string>,
 }
 
 class FormInput extends TextInput<Form> {}

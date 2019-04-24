@@ -29,9 +29,9 @@ describe("OptionalString", () => {
 		console.log(result.getOrElse(null))
 		assert.ok(
 			result.isRight() && 
-			result.getOrElse(null).s.getFailFast() === "hi" && 
-			result.getOrElse(null).n.getFailFast() === 12 && 
-			result.getOrElse(null).b.getFailFast() === true
+			result.getOrElse(null).s.getOrElse(null) === "hi" && 
+			result.getOrElse(null).n.getOrElse(null) === 12 && 
+			result.getOrElse(null).b.getOrElse(null) === true
 		)
 	})
 	it("works for falsy", () => {
@@ -44,9 +44,9 @@ describe("OptionalString", () => {
 		const err = PathReporter.report(result)
 		assert.ok(
 			result.isRight() && 
-			result.getOrElse(null).s.getFailFast() === "" && 
-			result.getOrElse(null).n.getFailFast() === 0 && 
-			result.getOrElse(null).b.getFailFast() === false
+			result.getOrElse(null).s.getOrElse(null) === "" && 
+			result.getOrElse(null).n.getOrElse(null) === 0 && 
+			result.getOrElse(null).b.getOrElse(null) === false
 		)
 	})
 	it("works for null", () => {
@@ -59,9 +59,9 @@ describe("OptionalString", () => {
 		const err = PathReporter.report(result)
 		assert.ok(
 			result.isRight() && 
-			!result.getOrElse(null).s.isDefined() && 
-			!result.getOrElse(null).n.isDefined() && 
-			!result.getOrElse(null).b.isDefined()
+			result.getOrElse(null).s.isNone() && 
+			result.getOrElse(null).n.isNone() && 
+			result.getOrElse(null).b.isNone()
 		)
 	})
 	it("works for undefined", () => {
@@ -70,9 +70,9 @@ describe("OptionalString", () => {
 		const err = PathReporter.report(result)
 		assert.ok(
 			result.isRight() && 
-			!result.getOrElse(null).s.isDefined() && 
-			!result.getOrElse(null).n.isDefined() && 
-			!result.getOrElse(null).b.isDefined()
+			result.getOrElse(null).s.isNone() && 
+			result.getOrElse(null).n.isNone() && 
+			result.getOrElse(null).b.isNone()
 		)
 	})
 })

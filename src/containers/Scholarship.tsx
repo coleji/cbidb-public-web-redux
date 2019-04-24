@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import {Option, some, none} from 'fp-ts/lib/Option'
 
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
@@ -13,14 +14,14 @@ import TextInput from "../components/TextInput";
 export const FORM_NAME = "scholarshipForm"
 
 export interface Form {
-	isApplying: Optional<string>,
-	numberAdults: Optional<string>,
-	haveInsurange: Optional<string>,
-	numberInfants: Optional<string>,
-	numberPreschoolers: Optional<string>,
-	numberSchoolagers: Optional<string>,
-	numberTeenagers: Optional<string>,
-	income: Optional<string>,
+	isApplying: Option<string>,
+	numberAdults: Option<string>,
+	haveInsurange: Option<string>,
+	numberInfants: Option<string>,
+	numberPreschoolers: Option<string>,
+	numberSchoolagers: Option<string>,
+	numberTeenagers: Option<string>,
+	income: Option<string>,
 	doAgree: boolean
 }
 

@@ -1,5 +1,6 @@
 import * as React from "react";
 import {ApexItem, ApexItemProps} from "./ApexItem";
+import { Option } from "fp-ts/lib/Option";
 
 export interface KeyAndDisplay {
 	key: string,
@@ -11,7 +12,7 @@ interface Props {
 	nullDisplay?: string
 }
 
-export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, Optional<string>>, Optional<string>> {
+export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, Option<string>>, Option<string>> {
 	getElement() {
 		const onChange = (ev: React.ChangeEvent<HTMLSelectElement>) => this.props.reduxAction(this.props.id, ev.target.value);
 

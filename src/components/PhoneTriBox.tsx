@@ -2,6 +2,7 @@ import * as React from "react";
 
 import {Select} from "./Select"
 import TextInput from "./TextInput";
+import { Option, some, none } from "fp-ts/lib/Option";
 
 export interface PhoneTriBoxProps<U> {
     label: string,
@@ -10,46 +11,46 @@ export interface PhoneTriBoxProps<U> {
     thirdID: string & keyof U,
     extID: string & keyof U,
     typeID: string & keyof U,
-    firstValue: Optional<string>,
-    secondValue: Optional<string>,
-    thirdValue: Optional<string>,
-    extValue: Optional<string>
-    typeValue: Optional<string>,
+    firstValue: Option<string>,
+    secondValue: Option<string>,
+    thirdValue: Option<string>,
+    extValue: Option<string>
+    typeValue: Option<string>,
     reduxAction?: (name: string, value: string) => void,
     isRequired?: boolean,
 	blurBox?: boolean
 }
 
-export const splitPhone = (phone: Optional<string>) => phone.match({
-	some: p => ({
-		first: Some(p.substr(1,3)),
-		second: Some(p.substr(4,3)),
-		third: Some(p.substr(7,3)),
-		ext: Some(p.substr(10))
-	}),
-	none: () => ({
-		first: None() as Optional<string>,
-		second: None() as Optional<string>,
-		third: None() as Optional<string>,
-		ext: None() as Optional<string>
+export const splitPhone = (phone: Option<string>) => phone.fold(
+	{
+		first: none as Option<string>,
+		second: none as Option<string>,
+		third: none as Option<string>,
+		ext: none as Option<string>
+	},
+	p => ({
+		first: some(p.substr(1,3)),
+		second: some(p.substr(4,3)),
+		third: some(p.substr(7,3)),
+		ext: some(p.substr(10))
 	})
-})
+)
 
 export const combinePhone = (
-	first: Optional<string>,
-	second: Optional<string>,
-	third: Optional<string>,
-	ext:  Optional<string>
+	first: Option<string>,
+	second: Option<string>,
+	third: Option<string>,
+	ext:  Option<string>
 ) => {
 	if (
-		!first.isDefined() && 
-		!second.isDefined() && 
-		!third.isDefined() && 
-		!ext.isDefined()
+		first.isNone() && 
+		second.isNone() && 
+		third.isNone() && 
+		ext.isNone()
 	) {
-		return None() as Optional<string>;
+		return none;
 	} else {
-		return Some([
+		return some([
 			first.getOrElse(""),
 			second.getOrElse(""),
 			third.getOrElse(""),

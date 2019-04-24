@@ -1,34 +1,35 @@
 import * as t from 'io-ts'
+import { Option, some, none } from 'fp-ts/lib/Option';
 
-export const OptionalString = new t.Type<Optional<string>, string, unknown>(
+export const OptionalString = new t.Type<Option<string>, string, unknown>(
 	'OptionalString',
-	(u): u is Optional<string> => u instanceof Optional,
+	(u): u is Option<string> => u instanceof Option,
 	(u, c) =>
 		t.union([t.string, t.null, t.undefined]).validate(u, c).chain(s => {
-			if (s === null || s === undefined) return t.success(<Optional<string>>None())
-			else return t.success(Some(s))
+			if (s === null || s === undefined) return t.success(<Option<string>>none)
+			else return t.success(some(s))
 		}),
-	a => a.match({some: (s) => `Some(${s})`, none: () => "None"})
+	a => a.fold("None", (s) => `some(${s})`)
 )
 
-export const OptionalNumber = new t.Type<Optional<number>, string, unknown>(
+export const OptionalNumber = new t.Type<Option<number>, string, unknown>(
 	'OptionalNumber',
-	(u): u is Optional<number> => u instanceof Optional,
+	(u): u is Option<number> => u instanceof Option,
 	(u, c) =>
 		t.union([t.number, t.null, t.undefined]).validate(u, c).chain(s => {
-			if (s === null || s === undefined) return t.success(<Optional<number>>None())
-			else return t.success(Some(s))
+			if (s === null || s === undefined) return t.success(<Option<number>>none)
+			else return t.success(some(s))
 		}),
-	a => a.match({some: (n) => `Some(${n})`, none: () => "None"})
+		a => a.fold("None", (s) => `some(${s})`)
 )
 
-export const OptionalBoolean = new t.Type<Optional<boolean>, string, unknown>(
+export const OptionalBoolean = new t.Type<Option<boolean>, string, unknown>(
 	'OptionalBoolean',
-	(u): u is Optional<boolean> => u instanceof Optional,
+	(u): u is Option<boolean> => u instanceof Option,
 	(u, c) =>
 		t.union([t.boolean, t.null, t.undefined]).validate(u, c).chain(s => {
-			if (s === null || s === undefined) return t.success(<Optional<boolean>>None())
-			else return t.success(Some(s))
+			if (s === null || s === undefined) return t.success(<Option<boolean>>none)
+			else return t.success(some(s))
 		}),
-	a => a.match({some: (b) => `Some(${b})`, none: () => "None"})
+		a => a.fold("None", (s) => `some(${s})`)
 )

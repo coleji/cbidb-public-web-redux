@@ -8,18 +8,19 @@ import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
+import { Option } from "fp-ts/lib/Option";
 
 
 export const FORM_NAME = "surveyInfoForm"
 
 export interface Form {
-    genderID: Optional<string>,
+    genderID: Option<string>,
 	referral: string[],
-	referralOther: Optional<string>,
-	language: Optional<string>,
+	referralOther: Option<string>,
+	language: Option<string>,
 	ethnicity: string[],
-	ethnicityOther: Optional<string>
-	school: Optional<string>,
+	ethnicityOther: Option<string>
+	school: Option<string>,
 	freeLunch: boolean
 }
 
