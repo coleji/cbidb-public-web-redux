@@ -46,7 +46,7 @@ const apiToForm: (api: ApiType) => Form = api => {
 	const {first: primaryPhoneFirst, second: primaryPhoneSecond, third: primaryPhoneThird, ext: primaryPhoneExt} = splitPhone(api.primaryPhone)
 	const {first: alternatePhoneFirst, second: alternatePhoneSecond, third: alternatePhoneThird, ext: alternatePhoneExt} = splitPhone(api.alternatePhone)
 	const [dobDate, dobMonth, dobYear] = dateStringToComponents(api.dob).match({
-		some: a => [Some(a[0]), Some(a[1]), Some(a[2])],
+		some: a => [Some(a.month), Some(a.date), Some(a.year)],
 		none: () => [None() as Optional<string>, None() as Optional<string>, None() as Optional<string>]
 	})
 	return {

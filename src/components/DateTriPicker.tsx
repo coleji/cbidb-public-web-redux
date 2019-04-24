@@ -38,12 +38,12 @@ export function componentsToDate(month: Optional<string>, date: Optional<string>
 	else return None()
 }
 
-export function dateStringToComponents(dateString: Optional<string>): Optional<[string, string, string]> {
+export function dateStringToComponents(dateString: Optional<string>): Optional<{month: string, date: string, year: string}> {
 	return dateString.flatMap(s => {
 		const dobRegex = /(\d{2})\/(\d{2})\/(\d{4})/
 		const dobResult = dobRegex.exec(s)
-		if (dobResult == null) return None()
-		else return Some([dobResult[1], dobResult[2], dobResult[3]])
+		if (dobResult == null) return None() 
+		else return Some({month: dobResult[1], date: dobResult[2], year: dobResult[3]})
 	})
 }
 

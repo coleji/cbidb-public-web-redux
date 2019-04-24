@@ -13,14 +13,14 @@ import TextInput from "../components/TextInput";
 export const FORM_NAME = "scholarshipForm"
 
 export interface Form {
-	isApplying: string,
-	numberAdults: string,
-	haveInsurange: string,
-	numberInfants: string,
-	numberPreschoolers: string,
-	numberSchoolagers: string,
-	numberTeenagers: string,
-	income: string,
+	isApplying: Optional<string>,
+	numberAdults: Optional<string>,
+	haveInsurange: Optional<string>,
+	numberInfants: Optional<string>,
+	numberPreschoolers: Optional<string>,
+	numberSchoolagers: Optional<string>,
+	numberTeenagers: Optional<string>,
+	income: Optional<string>,
 	doAgree: boolean
 }
 
@@ -194,7 +194,7 @@ class RatingsPage extends React.PureComponent<Props> {
 					<FormRadio id="isApplying" justElement={true} values={radioValues} reduxAction={self.props.updateField} value={self.props.form.isApplying}/>
 				</div>
 			</JoomlaArticleRegion>
-			{self.props.form.isApplying == "Yes" ? familyInfo : ""}
+			{self.props.form.isApplying.getOrElse("No") == "Yes" ? familyInfo : ""}
 		</JoomlaMainPage>
 	}
 }

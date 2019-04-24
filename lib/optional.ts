@@ -56,7 +56,7 @@ class Optional_None<T> extends Optional<T> {
 		super();
 	}
 	flatMap<U>(f: (t: T) => Optional<U>): Optional<U> {
-		return None()
+		return <Optional<U>>None()
 	}
 	forEach(f: (t:T) => void): void {
 		// do nothing

@@ -17,8 +17,8 @@ import { ServerParams } from "../async/APIWrapper";
 export const FORM_NAME = "login"
 
 export const formDefault = {
-	username: "",
-	password: ""
+	username: None() as Optional<string>,
+	password: None() as Optional<string>
 }
 
 export type Form = typeof formDefault
@@ -161,7 +161,7 @@ const standardFormReducer = formReducer<Form>(FORM_NAME, formDefault);
 export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<Form>, action: any) => {
 	const modifiedState = 
 		action.type == "LOGIN_FAILURE"
-		? {...state, data: {...state.data, password: ""}}
+		? {...state, data: {...state.data, password: None()}}
 		: state;
 	return standardFormReducer(modifiedState, action);
 }
@@ -177,7 +177,7 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		selfServerParams: rootState.staticState.selfServerParams
 	}),
 	dispatch => ({
-		login: (selfServerParams: ServerParams, form: Form) => login(selfServerParams)(dispatch, form.username, form.password),
+		login: (selfServerParams: ServerParams, form: Form) => login(selfServerParams)(dispatch, form.username.getOrElse(""), form.password.getOrElse("")),
 		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	})
 )(LoginPage)

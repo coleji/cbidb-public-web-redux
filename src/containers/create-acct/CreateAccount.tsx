@@ -14,11 +14,11 @@ import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
 export const FORM_NAME = "create-acct"
 
 export interface Form {
-	firstName: string
-	lastName: string
-	email: string
-	pw1: string
-	pw2: string
+	firstName: Optional<string>
+	lastName: Optional<string>
+	email: Optional<string>
+	pw1: Optional<string>
+	pw2: Optional<string>
 }
 
 interface StateProps {
