@@ -13,13 +13,13 @@ import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 export const FORM_NAME = "surveyInfoForm"
 
 export interface Form {
-    genderID: string,
+    genderID: Optional<string>,
 	referral: string[],
-	referralOther: string,
-	language: string,
+	referralOther: Optional<string>,
+	language: Optional<string>,
 	ethnicity: string[],
-	ethnicityOther: string
-	school: string,
+	ethnicityOther: Optional<string>
+	school: Optional<string>,
 	freeLunch: boolean
 }
 

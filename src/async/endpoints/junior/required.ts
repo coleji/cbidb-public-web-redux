@@ -1,26 +1,27 @@
 import * as t from 'io-ts'
 import APIWrapper, { HttpMethod } from '../../APIWrapper';
+import {OptionalString} from '../../../util/OptionalTypeValidators'
 
 export const validator = t.type({
-	firstName: t.union([t.string, t.undefined]),
-	lastName: t.union([t.string, t.undefined]),
-	middleInitial: t.union([t.string, t.undefined]),
-	dob: t.union([t.string, t.undefined]),
-	childEmail: t.union([t.string, t.undefined]),
-	addr1: t.union([t.string, t.undefined]),
-	addr2: t.union([t.string, t.undefined]),
-	addr3: t.union([t.string, t.undefined]),
-	city: t.union([t.string, t.undefined]),
-	state: t.union([t.string, t.undefined]),
-	zip: t.union([t.string, t.undefined]),
-	country: t.union([t.string, t.undefined]),
-	primaryPhone: t.union([t.string, t.undefined]),
-	primaryPhoneType: t.union([t.string, t.undefined]),
-	alternatePhone: t.union([t.string, t.undefined]),
-	alternatePhoneType: t.union([t.string, t.undefined]),
-	allergies: t.union([t.string, t.undefined]),
-	medications: t.union([t.string, t.undefined]),
-	specialNeeds: t.union([t.string, t.undefined])
+	firstName: OptionalString,
+	lastName: OptionalString,
+	middleInitial: OptionalString,
+	dob: OptionalString,
+	childEmail: OptionalString,
+	addr1: OptionalString,
+	addr2: OptionalString,
+	addr3: OptionalString,
+	city: OptionalString,
+	state: OptionalString,
+	zip: OptionalString,
+	country: OptionalString,
+	primaryPhone: OptionalString,
+	primaryPhoneType: OptionalString,
+	alternatePhone: OptionalString,
+	alternatePhoneType: OptionalString,
+	allergies: OptionalString,
+	medications: OptionalString,
+	specialNeeds: OptionalString
 })
 
 const path = "/junior/required"

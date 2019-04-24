@@ -5,8 +5,8 @@ import * as React from "react";
 import {Dispatch} from "redux";
 import { connect } from "react-redux";
 import { matchPath } from 'react-router-dom';
-import DateTriPicker, { DateTriPickerProps, componentsToDate } from "../../components/DateTriPicker";
-import PhoneTriBox, { PhoneTriBoxProps } from "../../components/PhoneTriBox";
+import DateTriPicker, { DateTriPickerProps, componentsToDate, dateStringToComponents } from "../../components/DateTriPicker";
+import PhoneTriBox, { PhoneTriBoxProps, splitPhone, combinePhone } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import { Select } from "../../components/Select";
 import TextArea from "../../components/TextArea";
@@ -21,7 +21,6 @@ import {getReduxState} from "../../reducer/store"
 import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/required"
-import splitPhone from "../../util/phone"
 
 export const FORM_NAME = "registrationRequiredInfo"
 
@@ -30,30 +29,26 @@ export const path = '/required/:personId'
 type ApiType = t.TypeOf<typeof validator>
 
 export type Form = ApiType & {
-	dobMonth: string,
-	dobDate: string,
-	dobYear: string,
-	primaryPhoneFirst: string,
-	primaryPhoneSecond: string,
-	primaryPhoneThird: string,
-	primaryPhoneExt: string
-	alternatePhoneFirst: string,
-	alternatePhoneSecond: string,
-	alternatePhoneThird: string,
-	alternatePhoneExt: string
+	dobMonth: Optional<string>,
+	dobDate: Optional<string>,
+	dobYear: Optional<string>,
+	primaryPhoneFirst: Optional<string>,
+	primaryPhoneSecond: Optional<string>,
+	primaryPhoneThird: Optional<string>,
+	primaryPhoneExt: Optional<string>
+	alternatePhoneFirst: Optional<string>,
+	alternatePhoneSecond: Optional<string>,
+	alternatePhoneThird: Optional<string>,
+	alternatePhoneExt: Optional<string>
 }
 
 const apiToForm: (api: ApiType) => Form = api => {
-	const dobRegex = /(\d{2})\/(\d{2})\/(\d{4})/
-	const dobResult = dobRegex.exec(api.dob)
-
-	const [dontCare, dobMonth, dobDate, dobYear] = dobResult || [null, null, null, null]
-
-	console.log(api.dob)
-	console.log({dobMonth, dobDate, dobYear})
-
-	const {first: primaryPhoneFirst, second: primaryPhoneSecond, third: primaryPhoneThird, ext: primaryPhoneExt} = splitPhone(api.primaryPhone || "")
-	const {first: alternatePhoneFirst, second: alternatePhoneSecond, third: alternatePhoneThird, ext: alternatePhoneExt} = splitPhone(api.alternatePhone || "")
+	const {first: primaryPhoneFirst, second: primaryPhoneSecond, third: primaryPhoneThird, ext: primaryPhoneExt} = splitPhone(api.primaryPhone)
+	const {first: alternatePhoneFirst, second: alternatePhoneSecond, third: alternatePhoneThird, ext: alternatePhoneExt} = splitPhone(api.alternatePhone)
+	const [dobDate, dobMonth, dobYear] = dateStringToComponents(api.dob).match({
+		some: a => [Some(a[0]), Some(a[1]), Some(a[2])],
+		none: () => [None() as Optional<string>, None() as Optional<string>, None() as Optional<string>]
+	})
 	return {
 		...api,
 		dobDate,
@@ -71,13 +66,11 @@ const apiToForm: (api: ApiType) => Form = api => {
 }
 
 const formToAPI: (form: Form) => ApiType = form => {
-	const dobMaybe = componentsToDate(form.dobMonth, form.dobDate, form.dobYear)
-	console.log(dobMaybe)
 	return {
 		...form,
-		dob: dobMaybe.getOrElse(null),
-		primaryPhone: [form.primaryPhoneFirst, form.primaryPhoneSecond, form.primaryPhoneThird, form.primaryPhoneExt].join(""),
-		alternatePhone: [form.alternatePhoneFirst, form.alternatePhoneSecond, form.alternatePhoneThird, form.alternatePhoneExt].join("")
+		dob: componentsToDate(form.dobMonth, form.dobDate, form.dobYear),
+		primaryPhone: combinePhone(form.primaryPhoneFirst, form.primaryPhoneSecond, form.primaryPhoneThird, form.primaryPhoneExt),
+		alternatePhone: combinePhone(form.alternatePhoneFirst, form.alternatePhoneSecond, form.alternatePhoneThird, form.alternatePhoneExt)
 	}
 }
 

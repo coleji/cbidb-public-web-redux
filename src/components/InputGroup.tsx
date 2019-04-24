@@ -53,7 +53,7 @@ abstract class InputGroup<T_Form, T_Props extends Props, T_ValueType> extends Ap
     }
 }
 
-export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, string> {
+export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, Optional<string>> {
 	isCheckbox = false;
 	values = this.props.values;
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value);

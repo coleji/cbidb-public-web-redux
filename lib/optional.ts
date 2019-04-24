@@ -1,4 +1,5 @@
 abstract class Optional<T> {
+	abstract flatMap<U>(f: (t: T) => Optional<U>): Optional<U>
 	abstract forEach(f: (t:T) => void): void
 	abstract get(): T
 	abstract getFailFast(): T
@@ -9,6 +10,7 @@ abstract class Optional<T> {
 		some: (t: T) => U,
 		none: () => U
 	}): U
+	abstract orNull(): T
 }
 
 class Optional_Some<T> extends Optional<T> {
@@ -16,6 +18,9 @@ class Optional_Some<T> extends Optional<T> {
 	constructor(t: T) {
 		super();
 		this.t = t;
+	}
+	flatMap<U>(f: (t: T) => Optional<U>): Optional<U> {
+		return f(this.t)
 	}
 	forEach(f: (t:T) => void): void {
 		f(this.t);
@@ -41,11 +46,17 @@ class Optional_Some<T> extends Optional<T> {
 	}): U {
 		return m.some(this.t);
 	}
+	orNull(): T {
+		return this.t
+	}
 }
 
 class Optional_None<T> extends Optional<T> {
 	constructor() {
 		super();
+	}
+	flatMap<U>(f: (t: T) => Optional<U>): Optional<U> {
+		return None()
 	}
 	forEach(f: (t:T) => void): void {
 		// do nothing
@@ -71,6 +82,9 @@ class Optional_None<T> extends Optional<T> {
 		none: () => U
 	}): U {
 		return m.none();
+	}
+	orNull(): T {
+		return null;
 	}
 }
 

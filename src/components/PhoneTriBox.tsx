@@ -10,14 +10,52 @@ export interface PhoneTriBoxProps<U> {
     thirdID: string & keyof U,
     extID: string & keyof U,
     typeID: string & keyof U,
-    firstValue: string,
-    secondValue: string,
-    thirdValue: string,
-    extValue: string
-    typeValue: string,
+    firstValue: Optional<string>,
+    secondValue: Optional<string>,
+    thirdValue: Optional<string>,
+    extValue: Optional<string>
+    typeValue: Optional<string>,
     reduxAction?: (name: string, value: string) => void,
     isRequired?: boolean,
 	blurBox?: boolean
+}
+
+export const splitPhone = (phone: Optional<string>) => phone.match({
+	some: p => ({
+		first: Some(p.substr(1,3)),
+		second: Some(p.substr(4,3)),
+		third: Some(p.substr(7,3)),
+		ext: Some(p.substr(10))
+	}),
+	none: () => ({
+		first: None() as Optional<string>,
+		second: None() as Optional<string>,
+		third: None() as Optional<string>,
+		ext: None() as Optional<string>
+	})
+})
+
+export const combinePhone = (
+	first: Optional<string>,
+	second: Optional<string>,
+	third: Optional<string>,
+	ext:  Optional<string>
+) => {
+	if (
+		!first.isDefined() && 
+		!second.isDefined() && 
+		!third.isDefined() && 
+		!ext.isDefined()
+	) {
+		return None() as Optional<string>;
+	} else {
+		return Some([
+			first.getOrElse(""),
+			second.getOrElse(""),
+			third.getOrElse(""),
+			ext.getOrElse("")
+		].join(""))
+	}
 }
 
 

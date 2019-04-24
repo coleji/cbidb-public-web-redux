@@ -11,7 +11,7 @@ interface Props {
 	nullDisplay?: string
 }
 
-export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, string>, string> {
+export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, Optional<string>>, Optional<string>> {
 	getElement() {
 		const onChange = (ev: React.ChangeEvent<HTMLSelectElement>) => this.props.reduxAction(this.props.id, ev.target.value);
 
@@ -31,7 +31,7 @@ export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, string>, str
 				name={this.props.id}
 				className="selectlist apex-item-select"
 				onChange={onChange}
-				value={this.props.value == null ? undefined : this.props.value}
+				value={this.props.value.getOrElse(undefined)}
 			>
 				{nullOption.concat(this.props.options.map(({key, display}) => <option value={key} key={key}>{display}</option>))}
 			</select>

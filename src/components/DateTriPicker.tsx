@@ -3,15 +3,16 @@ import * as React from "react";
 import {Select, KeyAndDisplay} from "./Select"
 import range from "../util/range"
 import * as moment from 'moment'
+import { nominalTypeHack } from "prop-types";
 
 export interface DateTriPickerProps<U> {
 	years: number[]
 	monthID: string & keyof U,
 	dayID: string & keyof U,
 	yearID: string & keyof U,
-	monthValue: string,
-	dayValue: string,
-	yearValue: string,
+	monthValue: Optional<string>,
+	dayValue: Optional<string>,
+	yearValue: Optional<string>,
 	reduxAction?: (name: string, value: string) => void,
 	isRequired?: boolean,
 	blurBox: boolean
@@ -24,8 +25,9 @@ const dobMonthValues: KeyAndDisplay[] = months.map((m, i) => ({key: leadingZero(
 
 const days = range(1,31).map(i => ({key: String(leadingZero(i)), display: String(i)}))
 
-export function componentsToDate(month: string, date: string, year: string): Optional<string> {
+export function componentsToDate(month: Optional<string>, date: Optional<string>, year: Optional<string>): Optional<string> {
 	if (
+		!month.isDefined() || !date.isDefined() || !year.isDefined() ||
 		isNaN(Number(month)) || isNaN(Number(date)) || isNaN(Number(year)) || 
 		month == null || date == null || year == null
 	) return None()
@@ -34,6 +36,15 @@ export function componentsToDate(month: string, date: string, year: string): Opt
 	console.log(candidateMoment)
 	if (candidateMoment.isValid()) return Some(candidate)
 	else return None()
+}
+
+export function dateStringToComponents(dateString: Optional<string>): Optional<[string, string, string]> {
+	return dateString.flatMap(s => {
+		const dobRegex = /(\d{2})\/(\d{2})\/(\d{4})/
+		const dobResult = dobRegex.exec(s)
+		if (dobResult == null) return None()
+		else return Some([dobResult[1], dobResult[2], dobResult[3]])
+	})
 }
 
 export default class DateTriPicker<U, T extends DateTriPickerProps<U>> extends React.PureComponent<T> {
