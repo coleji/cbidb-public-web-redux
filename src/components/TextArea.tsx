@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ApexItemProps, ApexItem } from "./ApexItem"
-import { Option } from "fp-ts/lib/Option";
+import { Option, none } from "fp-ts/lib/Option";
 
 interface Props {
 	isPassword?: boolean
@@ -37,7 +37,7 @@ export default class TextArea<T> extends ApexItem<T, Props & ApexItemProps<T, Op
 				maxLength={this.props.maxLength || 100}
 				onChange={onChange}
 				onKeyPress={onKeyPress}
-				value={this.props.value.getOrElse("")}
+				value={(this.props.value || none).getOrElse("")}
 				rows={this.props.rows}
 				cols={this.props.cols}
 				placeholder={this.props.placeholder}

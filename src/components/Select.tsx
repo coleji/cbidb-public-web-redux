@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ApexItem, ApexItemProps} from "./ApexItem";
-import { Option } from "fp-ts/lib/Option";
+import { Option, none } from "fp-ts/lib/Option";
 
 export interface KeyAndDisplay {
 	key: string,
@@ -32,7 +32,7 @@ export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, Option<strin
 				name={this.props.id}
 				className="selectlist apex-item-select"
 				onChange={onChange}
-				value={this.props.value.getOrElse(undefined)}
+				value={(this.props.value || none).getOrElse(undefined)}
 			>
 				{nullOption.concat(this.props.options.map(({key, display}) => <option value={key} key={key}>{display}</option>))}
 			</select>
