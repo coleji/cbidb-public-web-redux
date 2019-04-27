@@ -4,10 +4,6 @@ import { PathReporter } from 'io-ts/lib/PathReporter'
 
 import {OptionalString, OptionalNumber, OptionalBoolean} from "../../src/util/OptionalTypeValidators"
 
-
-
-
-
 const shape = t.type({
 	s: OptionalString,
 	n: OptionalNumber,

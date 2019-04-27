@@ -27,14 +27,17 @@ const dobMonthValues: KeyAndDisplay[] = months.map((m, i) => ({key: leadingZero(
 const days = range(1,31).map(i => ({key: String(leadingZero(i)), display: String(i)}))
 
 export function componentsToDate(month: Option<string>, date: Option<string>, year: Option<string>): Option<string> {
+	console.log(month)
+	console.log(date)
+	console.log(year)
 	if (
 		month.isNone() || date.isNone() || year.isNone() ||
-		isNaN(Number(month)) || isNaN(Number(date)) || isNaN(Number(year)) || 
+		isNaN(Number(month.getOrElse(null))) || isNaN(Number(date.getOrElse(null))) || isNaN(Number(year.getOrElse(null))) || 
 		month == null || date == null || year == null
 	) return none
-	const candidate = `${month}/${date}/${year}`
+	const candidate = `${month.getOrElse(null)}/${date.getOrElse(null)}/${year.getOrElse(null)}`
 	const candidateMoment = moment(candidate, "MM/DD/YYYY");
-	console.log(candidateMoment)
+	console.log("setting date: ", candidateMoment)
 	if (candidateMoment.isValid()) return some(candidate)
 	else return none
 }

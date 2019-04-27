@@ -29,9 +29,9 @@ export const splitPhone = (phone: Option<string>) => phone.fold(
 		ext: none as Option<string>
 	},
 	p => ({
-		first: some(p.substr(1,3)),
-		second: some(p.substr(4,3)),
-		third: some(p.substr(7,3)),
+		first: some(p.substr(0,3)),
+		second: some(p.substr(3,3)),
+		third: some(p.substr(6,4)),
 		ext: some(p.substr(10))
 	})
 )

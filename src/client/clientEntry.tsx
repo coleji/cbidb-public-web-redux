@@ -13,7 +13,7 @@ import { setStore } from "../reducer/store"
 
 import { makeRootReducer, StaticState } from '../reducer/rootReducer'
 import { some, none } from 'fp-ts/lib/Option';
-import replaceWithOption from '../util/deserializeOption';
+import {replaceWithOption} from '../util/deserializeOption';
 
 require("../../lib/array-polyfill")
 

@@ -5,6 +5,7 @@ import {FailureType, FailureType_BadReturn, FailureType_Unauthorized} from "./Fa
 import { Either } from 'fp-ts/lib/Either';
 import * as https from "https"
 import { Option, some, none } from 'fp-ts/lib/Option';
+import { removeOptions } from '../util/deserializeOption';
 
 export enum HttpMethod {
 	GET = "GET",
@@ -103,7 +104,7 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 							}
 						})
 					} else {
-						const postData = JSON.stringify(data.jsonData)
+						const postData = JSON.stringify(removeOptions(data.jsonData))
 						console.log(postData)
 						if (postData == undefined) return none;
 						else return some({
