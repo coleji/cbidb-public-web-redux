@@ -26,16 +26,17 @@ export const validator = t.type({
 
 const path = "/junior/required"
 
-export const getWrapper = new APIWrapper({
-	path,
+export const getWrapper = (personId: number) => new APIWrapper({
+	path: path + "?personId=" + personId,
 	type: HttpMethod.GET,
 	resultValidator: validator
 })
 
-export const postWrapper = new APIWrapper({
+export const postWrapper = (personId: number) => new APIWrapper({
 	path,
 	type: HttpMethod.POST,
-	resultValidator: t.string
+	resultValidator: t.string,
+	fixedParams: {personId}
 })
 
 

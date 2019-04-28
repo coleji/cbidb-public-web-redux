@@ -41,10 +41,10 @@ export function success<T>(formName: string, result: T) {
 	})
 }
 
-export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form) => 
+export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form) => 
 	getWithDefault(formName, apiw, mapper, {})
 
-export const getWithDefault = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form, defaultState: T_Form) => {
+export const getWithDefault = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form, defaultState: T_Form) => {
 	const dispatch = getDispatch();
 	dispatch({
 		type: "INITIALIZE_FORM",
@@ -72,7 +72,7 @@ export const getWithDefault = <T_Form, T_APIValidator extends t.Any>(formName: s
 	})
 }
 
-export const post = <T extends object>(formName: string, apiw: APIWrapper<any, T>) => (dataForAPI: T) => {
+export const post = <T extends object>(formName: string, apiw: APIWrapper<any, T, any>) => (dataForAPI: T) => {
 	return apiw.send(getReduxState().staticState.selfServerParams)(PostJSON(dataForAPI)).then((result: string) => {
 		console.log("Got result from api: ", result)
 		return Promise.resolve("blah")

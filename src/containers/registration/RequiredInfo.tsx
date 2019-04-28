@@ -108,11 +108,11 @@ class RequiredInfo extends React.PureComponent<Props> {
 			props.router.location.pathname,
 			{ path }
 			) || {params: {}};
-		this.personId = (match.params as any).personId;
+		this.personId = Number((match.params as any).personId);
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, getWrapper, apiToForm)
+		get(FORM_NAME, getWrapper(this.personId), apiToForm)
 	}
 	render() {
 		console.log("store", getReduxState())
@@ -332,7 +332,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 				{specNeedsFields}
 			</JoomlaArticleRegion>
 			<Button text="Next" onClick={() => {
-				post(FORM_NAME, postWrapper)(formToAPI(this.props.form.data)).then(this.props.goHome)
+				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data)).then(this.props.goHome)
 			}}/>
 		</JoomlaMainPage>
 	}

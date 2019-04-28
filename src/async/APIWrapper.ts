@@ -6,6 +6,7 @@ import { Either } from 'fp-ts/lib/Either';
 import * as https from "https"
 import { Option, some, none } from 'fp-ts/lib/Option';
 import { removeOptions } from '../util/deserializeOption';
+import config from '../server/config';
 
 export enum HttpMethod {
 	GET = "GET",
@@ -36,11 +37,12 @@ export interface GetConfig<T_Validator extends t.Any> extends ConfigCommon<T_Val
 	type: HttpMethod.GET,
 }
 
-export interface PostConfig<T_Validator extends t.Any> extends ConfigCommon<T_Validator> {
-	type: HttpMethod.POST
+export interface PostConfig<T_Validator extends t.Any, T_FixedParams> extends ConfigCommon<T_Validator> {
+	type: HttpMethod.POST,
+	fixedParams?: T_FixedParams
 }
 
-export type Config<T_Validator extends t.Any> = GetConfig<T_Validator> | PostConfig<T_Validator>;
+export type Config<T_Validator extends t.Any, T_FixedParams> = GetConfig<T_Validator> | PostConfig<T_Validator, T_FixedParams>;
 
 export interface ServerParams {
 	host: string,
@@ -65,9 +67,9 @@ export const PostJSON: <T_PostJSON>(jsonData: T_PostJSON) => PostJSON<T_PostJSON
 
 export type PostType<T> = PostString | PostJSON<T>
 
-export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
-	config: Config<T_Validator>
-	constructor(config: Config<T_Validator>) {
+export default class APIWrapper<T_Validator extends t.Any, T_PostJSON, T_FixedParams> {
+	config: Config<T_Validator, T_FixedParams>
+	constructor(config: Config<T_Validator, T_FixedParams>) {
 		this.config = config;
 	}
 	parseResponse: (response: string) => ApiResult<t.TypeOf<T_Validator>> = response => {
@@ -104,7 +106,10 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON> {
 							}
 						})
 					} else {
-						const postData = JSON.stringify(removeOptions(data.jsonData))
+						const postData = JSON.stringify(removeOptions({
+							...data.jsonData,
+							...(self.config.fixedParams || {})
+						}))
 						console.log(postData)
 						if (postData == undefined) return none;
 						else return some({
