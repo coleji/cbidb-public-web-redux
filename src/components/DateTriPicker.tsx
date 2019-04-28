@@ -46,6 +46,8 @@ export function dateStringToComponents(dateString: Option<string>): Option<{mont
 	return dateString.chain(s => {
 		const dobRegex = /(\d{2})\/(\d{2})\/(\d{4})/
 		const dobResult = dobRegex.exec(s)
+		console.log("dobResult: ", dobResult)
+		console.log("input: ",s )
 		if (dobResult == null) return none
 		else return some({month: dobResult[1], date: dobResult[2], year: dobResult[3]})
 	})

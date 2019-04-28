@@ -46,7 +46,7 @@ export type Form = ApiType & {
 const apiToForm: (api: ApiType) => Form = api => {
 	const {first: primaryPhoneFirst, second: primaryPhoneSecond, third: primaryPhoneThird, ext: primaryPhoneExt} = splitPhone(api.primaryPhone)
 	const {first: alternatePhoneFirst, second: alternatePhoneSecond, third: alternatePhoneThird, ext: alternatePhoneExt} = splitPhone(api.alternatePhone)
-	const [dobDate, dobMonth, dobYear] = dateStringToComponents(api.dob).fold(
+	const [dobMonth, dobDate, dobYear] = dateStringToComponents(api.dob).fold(
 		[none, none, none],
 		a => [some(a.month), some(a.date), some(a.year)]
 	)

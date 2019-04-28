@@ -3,7 +3,7 @@ import * as t from 'io-ts'
 
 import {getDispatch, getReduxState} from "../reducer/store"
 import APIWrapper, { PostJSON } from "../async/APIWrapper";
-import { some } from "fp-ts/lib/Option";
+import { some, none } from "fp-ts/lib/Option";
 
 export const UPDATE_FORM_DISPATCH_TYPE = "UPDATE_FORM";
 
@@ -96,8 +96,8 @@ export const formReducer: <T extends object>(formName: string, defaultState: T) 
     switch (action.type) {
 	case "UPDATE_FORM":
 		const updateAction = <FormUpdateAction>action;
-        var updated: any = {};
-        updated[updateAction.fieldName] = some(updateAction.fieldValue);
+		var updated: any = {};
+		updated[updateAction.fieldName] = (updateAction.fieldValue == null || updateAction.fieldValue == "") ? none : some(updateAction.fieldValue);
 		return {
 			apiState: startState.apiState,
 			data: <T>{...<object>startState.data, ...<object>(updated as FormSubSet)}
