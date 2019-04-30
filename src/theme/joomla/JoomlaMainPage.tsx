@@ -1,10 +1,11 @@
 import * as React from "react";
+import Page from "../../components/Page";
 
 interface Props {
 	navBar?: JSX.Element
 }
 
-export default class JoomlaMainPage extends React.Component<Props> {
+export default class JoomlaMainPage extends Page<Props> {
     render() {
         return (
             <div className="rt-container">

@@ -87,7 +87,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 		console.log("updating field!")
 		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	},
-	goHome: () => dispatch(push('/'))
+	goHome: () => dispatch(push('/')),
+	cancel: () => dispatch(push('/'))
 })
 
 class FormInput extends TextInput<Form> {}
@@ -331,7 +332,8 @@ class RequiredInfo extends React.PureComponent<Props> {
 				<br />
 				{specNeedsFields}
 			</JoomlaArticleRegion>
-			<Button text="Next" onClick={() => {
+			<Button text="< Back" onClick={this.props.cancel}/>
+			<Button text="Next >" onClick={() => {
 				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data)).then(this.props.goHome)
 			}}/>
 		</JoomlaMainPage>

@@ -1,11 +1,12 @@
 import * as React from "react";
+import Page from "../../components/Page";
 
 interface JoomlaTwoColumnsProps {
     left: React.ReactNode,
     right: React.ReactNode
 }
 
-export default class JoomlaTwoColumns extends React.Component<JoomlaTwoColumnsProps> {
+export default class JoomlaTwoColumns extends Page<JoomlaTwoColumnsProps> {
     render() {
         return (
             <div className="rt-container">

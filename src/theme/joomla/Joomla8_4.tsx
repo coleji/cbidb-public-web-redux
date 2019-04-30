@@ -1,11 +1,12 @@
 import * as React from "react";
+import Page from "../../components/Page";
 
 interface Joomla8_4Props {
 	main: React.ReactNode,
 	right: React.ReactNode
 }
 
-export default class Joomla8_4 extends React.Component<Joomla8_4Props> {
+export default class Joomla8_4 extends Page<Joomla8_4Props> {
 	render() {
 		return (
 			<div className="rt-container">
