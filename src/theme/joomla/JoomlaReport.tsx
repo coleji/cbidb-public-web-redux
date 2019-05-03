@@ -2,11 +2,13 @@ import * as React from "react";
 
 interface Props {
 	headers: string[],
-	rows: React.ReactNode[][]
+	rows: React.ReactNode[][],
+	waitingOnAPI: boolean
 }
 
 export default (props: Props) => {
-	return (
+	if (props.waitingOnAPI) return <img src="/images/spinner.gif" tabIndex={999} style={{width: "150px"}}/>
+	else return (
 		<table cellPadding="0" cellSpacing="0" className="report-standard">
 			<tbody><tr>
 				{props.headers.zipWithIndex().map(headerTuple => (

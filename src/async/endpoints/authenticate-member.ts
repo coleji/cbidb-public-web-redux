@@ -5,7 +5,7 @@ import memberWelcome from "./member-welcome"
 
 const path = "/authenticate-member"
 
-const apiw = new APIWrapper({
+const apiw = new APIWrapper<typeof t.boolean, PostString, {}>({
 	path,
 	type: HttpMethod.POST,
 	resultValidator: t.boolean,

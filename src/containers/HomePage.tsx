@@ -52,7 +52,7 @@ class HomePage extends React.PureComponent<Props> {
 	render() {
 		//const self = this;
 
-		console.log(this.props.homePageData)
+		console.log("home page data  ", this.props.homePageData)
 
 		//TODO
 		const rowData: {
@@ -68,7 +68,7 @@ class HomePage extends React.PureComponent<Props> {
 		}))
 
 		const mainTable = <JoomlaArticleRegion title="My Junior Program Memberships">
-			<JoomlaReport headers={["Name", "Status", "Actions"]} rows={rowData.map(r => [r.name, r.status, r.actions])}/>
+			<JoomlaReport headers={["Name", "Status", "Actions"]} rows={rowData.map(r => [r.name, r.status, r.actions])} waitingOnAPI={this.props.homePageData.parentPersonId == null}/>
 		</JoomlaArticleRegion>
 
 		return <JoomlaMainPage navBar={NavBarLogoutOnly()}>

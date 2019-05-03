@@ -1,6 +1,7 @@
 import * as t from 'io-ts'
 import APIWrapper, { HttpMethod } from '../../APIWrapper';
 import {OptionalString} from '../../../util/OptionalTypeValidators'
+import { Validator } from 'react';
 
 export const validator = t.type({
 	firstName: OptionalString,
@@ -26,13 +27,13 @@ export const validator = t.type({
 
 const path = "/junior/required"
 
-export const getWrapper = (personId: number) => new APIWrapper({
+export const getWrapper = (personId: number) => new APIWrapper<typeof validator, {}, {}>({
 	path: path + "?personId=" + personId,
 	type: HttpMethod.GET,
 	resultValidator: validator
 })
 
-export const postWrapper = (personId: number) => new APIWrapper({
+export const postWrapper = (personId: number) => new APIWrapper<typeof t.string, t.TypeOf<typeof validator>, {personId: number}>({
 	path,
 	type: HttpMethod.POST,
 	resultValidator: t.string,
