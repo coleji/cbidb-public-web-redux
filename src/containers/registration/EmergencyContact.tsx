@@ -1,64 +1,124 @@
 import * as React from "react";
+import * as t from 'io-ts'
 import { connect } from "react-redux";
-import PhoneTriBox, { PhoneTriBoxProps } from "../../components/PhoneTriBox";
+import PhoneTriBox, { PhoneTriBoxProps, splitPhone, combinePhone } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import TextInput from "../../components/TextInput";
-import { dispatchFormUpdate } from "../../form/form";
+import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
 import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import { Option } from "fp-ts/lib/Option";
-
+import {Dispatch} from "redux";
+import { push } from 'connected-react-router';
+import Button from "../../components/Button";
+import { matchPath } from "react-router";
+import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/emerg-contact"
 
 export const FORM_NAME = "emergencyContact"
 
-export interface Form {
-	emerg1Name: Option<string>,
-	emerg1Relation: Option<string>,
-	emerg1PrimaryPhoneFirst: Option<string>,
-	emerg1PrimaryPhoneSecond: Option<string>,
-	emerg1PrimaryPhoneThird: Option<string>,
-	emerg1PrimaryPhoneExt: Option<string>,
-	emerg1PrimaryPhoneType: Option<string>,
+export const path = '/emerg/:personId'
 
-	emerg1AlternatePhoneFirst: Option<string>,
-	emerg1AlternatePhoneSecond: Option<string>,
-	emerg1AlternatePhoneThird: Option<string>,
-	emerg1AlternatePhoneExt: Option<string>,
-	emerg1AlternatePhoneType: Option<string>,
+type ApiType = t.TypeOf<typeof validator>
 
-	emerg2Name: Option<string>,
-	emerg2Relation: Option<string>,
-	emerg2PrimaryPhoneFirst: Option<string>,
-	emerg2PrimaryPhoneSecond: Option<string>,
-	emerg2PrimaryPhoneThird: Option<string>,
-	emerg2PrimaryPhoneExt: Option<string>,
-	emerg2PrimaryPhoneType: Option<string>,
+export type Form = ApiType & {
+	emerg1PhonePrimaryFirst: Option<string>,
+	emerg1PhonePrimarySecond: Option<string>,
+	emerg1PhonePrimaryThird: Option<string>,
+	emerg1PhonePrimaryExt: Option<string>,
 
-	emerg2AlternatePhoneFirst: Option<string>,
-	emerg2AlternatePhoneSecond: Option<string>,
-	emerg2AlternatePhoneThird: Option<string>,
-	emerg2AlternatePhoneExt: Option<string>,
-	emerg2AlternatePhoneType: Option<string>,
+	emerg1PhoneAlternateFirst: Option<string>,
+	emerg1PhoneAlternateSecond: Option<string>,
+	emerg1PhoneAlternateThird: Option<string>,
+	emerg1PhoneAlternateExt: Option<string>,
+
+	emerg2PhonePrimaryFirst: Option<string>,
+	emerg2PhonePrimarySecond: Option<string>,
+	emerg2PhonePrimaryThird: Option<string>,
+	emerg2PhonePrimaryExt: Option<string>,
+
+	emerg2PhoneAlternateFirst: Option<string>,
+	emerg2PhoneAlternateSecond: Option<string>,
+	emerg2PhoneAlternateThird: Option<string>,
+	emerg2PhoneAlternateExt: Option<string>,
 }
+
+const apiToForm: (api: ApiType) => Form = api => {
+	const {first: emerg1PhonePrimaryFirst, second: emerg1PhonePrimarySecond, third: emerg1PhonePrimaryThird, ext: emerg1PhonePrimaryExt} = splitPhone(api.emerg1PhonePrimary)
+	const {first: emerg1PhoneAlternateFirst, second: emerg1PhoneAlternateSecond, third: emerg1PhoneAlternateThird, ext: emerg1PhoneAlternateExt} = splitPhone(api.emerg1PhoneAlternate)
+	const {first: emerg2PhonePrimaryFirst, second: emerg2PhonePrimarySecond, third: emerg2PhonePrimaryThird, ext: emerg2PhonePrimaryExt} = splitPhone(api.emerg2PhonePrimary)
+	const {first: emerg2PhoneAlternateFirst, second: emerg2PhoneAlternateSecond, third: emerg2PhoneAlternateThird, ext: emerg2PhoneAlternateExt} = splitPhone(api.emerg2PhoneAlternate)
+	return {
+		...api,
+		emerg1PhonePrimaryFirst,
+		emerg1PhonePrimarySecond,
+		emerg1PhonePrimaryThird,
+		emerg1PhonePrimaryExt,
+		emerg1PhoneAlternateFirst,
+		emerg1PhoneAlternateSecond,
+		emerg1PhoneAlternateThird,
+		emerg1PhoneAlternateExt,
+		emerg2PhonePrimaryFirst,
+		emerg2PhonePrimarySecond,
+		emerg2PhonePrimaryThird,
+		emerg2PhonePrimaryExt,
+		emerg2PhoneAlternateFirst,
+		emerg2PhoneAlternateSecond,
+		emerg2PhoneAlternateThird,
+		emerg2PhoneAlternateExt,
+	}
+}
+
+const formToAPI: (form: Form) => ApiType = form => {
+	console.log("inside formToAPI")
+	return {
+		...form,
+		emerg1PhonePrimary: combinePhone(form.emerg1PhonePrimaryFirst, form.emerg1PhonePrimarySecond, form.emerg1PhonePrimaryThird, form.emerg1PhonePrimaryExt),
+		emerg1PhoneAlternate: combinePhone(form.emerg1PhoneAlternateFirst, form.emerg1PhoneAlternateSecond, form.emerg1PhoneAlternateThird, form.emerg1PhoneAlternateExt),
+		emerg2PhonePrimary: combinePhone(form.emerg2PhonePrimaryFirst, form.emerg2PhonePrimarySecond, form.emerg2PhonePrimaryThird, form.emerg2PhonePrimaryExt),
+		emerg2PhoneAlternate: combinePhone(form.emerg2PhoneAlternateFirst, form.emerg2PhoneAlternateSecond, form.emerg2PhoneAlternateThird, form.emerg2PhoneAlternateExt),
+	}
+}
+
+const mapStateToProps = (state: RootState) => ({
+	form: state.emergencyContactForm,
+	router: state.router
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	updateField: (name: keyof Form, value: string) => {
+		console.log("updating field!")
+		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+	},
+	goBack: () => dispatch(push('/')),	// TODO
+	//goNext: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString())))	// TODO
+	goNext: (personId: number) => dispatch(push("/"))	// TODO
+})
 
 class FormInput extends TextInput<Form> {}
 // class FormSelect extends Select<Form> {}
 
-interface StateProps {
-	form: Form
-}
-
-interface DispatchProps {
-	updateField: (name: keyof Form, value: string) => void
-}
-
 interface StaticProps { }
 
-type Props = StateProps & DispatchProps & StaticProps;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps;
 
 class EmergencyContact extends React.PureComponent<Props> {
+	personId: number
+	constructor(props: Props) {
+		super(props)
+		console.log("constructor!!!")
+		// TODO: typesafe? 
+		const match = matchPath(
+			props.router.location.pathname,
+			{ path }
+			) || {params: {}};
+		this.personId = Number((match.params as any).personId);
+
+		console.log("scraped from the url: " + this.personId)
+		
+		get(FORM_NAME, getWrapper(this.personId), apiToForm)
+	}
 	render() {
 		const self = this;
 		const reduxAction = self.props.updateField;
@@ -69,83 +129,83 @@ class EmergencyContact extends React.PureComponent<Props> {
 					id="emerg1Name"
 					label="Emergency Contact #1 Name"
 					isRequired={true}
-					value={self.props.form.emerg1Name}
+					value={self.props.form.data.emerg1Name}
 					reduxAction={reduxAction}
 				/>
 				<FormInput
 					id="emerg1Relation"
 					label="Relation"
 					isRequired={true}
-					value={self.props.form.emerg1Relation}
+					value={self.props.form.data.emerg1Relation}
 					reduxAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Primary Phone"
 					isRequired={true}
-					firstID="emerg1PrimaryPhoneFirst"
-					secondID="emerg1PrimaryPhoneSecond"
-					thirdID="emerg1PrimaryPhoneThird"
-					extID="emerg1PrimaryPhoneExt"
-					typeID="emerg1PrimaryPhoneType"
-					firstValue={self.props.form.emerg1PrimaryPhoneFirst}
-					secondValue={self.props.form.emerg1PrimaryPhoneSecond}
-					thirdValue={self.props.form.emerg1PrimaryPhoneThird}
-					extValue={self.props.form.emerg1PrimaryPhoneExt}
-					typeValue={self.props.form.emerg1PrimaryPhoneType}
+					firstID="emerg1PhonePrimaryFirst"
+					secondID="emerg1PhonePrimarySecond"
+					thirdID="emerg1PhonePrimaryThird"
+					extID="emerg1PhonePrimaryExt"
+					typeID="emerg1PhonePrimaryType"
+					firstValue={self.props.form.data.emerg1PhonePrimaryFirst}
+					secondValue={self.props.form.data.emerg1PhonePrimarySecond}
+					thirdValue={self.props.form.data.emerg1PhonePrimaryThird}
+					extValue={self.props.form.data.emerg1PhonePrimaryExt}
+					typeValue={self.props.form.data.emerg1PhonePrimaryType}
 					reduxAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Alternate Phone"
-					firstID="emerg1AlternatePhoneFirst"
-					secondID="emerg1AlternatePhoneSecond"
-					thirdID="emerg1AlternatePhoneThird"
-					extID="emerg1AlternatePhoneExt"
-					typeID="emerg1AlternatePhoneType"
-					firstValue={self.props.form.emerg1AlternatePhoneFirst}
-					secondValue={self.props.form.emerg1AlternatePhoneSecond}
-					thirdValue={self.props.form.emerg1AlternatePhoneThird}
-					extValue={self.props.form.emerg1AlternatePhoneExt}
-					typeValue={self.props.form.emerg1AlternatePhoneType}
+					firstID="emerg1PhoneAlternateFirst"
+					secondID="emerg1PhoneAlternateSecond"
+					thirdID="emerg1PhoneAlternateThird"
+					extID="emerg1PhoneAlternateExt"
+					typeID="emerg1PhoneAlternateType"
+					firstValue={self.props.form.data.emerg1PhoneAlternateFirst}
+					secondValue={self.props.form.data.emerg1PhoneAlternateSecond}
+					thirdValue={self.props.form.data.emerg1PhoneAlternateThird}
+					extValue={self.props.form.data.emerg1PhoneAlternateExt}
+					typeValue={self.props.form.data.emerg1PhoneAlternateType}
 					reduxAction={reduxAction}
 				/>
 				<FormInput
 					id="emerg2Name"
 					label="Emergency Contact #2 Name"
-					value={self.props.form.emerg2Name}
+					value={self.props.form.data.emerg2Name}
 					reduxAction={reduxAction}
 				/>
 				<FormInput
 					id="emerg2Relation"
 					label="Relation"
-					value={self.props.form.emerg2Relation}
+					value={self.props.form.data.emerg2Relation}
 					reduxAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Primary Phone"
-					firstID="emerg2PrimaryPhoneFirst"
-					secondID="emerg2PrimaryPhoneSecond"
-					thirdID="emerg2PrimaryPhoneThird"
-					extID="emerg2PrimaryPhoneExt"
-					typeID="emerg2PrimaryPhoneType"
-					firstValue={self.props.form.emerg2PrimaryPhoneFirst}
-					secondValue={self.props.form.emerg2PrimaryPhoneSecond}
-					thirdValue={self.props.form.emerg2PrimaryPhoneThird}
-					extValue={self.props.form.emerg2PrimaryPhoneExt}
-					typeValue={self.props.form.emerg2PrimaryPhoneType}
+					firstID="emerg2PhonePrimaryFirst"
+					secondID="emerg2PhonePrimarySecond"
+					thirdID="emerg2PhonePrimaryThird"
+					extID="emerg2PhonePrimaryExt"
+					typeID="emerg2PhonePrimaryType"
+					firstValue={self.props.form.data.emerg2PhonePrimaryFirst}
+					secondValue={self.props.form.data.emerg2PhonePrimarySecond}
+					thirdValue={self.props.form.data.emerg2PhonePrimaryThird}
+					extValue={self.props.form.data.emerg2PhonePrimaryExt}
+					typeValue={self.props.form.data.emerg2PhonePrimaryType}
 					reduxAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Alternate Phone"
-					firstID="emerg2AlternatePhoneFirst"
-					secondID="emerg2AlternatePhoneSecond"
-					thirdID="emerg2AlternatePhoneThird"
-					extID="emerg2AlternatePhoneExt"
-					typeID="emerg2AlternatePhoneType"
-					firstValue={self.props.form.emerg2AlternatePhoneFirst}
-					secondValue={self.props.form.emerg2AlternatePhoneSecond}
-					thirdValue={self.props.form.emerg2AlternatePhoneThird}
-					extValue={self.props.form.emerg2AlternatePhoneExt}
-					typeValue={self.props.form.emerg2AlternatePhoneType}
+					firstID="emerg2PhoneAlternateFirst"
+					secondID="emerg2PhoneAlternateSecond"
+					thirdID="emerg2PhoneAlternateThird"
+					extID="emerg2PhoneAlternateExt"
+					typeID="emerg2PhoneAlternateType"
+					firstValue={self.props.form.data.emerg2PhoneAlternateFirst}
+					secondValue={self.props.form.data.emerg2PhoneAlternateSecond}
+					thirdValue={self.props.form.data.emerg2PhoneAlternateThird}
+					extValue={self.props.form.data.emerg2PhoneAlternateExt}
+					typeValue={self.props.form.data.emerg2PhoneAlternateType}
 					reduxAction={reduxAction}
 				/>
 
@@ -160,18 +220,12 @@ class EmergencyContact extends React.PureComponent<Props> {
 			<JoomlaArticleRegion title="Who should we contact in the event of an emergency?">
 				{emergFields}
 			</JoomlaArticleRegion>
+			<Button text="< Back" onClick={this.props.goBack}/>
+			<Button text="Next >" onClick={() => {
+				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data)).then(() => this.props.goNext(this.personId))
+			}}/>
 		</JoomlaMainPage>
 	}
 }
 
-export default connect<StateProps, DispatchProps, StaticProps, RootState>(
-	state => ({
-		form: state.emergencyContactForm.data
-	}),
-	dispatch => ({
-		updateField: (name: keyof Form, value: string) => {
-			console.log("updating field!")
-			dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
-		}
-	})
-)(EmergencyContact)
+export default connect(mapStateToProps, mapDispatchToProps)(EmergencyContact)

@@ -22,6 +22,7 @@ import {getReduxState} from "../../reducer/store"
 import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/required"
+import {path as emergContactPath} from "./EmergencyContact"
 
 export const FORM_NAME = "registrationRequiredInfo"
 
@@ -87,8 +88,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 		console.log("updating field!")
 		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	},
-	goHome: () => dispatch(push('/')),
-	cancel: () => dispatch(push('/'))
+	goBack: () => dispatch(push('/')),	// TODO
+	goNext: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString())))	// TODO
 })
 
 class FormInput extends TextInput<Form> {}
@@ -332,9 +333,9 @@ class RequiredInfo extends React.PureComponent<Props> {
 				<br />
 				{specNeedsFields}
 			</JoomlaArticleRegion>
-			<Button text="< Back" onClick={this.props.cancel}/>
+			<Button text="< Back" onClick={this.props.goBack}/>
 			<Button text="Next >" onClick={() => {
-				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data)).then(this.props.goHome)
+				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data)).then(() => this.props.goNext(this.personId))
 			}}/>
 		</JoomlaMainPage>
 	}
