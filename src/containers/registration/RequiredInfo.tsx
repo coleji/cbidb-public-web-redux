@@ -121,8 +121,6 @@ class RequiredInfo extends React.PureComponent<Props> {
 		const self = this;
 		const reduxAction = self.props.updateField;
 
-
-
 		const thisYear = Number(self.props.getMoment().format("YYYY"))
 		const years = range(thisYear-20, thisYear)
 

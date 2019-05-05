@@ -15,6 +15,7 @@ import { push } from 'connected-react-router';
 import Button from "../../components/Button";
 import { matchPath } from "react-router";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/emerg-contact"
+import {path as swimProofPath} from './SwimProof';
 
 export const FORM_NAME = "emergencyContact"
 
@@ -92,8 +93,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	},
 	goBack: () => dispatch(push('/')),	// TODO
-	//goNext: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString())))	// TODO
-	goNext: (personId: number) => dispatch(push("/"))	// TODO
+	goNext: (personId: number) => dispatch(push(swimProofPath.replace(":personId", personId.toString())))	// TODO
 })
 
 class FormInput extends TextInput<Form> {}

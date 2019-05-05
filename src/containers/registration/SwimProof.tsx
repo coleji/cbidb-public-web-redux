@@ -1,39 +1,74 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import * as t from 'io-ts'
 import { RadioGroup } from "../../components/InputGroup";
 import ProgressThermometer from "../../components/ProgressThermometer";
-import { dispatchFormUpdate } from "../../form/form";
+import { dispatchFormUpdate, get, post } from "../../form/form";
 import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import { Option } from "fp-ts/lib/Option";
+import { Option, none, Some, some } from "fp-ts/lib/Option";
+import { Dispatch } from "redux";
+import { push } from "connected-react-router";
+import { matchPath } from "react-router";
+import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/swim-proof"
+import Button from "../../components/Button";
+import {path as emergContactPath} from "./EmergencyContact"
 
 
 export const FORM_NAME = "swimProofForm"
 
+export const path = '/swimproof/:personId'
+
+type API = t.TypeOf<typeof validator>
+
 export interface Form {
-	swimProofID: Option<string>
+	swimProofId: Option<string>
 }
+
+const mapStateToProps = (state: RootState) => ({
+	form: state.swimProofForm,
+	jpDirectorNameFirst: state.staticState.jpDirectorNameFirst,
+	jpDirectorNameLast: state.staticState.jpDirectorNameLast,
+	jpDirectorEmail: state.staticState.jpDirectorEmail,
+	router: state.router
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	updateField: (name: keyof Form, value: string) => {
+		console.log("updating field!")
+		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+	},
+	goBack: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString()))),	// TODO
+	goNext: () => dispatch(push('/')),	// TODO
+})
 
 class FormRadio extends RadioGroup<Form> {}
 
-interface StateProps {
-    form: Form,
-    jpDirectorNameFirst: string,
-	jpDirectorNameLast: string,
-	jpDirectorEmail: string,
-}
-
-interface DispatchProps {
-	updateField: (name: keyof Form, value: string) => void
-}
-
 interface StaticProps { }
 
-type Props = StateProps & DispatchProps & StaticProps;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps;
 
 class SwimProof extends React.PureComponent<Props> {
+	personId: number
+	constructor(props: Props) {
+		super(props)
+		console.log("constructor!!!")
+		// TODO: typesafe? 
+		const match = matchPath(
+			props.router.location.pathname,
+			{ path }
+			) || {params: {}};
+		this.personId = Number((match.params as any).personId);
+
+		console.log("scraped from the url: " + this.personId)
+		
+		get(FORM_NAME, getWrapper(this.personId), (api: API) => ({
+			...api,
+			swimProofId: api.swimProofId.map(n => n.toString())
+		}))
+	}
 	render() {
 		const self = this;
         const reduxAction = self.props.updateField;
@@ -43,7 +78,7 @@ class SwimProof extends React.PureComponent<Props> {
                      may result in suspension of membership until adequate proof can be obtained.`
 
         const swimProofValues = [{
-            key: "",
+            key: "-1",
             display: "None"
         }, {
             key: "1",
@@ -69,10 +104,8 @@ class SwimProof extends React.PureComponent<Props> {
             </div>
         </JoomlaNotitleRegion>)
 
-        console.log("swim proof id is " + self.props.form.swimProofID)
-
-        const mailto = "mailto:" + self.props.jpDirectorEmail
-
+		const mailto = "mailto:" + self.props.jpDirectorEmail
+	
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
 				<ProgressThermometer />
@@ -82,9 +115,15 @@ class SwimProof extends React.PureComponent<Props> {
                 <br /><br />
                 {"Which of these do you possess?"}
                 <br /><br />
-                <FormRadio id="swimProofID" justElement={true} values={swimProofValues} reduxAction={reduxAction} value={self.props.form.swimProofID}/>
+                <FormRadio
+					id="swimProofId"
+					justElement={true}
+					values={swimProofValues}
+					reduxAction={reduxAction}
+					value={(self.props.form.data.swimProofId || none).map(n => n.toString())}
+				/>
 			</JoomlaArticleRegion>
-            {self.props.form.swimProofID.isSome() ? "" : noProofRegion}
+            {(self.props.form.data.swimProofId || none).getOrElse(null) == "-1" ? noProofRegion : ""}
             <JoomlaNotitleRegion>
                 <span>
                 If you believe you have a proof of swimming ability not on the above list,
@@ -92,21 +131,15 @@ class SwimProof extends React.PureComponent<Props> {
                 please email {self.props.jpDirectorNameFirst} {self.props.jpDirectorNameLast} at <a href={mailto}>{self.props.jpDirectorEmail}</a>.
                 </span>
 			</JoomlaNotitleRegion>
+			<Button text="< Back" onClick={this.props.goBack}/>
+			<Button text="Next >" onClick={() => {
+				post(FORM_NAME, postWrapper(this.personId))({
+					...this.props.form.data,
+					swimProofId: this.props.form.data.swimProofId.map(s => Number(s))
+				}).then(this.props.goNext)
+			}}/>
 		</JoomlaMainPage>
 	}
 }
 
-export default connect<StateProps, DispatchProps, StaticProps, RootState>(
-	state => ({
-		form: state.swimProofForm.data,
-        jpDirectorNameFirst: state.staticState.jpDirectorNameFirst,
-        jpDirectorNameLast: state.staticState.jpDirectorNameLast,
-        jpDirectorEmail: state.staticState.jpDirectorEmail,
-	}),
-	dispatch => ({
-		updateField: (name: keyof Form, value: string) => {
-			console.log("updating field!")
-			dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
-		}
-	})
-)(SwimProof)
+export default connect(mapStateToProps, mapDispatchToProps)(SwimProof)
