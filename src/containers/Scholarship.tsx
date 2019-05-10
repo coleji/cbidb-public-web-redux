@@ -22,7 +22,7 @@ export interface Form {
 	numberSchoolagers: Option<string>,
 	numberTeenagers: Option<string>,
 	income: Option<string>,
-	doAgree: boolean
+	doAgree: Option<boolean>
 }
 
 class FormInput extends TextInput<Form> {}
@@ -173,7 +173,7 @@ class RatingsPage extends React.PureComponent<Props> {
 					<br />
 					<br />
 					<table><tbody>
-						<FormBoolean id="doAgree" justElement={true} value={self.props.form.doAgree} label="I agree to the above terms for scholarship application." reduxAction={self.props.updateField}/>
+						<FormBoolean id="doAgree" justElement={true} value={(self.props.form.doAgree || none)} label="I agree to the above terms for scholarship application." reduxAction={self.props.updateField}/>
 					</tbody></table>
 				</JoomlaArticleRegion>
 			</React.Fragment>

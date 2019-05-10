@@ -15,6 +15,7 @@ import { matchPath } from "react-router";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/swim-proof"
 import Button from "../../components/Button";
 import {path as emergContactPath} from "./EmergencyContact"
+import {path as surveyPath} from "./SurveyInfo"
 
 
 export const FORM_NAME = "swimProofForm"
@@ -41,7 +42,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
 	},
 	goBack: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString()))),	// TODO
-	goNext: () => dispatch(push('/')),	// TODO
+	goNext: (personId: number) => dispatch(push(surveyPath.replace(":personId", personId.toString())))	// TODO
 })
 
 class FormRadio extends RadioGroup<Form> {}
@@ -136,7 +137,7 @@ class SwimProof extends React.PureComponent<Props> {
 				post(FORM_NAME, postWrapper(this.personId))({
 					...this.props.form.data,
 					swimProofId: this.props.form.data.swimProofId.map(s => Number(s))
-				}).then(this.props.goNext)
+				}).then(() => this.props.goNext(this.personId))
 			}}/>
 		</JoomlaMainPage>
 	}

@@ -8,20 +8,22 @@ import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import { Option } from "fp-ts/lib/Option";
+import { Option, none, some } from "fp-ts/lib/Option";
 
 
 export const FORM_NAME = "surveyInfoForm"
 
+export const path = '/survey/:personId'
+
 export interface Form {
     genderID: Option<string>,
-	referral: string[],
+	referral: Option<string[]>,
 	referralOther: Option<string>,
 	language: Option<string>,
-	ethnicity: string[],
+	ethnicity: Option<string[]>,
 	ethnicityOther: Option<string>
 	school: Option<string>,
-	freeLunch: boolean
+	freeLunch: Option<boolean>
 }
 
 const genders = [{
@@ -93,6 +95,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 	render() {
 		const self = this;
 		const reduxAction = self.props.updateField;
+		console.log(self.props.form)
 
 		// TODO: blank out the "other" fields in state when the toggling checkbox is unchecked
 
@@ -108,7 +111,7 @@ class SurveyInfo extends React.PureComponent<Props> {
                         columns={3}
                         values={genders}
                         reduxAction={reduxAction}
-                        value={self.props.form.genderID}
+                        value={self.props.form.genderID || none}
                     />
 					<FormCheckbox
                         id="referral"
@@ -120,14 +123,14 @@ class SurveyInfo extends React.PureComponent<Props> {
                         columns={3}
                         values={referralSources}
                         reduxAction={reduxAction}
-						value={self.props.form.referral}
+						value={(self.props.form.referral || none)}
                     />
 					{
-						(self.props.form.referral || []).contains("Other")
+						(self.props.form.referral || some([])).getOrElse([]).contains("Other")
 						? <FormInput
 							id="referralOther"
 							label="Other"
-							value={self.props.form.referralOther}
+							value={self.props.form.referralOther || none}
 							reduxAction={reduxAction}
 						/>
 						: null
@@ -139,7 +142,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 							Primary language<br />spoken at home
 							</React.Fragment>
 						}
-						value={self.props.form.language}
+						value={self.props.form.language || none}
 						reduxAction={reduxAction}
 					/>
 					<FormCheckbox
@@ -148,14 +151,14 @@ class SurveyInfo extends React.PureComponent<Props> {
                         columns={3}
                         values={ethnicities}
                         reduxAction={reduxAction}
-						value={self.props.form.ethnicity}
+						value={(self.props.form.ethnicity || none)}
                     />
 					{
-						(self.props.form.ethnicity || []).contains("Other")
+						(self.props.form.ethnicity || some([])).getOrElse([]).contains("Other")
 						? <FormInput
 							id="ethnicityOther"
 							label="Other"
-							value={self.props.form.ethnicityOther}
+							value={self.props.form.ethnicityOther || none}
 							reduxAction={reduxAction}
 						/>
 						: null
@@ -163,7 +166,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 					<FormInput
 						id="school"
 						label="School"
-						value={self.props.form.school}
+						value={self.props.form.school || none}
 						reduxAction={reduxAction}
 					/>
 					<FormBoolean
@@ -173,7 +176,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 							Eligible for Free/<br />Reduced Price Lunch?
 							</React.Fragment>
 						}
-						value={self.props.form.freeLunch}
+						value={(self.props.form.freeLunch || none)}
 						reduxAction={reduxAction}
 					/>
                 </tbody></table>

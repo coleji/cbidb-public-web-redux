@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ApexItem, ApexItemProps } from "./ApexItem";
-import { Option } from "fp-ts/lib/Option";
+import { Option, none } from "fp-ts/lib/Option";
 import { setFlagsFromString } from "v8";
 
 interface KeyValuePair {
@@ -70,23 +70,28 @@ export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, Opti
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value);
 }
 
-export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, string[]> {
+export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, Option<string[]>> {
 	isCheckbox = true;
 	values = this.props.values;
-	isChecked = (key: string) => false  // TODO
+	isChecked = (key: string) => {
+		const value = (this.props.value || none).getOrElse([])
+		return value.contains(key)
+	}  // TODO
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => {
+		const value = (this.props.value || none).getOrElse([])
 		if (ev.target.checked) {
-			this.props.reduxAction(this.props.id, (this.props.value || []).concat([ev.target.value]));
+			this.props.reduxAction(this.props.id, value.concat([ev.target.value]));
 		} else {
-			const newValues = this.props.value.filter(e => e != ev.target.value)
+			const newValues = value.filter(e => e != ev.target.value)
 			this.props.reduxAction(this.props.id, newValues);
 		}
 	}
 }
 
-export class SingleCheckbox<T_Form> extends InputGroup<T_Form, Props, boolean> {
+// TODO: ideally when unchecked this should set form state to some(false) rather than none but whatever
+export class SingleCheckbox<T_Form> extends InputGroup<T_Form, Props, Option<boolean>> {
 	isCheckbox = true;
-	isChecked = (key: string) => false  // TODO
+	isChecked = (key: string) => (this.props.value || none).getOrElse(false)  // TODO
 	values = [{key: "isTrue", display: this.props.justElement ? this.props.label : ""}];
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.checked);
 }

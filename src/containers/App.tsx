@@ -14,6 +14,7 @@ import Scholarship from './Scholarship';
 import RequiredInfo, {path as requiredInfoPath} from './registration/RequiredInfo';
 import EmergencyContact, {path as emergencyContactPath} from './registration/EmergencyContact';
 import SwimProof, {path as swimProofPath} from './registration/SwimProof';
+import SurveyInfo, {path as surveyPath} from './registration/SurveyInfo';
 
 
 interface StateProps {
@@ -53,6 +54,7 @@ class App extends React.PureComponent<Props> {
 			<Route key={requiredInfoPath} exact path={requiredInfoPath} component={RequiredInfo} />,
 			<Route key={emergencyContactPath} exact path={emergencyContactPath} component={EmergencyContact} />,
 			<Route key={swimProofPath} exact path={swimProofPath} component={SwimProof} />,
+			<Route key={surveyPath} exact path={surveyPath} component={SurveyInfo} />,
 			<Route key="default" component={HomePage} />
 		]
 
