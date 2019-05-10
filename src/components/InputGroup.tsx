@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ApexItem, ApexItemProps } from "./ApexItem";
 import { Option } from "fp-ts/lib/Option";
+import { setFlagsFromString } from "v8";
 
 interface KeyValuePair {
 	key: string,
@@ -27,11 +28,13 @@ abstract class InputGroup<T_Form, T_Props extends Props, T_ValueType> extends Ap
 	abstract isCheckbox: boolean
 	abstract onClick: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 	abstract values: KeyValuePair[]
+	abstract isChecked: (key: string) => boolean
     // private toggle(existingValues: string, newValue: string): string {
     //     const values = existingValues.split(this.props.delimiter);
         
     // }
     getElement() {
+		const self = this
         const columns = this.props.columns || 1;
 
         console.log(this.isCheckbox)
@@ -44,14 +47,17 @@ abstract class InputGroup<T_Form, T_Props extends Props, T_ValueType> extends Ap
 
         return this.props.blurBox ? (<div></div>) : (<div id={this.props.id} className={group + " apex-item-group apex-item-group--rc " + apexItem}><div className={"apex-item-grid " + group}>
             {this.values.grouped(columns).map((cells, i) => {
-                return <div className="apex-item-grid-row" key={"row_" + i}>
-                    {cells.map(({key, display}) => (
-                        <div className="apex-item-option" key={key}>
-                            <input type={type} id={this.props.id + "_" + key} name={this.props.id} value={key} onChange={this.onClick} />
-                            <label htmlFor={this.props.id + "_" + key}>{display == undefined ? key : display}</label>
-                        </div>
-                    ))}
-                </div>
+                return (
+					<div className="apex-item-grid-row" key={"row_" + i}>
+					{cells.map(({key, display}) => {
+						const checked = self.isChecked(key)
+						return (<div className="apex-item-option" key={key}>
+							<input type={type} id={this.props.id + "_" + key} name={this.props.id} value={key} onChange={this.onClick} checked={checked} />
+							<label htmlFor={this.props.id + "_" + key}>{display == undefined ? key : display}</label>
+						</div>)})
+					}
+					</div>
+				);
             })}
         </div></div>);
     }
@@ -60,12 +66,14 @@ abstract class InputGroup<T_Form, T_Props extends Props, T_ValueType> extends Ap
 export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, Option<string>> {
 	isCheckbox = false;
 	values = this.props.values;
+	isChecked = (key: string) => this.props.value.getOrElse("") == key
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value);
 }
 
 export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, string[]> {
 	isCheckbox = true;
 	values = this.props.values;
+	isChecked = (key: string) => false  // TODO
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => {
 		if (ev.target.checked) {
 			this.props.reduxAction(this.props.id, (this.props.value || []).concat([ev.target.value]));
@@ -78,6 +86,7 @@ export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, s
 
 export class SingleCheckbox<T_Form> extends InputGroup<T_Form, Props, boolean> {
 	isCheckbox = true;
+	isChecked = (key: string) => false  // TODO
 	values = [{key: "isTrue", display: this.props.justElement ? this.props.label : ""}];
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.checked);
 }

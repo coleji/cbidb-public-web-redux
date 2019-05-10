@@ -53,7 +53,7 @@ export const getWithDefault = <T_Form, T_APIValidator extends t.Any>(formName: s
 	})
 	// make api call to get form state
 	return apiw.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
-		console.log("Got result from api: ", result)
+		console.log("Got result from api: ", result.substr(0,50))
 		const parsedResult = apiw.parseResponse(result)
 		if (parsedResult.type == "Success") {
 			success(formName, mapper(parsedResult.result))

@@ -50,10 +50,6 @@ class HomePage extends React.PureComponent<Props> {
 		console.log("home page did get")
 	}
 	render() {
-		//const self = this;
-
-		console.log("home page data  ", this.props.homePageData)
-
 		//TODO
 		const rowData: {
 			personId: number,
