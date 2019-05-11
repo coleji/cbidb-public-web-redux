@@ -7,7 +7,7 @@ import {LoginState, loginReducer} from "./loginStateReducer"
 import {loginFormReducer, Form as LoginForm} from "../containers/LoginPage"
 import {Form as RegistrationRequiredInfoForm, FORM_NAME as registrationRequiredInfoFormName} from "../containers/registration/RequiredInfo"
 import {Form as EmergencyContactForm, FORM_NAME as emergencyContactFormName} from "../containers/registration/EmergencyContact"
-import {Form as SwimProofForm, FORM_NAME as swimProofFormName} from "../containers/registration/SwimProof"
+import {Form as SwimProofForm, FORM_NAME as swimProofFormName, formDefault as swimProofDefaultState} from "../containers/registration/SwimProof"
 import {Form as SurveyInfoForm, FORM_NAME as surveyInfoFormName} from "../containers/registration/SurveyInfo"
 import {Form as CreateAccountForm, FORM_NAME as createAccountFormName} from "../containers/create-acct/CreateAccount"
 import {Form as HomePageForm, formName as homePageFormName, formDefault as homePageDefault} from "../containers/HomePage"
@@ -56,7 +56,7 @@ export const makeRootReducer: (history: any, staticState: StaticState) => RootRe
 		createAcctForm: formReducer<CreateAccountForm>(createAccountFormName, <any>{}),
 		registrationRequiredInfoForm: formReducer<RegistrationRequiredInfoForm>(registrationRequiredInfoFormName, <any>{}),
 		emergencyContactForm: formReducer<EmergencyContactForm>(emergencyContactFormName, <any>{}),
-		swimProofForm: formReducer<SwimProofForm>(swimProofFormName, <any>{}),
+		swimProofForm: formReducer<SwimProofForm>(swimProofFormName, swimProofDefaultState),
 		surveyInfoForm: formReducer<SurveyInfoForm>(surveyInfoFormName, <any>{}),
 		scholarshipForm: formReducer<ScholarshipForm>(scholarshipFormName, <any>{}),
 		homePageForm: formReducer<HomePageForm>(homePageFormName, homePageDefault),

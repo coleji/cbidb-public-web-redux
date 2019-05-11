@@ -41,10 +41,15 @@ export function success<T>(formName: string, result: T) {
 	})
 }
 
-export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form) => 
-	getWithDefault(formName, apiw, mapper, {})
+// export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form) => 
+// 	getWithDefault(formName, {}, apiw, mapper)
 
-export const getWithDefault = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form, defaultState: T_Form) => {
+export const get = <T_Form, T_APIValidator extends t.Any>(
+	formName: string,
+	defaultState: T_Form,
+	apiw: APIWrapper<T_APIValidator, any, any>,
+	mapper: (api: t.TypeOf<T_APIValidator>) => T_Form
+) => {
 	const dispatch = getDispatch();
 	dispatch({
 		type: "INITIALIZE_FORM",

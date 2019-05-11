@@ -9,13 +9,14 @@ import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import { Option } from "fp-ts/lib/Option";
+import { Option, none } from "fp-ts/lib/Option";
 import {Dispatch} from "redux";
 import { push } from 'connected-react-router';
 import Button from "../../components/Button";
 import { matchPath } from "react-router";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/emerg-contact"
 import {path as swimProofPath} from './SwimProof';
+import makeDefault from "../../util/getOptionDefault";
 
 export const FORM_NAME = "emergencyContact"
 
@@ -23,27 +24,32 @@ export const path = '/emerg/:personId'
 
 type ApiType = t.TypeOf<typeof validator>
 
-export type Form = ApiType & {
-	emerg1PhonePrimaryFirst: Option<string>,
-	emerg1PhonePrimarySecond: Option<string>,
-	emerg1PhonePrimaryThird: Option<string>,
-	emerg1PhonePrimaryExt: Option<string>,
+const foo = makeDefault(validator)
 
-	emerg1PhoneAlternateFirst: Option<string>,
-	emerg1PhoneAlternateSecond: Option<string>,
-	emerg1PhoneAlternateThird: Option<string>,
-	emerg1PhoneAlternateExt: Option<string>,
+const formDefault = {
+	...makeDefault(validator),
+	emerg1PhonePrimaryFirst: none as Option<string>,
+	emerg1PhonePrimarySecond: none as Option<string>,
+	emerg1PhonePrimaryThird: none as Option<string>,
+	emerg1PhonePrimaryExt: none as Option<string>,
 
-	emerg2PhonePrimaryFirst: Option<string>,
-	emerg2PhonePrimarySecond: Option<string>,
-	emerg2PhonePrimaryThird: Option<string>,
-	emerg2PhonePrimaryExt: Option<string>,
+	emerg1PhoneAlternateFirst: none as Option<string>,
+	emerg1PhoneAlternateSecond: none as Option<string>,
+	emerg1PhoneAlternateThird: none as Option<string>,
+	emerg1PhoneAlternateExt: none as Option<string>,
 
-	emerg2PhoneAlternateFirst: Option<string>,
-	emerg2PhoneAlternateSecond: Option<string>,
-	emerg2PhoneAlternateThird: Option<string>,
-	emerg2PhoneAlternateExt: Option<string>,
+	emerg2PhonePrimaryFirst: none as Option<string>,
+	emerg2PhonePrimarySecond: none as Option<string>,
+	emerg2PhonePrimaryThird: none as Option<string>,
+	emerg2PhonePrimaryExt: none as Option<string>,
+
+	emerg2PhoneAlternateFirst: none as Option<string>,
+	emerg2PhoneAlternateSecond: none as Option<string>,
+	emerg2PhoneAlternateThird: none as Option<string>,
+	emerg2PhoneAlternateExt: none as Option<string>,
 }
+
+type Form = typeof formDefault
 
 const apiToForm: (api: ApiType) => Form = api => {
 	const {first: emerg1PhonePrimaryFirst, second: emerg1PhonePrimarySecond, third: emerg1PhonePrimaryThird, ext: emerg1PhonePrimaryExt} = splitPhone(api.emerg1PhonePrimary)
@@ -117,7 +123,7 @@ class EmergencyContact extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, getWrapper(this.personId), apiToForm)
+		get(FORM_NAME, formDefault, getWrapper(this.personId), apiToForm)
 	}
 	render() {
 		const self = this;

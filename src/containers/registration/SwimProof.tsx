@@ -24,9 +24,11 @@ export const path = '/swimproof/:personId'
 
 type API = t.TypeOf<typeof validator>
 
-export interface Form {
-	swimProofId: Option<string>
+export const formDefault = {
+	swimProofId: none as Option<string>
 }
+
+export type Form = typeof formDefault
 
 const mapStateToProps = (state: RootState) => ({
 	form: state.swimProofForm,
@@ -65,12 +67,13 @@ class SwimProof extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, getWrapper(this.personId), (api: API) => ({
+		get(FORM_NAME, formDefault, getWrapper(this.personId), (api: API) => ({
 			...api,
 			swimProofId: api.swimProofId.map(n => n.toString())
 		}))
 	}
 	render() {
+		console.log("about to render ", this.props.form)
 		const self = this;
         const reduxAction = self.props.updateField;
         
@@ -121,10 +124,10 @@ class SwimProof extends React.PureComponent<Props> {
 					justElement={true}
 					values={swimProofValues}
 					reduxAction={reduxAction}
-					value={(self.props.form.data.swimProofId || none).map(n => n.toString())}
+					value={self.props.form.data.swimProofId.map(n => n.toString())}
 				/>
 			</JoomlaArticleRegion>
-            {(self.props.form.data.swimProofId || none).getOrElse(null) == "-1" ? noProofRegion : ""}
+            {self.props.form.data.swimProofId.getOrElse(null) == "-1" ? noProofRegion : ""}
             <JoomlaNotitleRegion>
                 <span>
                 If you believe you have a proof of swimming ability not on the above list,

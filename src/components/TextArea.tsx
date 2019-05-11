@@ -10,7 +10,7 @@ interface Props {
 	placeholder?: string
 }
 
-export default class TextArea<T> extends ApexItem<T, Props & ApexItemProps<T, Option<string>>, Option<string>> {
+export default class TextArea<T> extends ApexItem<T, Props & ApexItemProps<T, string>, string> {
 	getElement() {
 		const onKeyPress = (e: React.KeyboardEvent) => {
 			if (this.props.onEnter && (e.keyCode || e.which) == 13) {

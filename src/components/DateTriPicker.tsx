@@ -4,7 +4,6 @@ import {Option, some, none} from 'fp-ts/lib/Option'
 import {Select, KeyAndDisplay} from "./Select"
 import range from "../util/range"
 import * as moment from 'moment'
-import { nominalTypeHack } from "prop-types";
 
 export interface DateTriPickerProps<U> {
 	years: number[]

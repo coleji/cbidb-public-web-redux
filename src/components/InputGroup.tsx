@@ -63,14 +63,14 @@ abstract class InputGroup<T_Form, T_Props extends Props, T_ValueType> extends Ap
     }
 }
 
-export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, Option<string>> {
+export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, string> {
 	isCheckbox = false;
 	values = this.props.values;
 	isChecked = (key: string) => this.props.value.getOrElse("") == key
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value);
 }
 
-export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, Option<string[]>> {
+export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, string[]> {
 	isCheckbox = true;
 	values = this.props.values;
 	isChecked = (key: string) => {
@@ -89,7 +89,7 @@ export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, O
 }
 
 // TODO: ideally when unchecked this should set form state to some(false) rather than none but whatever
-export class SingleCheckbox<T_Form> extends InputGroup<T_Form, Props, Option<boolean>> {
+export class SingleCheckbox<T_Form> extends InputGroup<T_Form, Props, boolean> {
 	isCheckbox = true;
 	isChecked = (key: string) => (this.props.value || none).getOrElse(false)  // TODO
 	values = [{key: "isTrue", display: this.props.justElement ? this.props.label : ""}];

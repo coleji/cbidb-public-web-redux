@@ -3,7 +3,7 @@ import APIWrapper, { HttpMethod } from '../../APIWrapper';
 import { OptionalString } from '../../../util/OptionalTypeValidators';
 
 export const validator = t.type({
-	emerg1Name: OptionalString,
+	emerg1Name: t.number,
 	emerg1Relation: OptionalString,
 	emerg1PhonePrimary: OptionalString,
 	emerg1PhonePrimaryType: OptionalString,

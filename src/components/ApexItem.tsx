@@ -1,8 +1,9 @@
 import * as React from "react";
+import { none, Option } from "fp-ts/lib/Option";
 
 export interface ApexItemProps<T_Form, T_ValueType> {
 	id: string & keyof T_Form,
-	value: T_ValueType,
+	value: Option<T_ValueType>,
 	label?: string | JSX.Element,
 	extraCells?: React.ReactNode,
 	innerRef?: React.RefObject<any>,
@@ -18,6 +19,10 @@ export interface ApexItemProps<T_Form, T_ValueType> {
 
 export abstract class ApexItem<T_Form, T_OwnProps, T_ValueType> extends React.PureComponent<T_OwnProps & ApexItemProps<T_Form, T_ValueType>> {
 	abstract getElement(): React.ReactNode
+	constructor(props: T_OwnProps & ApexItemProps<T_Form, T_ValueType>) {
+		super(props)
+		if (this.props.reduxAction) this.props.reduxAction(this.props.id, null)
+	}
 	getLabel() {
 		if (this.props.blurBox) {
 			return (
