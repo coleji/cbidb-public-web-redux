@@ -135,14 +135,14 @@ class EmergencyContact extends React.PureComponent<Props> {
 					id="emerg1Name"
 					label="Emergency Contact #1 Name"
 					isRequired={true}
-					value={self.props.form.data.emerg1Name}
+					value={self.props.form.data.getOrElse({} as any).emerg1Name}
 					reduxAction={reduxAction}
 				/>
 				<FormInput
 					id="emerg1Relation"
 					label="Relation"
 					isRequired={true}
-					value={self.props.form.data.emerg1Relation}
+					value={self.props.form.data.getOrElse({} as any).emerg1Relation}
 					reduxAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
@@ -153,11 +153,11 @@ class EmergencyContact extends React.PureComponent<Props> {
 					thirdID="emerg1PhonePrimaryThird"
 					extID="emerg1PhonePrimaryExt"
 					typeID="emerg1PhonePrimaryType"
-					firstValue={self.props.form.data.emerg1PhonePrimaryFirst}
-					secondValue={self.props.form.data.emerg1PhonePrimarySecond}
-					thirdValue={self.props.form.data.emerg1PhonePrimaryThird}
-					extValue={self.props.form.data.emerg1PhonePrimaryExt}
-					typeValue={self.props.form.data.emerg1PhonePrimaryType}
+					firstValue={self.props.form.data.getOrElse({} as any).emerg1PhonePrimaryFirst}
+					secondValue={self.props.form.data.getOrElse({} as any).emerg1PhonePrimarySecond}
+					thirdValue={self.props.form.data.getOrElse({} as any).emerg1PhonePrimaryThird}
+					extValue={self.props.form.data.getOrElse({} as any).emerg1PhonePrimaryExt}
+					typeValue={self.props.form.data.getOrElse({} as any).emerg1PhonePrimaryType}
 					reduxAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
@@ -167,23 +167,23 @@ class EmergencyContact extends React.PureComponent<Props> {
 					thirdID="emerg1PhoneAlternateThird"
 					extID="emerg1PhoneAlternateExt"
 					typeID="emerg1PhoneAlternateType"
-					firstValue={self.props.form.data.emerg1PhoneAlternateFirst}
-					secondValue={self.props.form.data.emerg1PhoneAlternateSecond}
-					thirdValue={self.props.form.data.emerg1PhoneAlternateThird}
-					extValue={self.props.form.data.emerg1PhoneAlternateExt}
-					typeValue={self.props.form.data.emerg1PhoneAlternateType}
+					firstValue={self.props.form.data.getOrElse({} as any).emerg1PhoneAlternateFirst}
+					secondValue={self.props.form.data.getOrElse({} as any).emerg1PhoneAlternateSecond}
+					thirdValue={self.props.form.data.getOrElse({} as any).emerg1PhoneAlternateThird}
+					extValue={self.props.form.data.getOrElse({} as any).emerg1PhoneAlternateExt}
+					typeValue={self.props.form.data.getOrElse({} as any).emerg1PhoneAlternateType}
 					reduxAction={reduxAction}
 				/>
 				<FormInput
 					id="emerg2Name"
 					label="Emergency Contact #2 Name"
-					value={self.props.form.data.emerg2Name}
+					value={self.props.form.data.getOrElse({} as any).emerg2Name}
 					reduxAction={reduxAction}
 				/>
 				<FormInput
 					id="emerg2Relation"
 					label="Relation"
-					value={self.props.form.data.emerg2Relation}
+					value={self.props.form.data.getOrElse({} as any).emerg2Relation}
 					reduxAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
@@ -193,11 +193,11 @@ class EmergencyContact extends React.PureComponent<Props> {
 					thirdID="emerg2PhonePrimaryThird"
 					extID="emerg2PhonePrimaryExt"
 					typeID="emerg2PhonePrimaryType"
-					firstValue={self.props.form.data.emerg2PhonePrimaryFirst}
-					secondValue={self.props.form.data.emerg2PhonePrimarySecond}
-					thirdValue={self.props.form.data.emerg2PhonePrimaryThird}
-					extValue={self.props.form.data.emerg2PhonePrimaryExt}
-					typeValue={self.props.form.data.emerg2PhonePrimaryType}
+					firstValue={self.props.form.data.getOrElse({} as any).emerg2PhonePrimaryFirst}
+					secondValue={self.props.form.data.getOrElse({} as any).emerg2PhonePrimarySecond}
+					thirdValue={self.props.form.data.getOrElse({} as any).emerg2PhonePrimaryThird}
+					extValue={self.props.form.data.getOrElse({} as any).emerg2PhonePrimaryExt}
+					typeValue={self.props.form.data.getOrElse({} as any).emerg2PhonePrimaryType}
 					reduxAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
@@ -207,11 +207,11 @@ class EmergencyContact extends React.PureComponent<Props> {
 					thirdID="emerg2PhoneAlternateThird"
 					extID="emerg2PhoneAlternateExt"
 					typeID="emerg2PhoneAlternateType"
-					firstValue={self.props.form.data.emerg2PhoneAlternateFirst}
-					secondValue={self.props.form.data.emerg2PhoneAlternateSecond}
-					thirdValue={self.props.form.data.emerg2PhoneAlternateThird}
-					extValue={self.props.form.data.emerg2PhoneAlternateExt}
-					typeValue={self.props.form.data.emerg2PhoneAlternateType}
+					firstValue={self.props.form.data.getOrElse({} as any).emerg2PhoneAlternateFirst}
+					secondValue={self.props.form.data.getOrElse({} as any).emerg2PhoneAlternateSecond}
+					thirdValue={self.props.form.data.getOrElse({} as any).emerg2PhoneAlternateThird}
+					extValue={self.props.form.data.getOrElse({} as any).emerg2PhoneAlternateExt}
+					typeValue={self.props.form.data.getOrElse({} as any).emerg2PhoneAlternateType}
 					reduxAction={reduxAction}
 				/>
 
@@ -228,7 +228,7 @@ class EmergencyContact extends React.PureComponent<Props> {
 			</JoomlaArticleRegion>
 			<Button text="< Back" onClick={this.props.goBack}/>
 			<Button text="Next >" onClick={() => {
-				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data)).then(() => this.props.goNext(this.personId))
+				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(() => this.props.goNext(this.personId))
 			}}/>
 		</JoomlaMainPage>
 	}

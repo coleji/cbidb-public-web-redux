@@ -5,7 +5,7 @@ import { Option } from "fp-ts/lib/Option";
 
 export default abstract class OneWayDataComponent<T_Props, T_Form, T_APIValidator extends t.Any>
 extends React.PureComponent<T_Props> {
-	abstract data: Option<T_Form>
+	abstract getData: () => Option<T_Form>
 	abstract formName: string
 	abstract getApiWrapper: APIWrapper<T_APIValidator, any, any>
 	abstract apiToForm: (apiResult: t.TypeOf<T_APIValidator>) => T_Form
@@ -16,6 +16,6 @@ extends React.PureComponent<T_Props> {
 		super(props)
 	}
 	render() {
-		return this.data.isSome() ? this.renderComponent(this.data.getOrElse(null)) : this.renderPlaceholder()
+		return this.getData().isSome() ? this.renderComponent(this.getData().getOrElse(null)) : this.renderPlaceholder()
 	}
 }

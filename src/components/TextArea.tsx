@@ -23,26 +23,18 @@ export default class TextArea<T> extends ApexItem<T, Props & ApexItemProps<T, st
 				? (ev: React.ChangeEvent<HTMLTextAreaElement>) => this.props.reduxAction(this.props.id, ev.target.value)
 				: this.props.onChange;
 
-		if (this.props.blurBox) {
-			return (<div style={{
-				width: `${30 * 8.8}px`,
-				height: "20px",
-				backgroundColor: "#eee"
-			}} />);
-		} else {
-			return (<textarea
-				id={this.props.id} ref={this.props.innerRef}
-				className="text_field apex-item-text"
-				name={this.props.id}
-				maxLength={this.props.maxLength || 100}
-				onChange={onChange}
-				onKeyPress={onKeyPress}
-				value={(this.props.value || none).getOrElse("")}
-				rows={this.props.rows}
-				cols={this.props.cols}
-				placeholder={this.props.placeholder}
-			/>);
-		}
+		return (<textarea
+			id={this.props.id} ref={this.props.innerRef}
+			className="text_field apex-item-text"
+			name={this.props.id}
+			maxLength={this.props.maxLength || 100}
+			onChange={onChange}
+			onKeyPress={onKeyPress}
+			value={(this.props.value || none).getOrElse("")}
+			rows={this.props.rows}
+			cols={this.props.cols}
+			placeholder={this.props.placeholder}
+		/>);
 	}
 }
 

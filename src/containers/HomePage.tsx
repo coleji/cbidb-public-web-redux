@@ -47,19 +47,24 @@ class HomePage extends OneWayDataComponent<Props, Form, typeof validator> {
 	getApiWrapper = apiw
 	apiToForm = (x: t.TypeOf<typeof validator>) => x
 	formToAPI = (x: Form) => x
-	data = this.props.homePageData
+	getData: () => Option<Form>
 	constructor(props: Props) {
 		super(props);
+		this.getData = () => this.props.homePageData
 		console.log("home page doing get")
 		console.log(getReduxState())
 		get(formName, formDefault, apiw, x => x)
 		console.log("home page did get")
 	}
 	renderPlaceholder() {
+		console.log("rendering placeholder")
 		return <span>whatever</span>
 	}
 	renderComponent(homePageData: typeof formDefault) {
 		//TODO
+		console.log("rendering component")
+		console.log(this.props.homePageData)
+		console.log(homePageData)
 		const rowData: {
 			personId: number,
 			name: string,

@@ -164,7 +164,7 @@ export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<
 		action.type == "LOGIN_FAILURE"
 		? {...state, data: {...state.data, password: none}}
 		: state;
-	return standardFormReducer(modifiedState, action);
+	return standardFormReducer(modifiedState as any, action);
 }
 
 export default connect<StateProps, DispatchProps, StaticProps, RootState>(
@@ -172,8 +172,8 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		jpPrice: Currency.cents(rootState.staticState.jpPriceCents),
 		lastSeason: rootState.staticState.currentSeason-1,
 		form: {
-			username: rootState.loginForm.data.username,
-			password: rootState.loginForm.data.password
+			username: rootState.loginForm.data.map(d => d.username).getOrElse(null),
+			password: rootState.loginForm.data.map(d => d.password).getOrElse(null)
 		},
 		selfServerParams: rootState.staticState.selfServerParams
 	}),

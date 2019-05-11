@@ -80,7 +80,7 @@ class FormRadio extends RadioGroup<Form> {}
 class FormCheckbox extends CheckboxGroup<Form>{}
 class FormBoolean extends SingleCheckbox<Form>{}
 interface StateProps {
-	form: Form
+	form: Option<Form>
 }
 
 interface DispatchProps {
@@ -95,7 +95,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 	render() {
 		const self = this;
 		const reduxAction = self.props.updateField;
-		console.log(self.props.form)
+		console.log(self.props.form.getOrElse({} as any))
 
 		// TODO: blank out the "other" fields in state when the toggling checkbox is unchecked
 
@@ -111,7 +111,7 @@ class SurveyInfo extends React.PureComponent<Props> {
                         columns={3}
                         values={genders}
                         reduxAction={reduxAction}
-                        value={self.props.form.genderID || none}
+                        value={self.props.form.getOrElse({} as any).genderID || none}
                     />
 					<FormCheckbox
                         id="referral"
@@ -123,14 +123,14 @@ class SurveyInfo extends React.PureComponent<Props> {
                         columns={3}
                         values={referralSources}
                         reduxAction={reduxAction}
-						value={(self.props.form.referral || none)}
+						value={(self.props.form.getOrElse({} as any).referral || none)}
                     />
 					{
-						(self.props.form.referral || some([])).getOrElse([]).contains("Other")
+						(self.props.form.getOrElse({} as any).referral || some([])).getOrElse([]).contains("Other")
 						? <FormInput
 							id="referralOther"
 							label="Other"
-							value={self.props.form.referralOther || none}
+							value={self.props.form.getOrElse({} as any).referralOther || none}
 							reduxAction={reduxAction}
 						/>
 						: null
@@ -142,7 +142,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 							Primary language<br />spoken at home
 							</React.Fragment>
 						}
-						value={self.props.form.language || none}
+						value={self.props.form.getOrElse({} as any).language || none}
 						reduxAction={reduxAction}
 					/>
 					<FormCheckbox
@@ -151,14 +151,14 @@ class SurveyInfo extends React.PureComponent<Props> {
                         columns={3}
                         values={ethnicities}
                         reduxAction={reduxAction}
-						value={(self.props.form.ethnicity || none)}
+						value={(self.props.form.getOrElse({} as any).ethnicity || none)}
                     />
 					{
-						(self.props.form.ethnicity || some([])).getOrElse([]).contains("Other")
+						(self.props.form.getOrElse({} as any).ethnicity || some([])).getOrElse([]).contains("Other")
 						? <FormInput
 							id="ethnicityOther"
 							label="Other"
-							value={self.props.form.ethnicityOther || none}
+							value={self.props.form.getOrElse({} as any).ethnicityOther || none}
 							reduxAction={reduxAction}
 						/>
 						: null
@@ -166,7 +166,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 					<FormInput
 						id="school"
 						label="School"
-						value={self.props.form.school || none}
+						value={self.props.form.getOrElse({} as any).school || none}
 						reduxAction={reduxAction}
 					/>
 					<FormBoolean
@@ -176,7 +176,7 @@ class SurveyInfo extends React.PureComponent<Props> {
 							Eligible for Free/<br />Reduced Price Lunch?
 							</React.Fragment>
 						}
-						value={(self.props.form.freeLunch || none)}
+						value={(self.props.form.getOrElse({} as any).freeLunch || none)}
 						reduxAction={reduxAction}
 					/>
                 </tbody></table>

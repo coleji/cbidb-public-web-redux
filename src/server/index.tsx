@@ -101,8 +101,8 @@ getConfig.then(serverConfig => {
 			console.log("got ", json)
 			if (json && json.userName) {
 				return Promise.resolve({
-					login: {authenticatedUserName: json.userName},
-					homePageForm: { data: json }
+					login: {authenticatedUserName: json.userName},	// TODO: should be option?
+					homePageForm: { data: some(json) }
 				});
 			} else Promise.resolve({})
 		}, (e) => {

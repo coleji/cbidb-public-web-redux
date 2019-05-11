@@ -17,8 +17,7 @@ export interface PhoneTriBoxProps<U> {
     extValue: Option<string>
     typeValue: Option<string>,
     reduxAction?: (name: string, value: string) => void,
-    isRequired?: boolean,
-	blurBox?: boolean
+    isRequired?: boolean
 }
 
 export const splitPhone = (phone: Option<string>) => phone.fold(
@@ -89,47 +88,36 @@ export default class PhoneTriBox<U, T extends PhoneTriBoxProps<U>> extends React
             size={5}
             justElement={true}
         />
-        return self.props.blurBox ? (
+        return <React.Fragment>
 			<TextInput<U>
-                id={self.props.firstID}
-                label={self.props.label}
-                value={self.props.firstValue}
-                reduxAction={self.props.reduxAction}
-                isRequired={self.props.isRequired}
-                size={3}
+				id={self.props.firstID}
+				label={self.props.label}
+				value={self.props.firstValue}
+				reduxAction={self.props.reduxAction}
+				isRequired={self.props.isRequired}
+				size={3}
 				maxLength={3}
-				blurBox={self.props.blurBox}
-            />
-		) : (<React.Fragment>
-            <TextInput<U>
-                id={self.props.firstID}
-                label={self.props.label}
-                value={self.props.firstValue}
-                reduxAction={self.props.reduxAction}
-                isRequired={self.props.isRequired}
-                size={3}
-                maxLength={3}
-                prependToElementCell="("
-                appendToElementCell={(
-                    <span>
-                        {") - "}
-                        {second}
-                        {" - "}
-                        {third}
-                        {"  ext."}
-                        {ext}
-                    </span>
-                )}
-            />
-            <Select<U>
-                id={self.props.typeID}
-                label="Type"
-                isRequired={self.props.isRequired}
-                value={self.props.typeValue}
-                reduxAction={self.props.reduxAction}
-                options={["Home", "Work", "Cell"].map(k => ({key: k, display: k}))}
-                nullDisplay="- Select -"
-            />
-        </React.Fragment>);
+				prependToElementCell="("
+				appendToElementCell={(
+					<span>
+						{") - "}
+						{second}
+						{" - "}
+						{third}
+						{"  ext."}
+						{ext}
+					</span>
+				)}
+			/>
+			<Select<U>
+				id={self.props.typeID}
+				label="Type"
+				isRequired={self.props.isRequired}
+				value={self.props.typeValue}
+				reduxAction={self.props.reduxAction}
+				options={["Home", "Work", "Cell"].map(k => ({key: k, display: k}))}
+				nullDisplay="- Select -"
+			/>
+		</React.Fragment>
 	}
 }

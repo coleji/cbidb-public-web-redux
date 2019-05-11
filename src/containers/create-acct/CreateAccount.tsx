@@ -23,7 +23,7 @@ export interface Form {
 }
 
 interface StateProps {
-	form: Form
+	form: Option<Form>
 }
 
 interface DispatchProps {
@@ -57,35 +57,35 @@ class CreateAccount extends React.PureComponent<Props> {
 					id="firstName"
 					label="Parent First Name"
 					isPassword={false}
-					value={self.props.form.firstName}
+					value={self.props.form.getOrElse({} as any).firstName}
 					reduxAction={self.props.updateField}
 				/>
 				<FormInput
 					id="lastName"
 					label="Parent Last Name"
 					isPassword={false}
-					value={self.props.form.lastName}
+					value={self.props.form.getOrElse({} as any).lastName}
 					reduxAction={self.props.updateField}
 				/>
 				<FormInput
 					id="email"
 					label="Parent Email"
 					isPassword={false}
-					value={self.props.form.email}
+					value={self.props.form.getOrElse({} as any).email}
 					reduxAction={self.props.updateField}
 				/>
 				<FormInput
 					id="pw1"
 					label="Create Password"
 					isPassword={true}
-					value={self.props.form.pw1}
+					value={self.props.form.getOrElse({} as any).pw1}
 					reduxAction={self.props.updateField}
 				/>
 				<FormInput
 					id="pw2"
 					label="Confirm Password"
 					isPassword={true}
-					value={self.props.form.pw2}
+					value={self.props.form.getOrElse({} as any).pw2}
 					reduxAction={self.props.updateField}
 				/>
 			</tbody></table>

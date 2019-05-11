@@ -7,10 +7,11 @@ import { RootState } from '../reducer/rootReducer';
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import {Form as WelcomePackageState} from "../containers/HomePage"
+import { Option } from 'fp-ts/lib/Option';
 
 
 interface StateProps {
-	welcomePackage: WelcomePackageState,
+	welcomePackage: Option<WelcomePackageState>,
 	router: any
 }
 
@@ -37,7 +38,7 @@ class RatingsPage extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + personId)
 
-		const kid = this.props.welcomePackage.children.find(e => e.personId == personId)
+		const kid = this.props.welcomePackage.getOrElse({} as any).children.find(e => e.personId == personId)
 
 		// TODO: specific kid.  Also welcome package seems to sometimes be empty
 		const ratings = kid ? kid.ratings : "<span></span>"

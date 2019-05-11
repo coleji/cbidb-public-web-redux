@@ -124,10 +124,10 @@ class SwimProof extends React.PureComponent<Props> {
 					justElement={true}
 					values={swimProofValues}
 					reduxAction={reduxAction}
-					value={self.props.form.data.swimProofId.map(n => n.toString())}
+					value={self.props.form.data.getOrElse({} as any).swimProofId.map(n => n.toString())}
 				/>
 			</JoomlaArticleRegion>
-            {self.props.form.data.swimProofId.getOrElse(null) == "-1" ? noProofRegion : ""}
+            {self.props.form.data.getOrElse({} as any).swimProofId.getOrElse(null) == "-1" ? noProofRegion : ""}
             <JoomlaNotitleRegion>
                 <span>
                 If you believe you have a proof of swimming ability not on the above list,
@@ -137,10 +137,10 @@ class SwimProof extends React.PureComponent<Props> {
 			</JoomlaNotitleRegion>
 			<Button text="< Back" onClick={this.props.goBack}/>
 			<Button text="Next >" onClick={() => {
-				post(FORM_NAME, postWrapper(this.personId))({
-					...this.props.form.data,
-					swimProofId: this.props.form.data.swimProofId.map(s => Number(s))
-				}).then(() => this.props.goNext(this.personId))
+				// post(FORM_NAME, postWrapper(this.personId))({
+				// 	...this.props.form.data,
+				// 	swimProofId: this.props.form.data.swimProofId.map(s => Number(s))
+				// }).then(() => this.props.goNext(this.personId))
 			}}/>
 		</JoomlaMainPage>
 	}

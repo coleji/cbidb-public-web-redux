@@ -31,7 +31,7 @@ class FormSelect extends Select<Form> {}
 class FormBoolean extends SingleCheckbox<Form>{}
 
 interface StateProps {
-	form: Form,
+	form: Option<Form>,
 	jpPrice: Currency,
 	currentSeason: number
 }
@@ -79,7 +79,7 @@ class RatingsPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("Adult", "Adults", 0, 3)}
-								value={self.props.form.numberAdults}
+								value={self.props.form.getOrElse({} as any).numberAdults}
 								reduxAction={self.props.updateField}
 							/></td>
 						</tr>	
@@ -94,7 +94,7 @@ class RatingsPage extends React.PureComponent<Props> {
 								}, {
 									key: "N", display: "No"
 								}]}
-								value={self.props.form.numberAdults}
+								value={self.props.form.getOrElse({} as any).numberAdults}
 								reduxAction={self.props.updateField}
 							/></td>
 						</tr>	
@@ -105,7 +105,7 @@ class RatingsPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("Infant", "Infants", 0, 7)}
-								value={self.props.form.numberAdults}
+								value={self.props.form.getOrElse({} as any).numberAdults}
 								reduxAction={self.props.updateField}
 							/></td>
 						</tr>	
@@ -116,7 +116,7 @@ class RatingsPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("Preschooler", "Preschoolers", 0, 7)}
-								value={self.props.form.numberAdults}
+								value={self.props.form.getOrElse({} as any).numberAdults}
 								reduxAction={self.props.updateField}
 							/></td>
 						</tr>	
@@ -127,7 +127,7 @@ class RatingsPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("School-age Child", "School-age Children", 0, 7)}
-								value={self.props.form.numberAdults}
+								value={self.props.form.getOrElse({} as any).numberAdults}
 								reduxAction={self.props.updateField}
 							/></td>
 						</tr>	
@@ -138,14 +138,14 @@ class RatingsPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("Teenager", "Teenagers", 0, 7)}
-								value={self.props.form.numberAdults}
+								value={self.props.form.getOrElse({} as any).numberAdults}
 								reduxAction={self.props.updateField}
 							/></td>
 						</tr>	
 						<tr>
 							<td>Please enter your Adjusted Gross Income:*</td>
 							<td>
-								<FormInput id="income" justElement={true} value={self.props.form.income} reduxAction={self.props.updateField} />
+								<FormInput id="income" justElement={true} value={self.props.form.getOrElse({} as any).income} reduxAction={self.props.updateField} />
 								<span style={{color: "#777", fontSize: "0.9em"}}>(ex. $50,000)</span>
 							</td>
 						</tr>	
@@ -173,7 +173,7 @@ class RatingsPage extends React.PureComponent<Props> {
 					<br />
 					<br />
 					<table><tbody>
-						<FormBoolean id="doAgree" justElement={true} value={(self.props.form.doAgree || none)} label="I agree to the above terms for scholarship application." reduxAction={self.props.updateField}/>
+						<FormBoolean id="doAgree" justElement={true} value={(self.props.form.getOrElse({} as any).doAgree || none)} label="I agree to the above terms for scholarship application." reduxAction={self.props.updateField}/>
 					</tbody></table>
 				</JoomlaArticleRegion>
 			</React.Fragment>
@@ -192,10 +192,10 @@ class RatingsPage extends React.PureComponent<Props> {
 				<br />
 				<br />
 				<div style={{marginLeft: "20px"}}>
-					<FormRadio id="isApplying" justElement={true} values={radioValues} reduxAction={self.props.updateField} value={self.props.form.isApplying}/>
+					<FormRadio id="isApplying" justElement={true} values={radioValues} reduxAction={self.props.updateField} value={self.props.form.getOrElse({} as any).isApplying}/>
 				</div>
 			</JoomlaArticleRegion>
-			{self.props.form.isApplying.getOrElse("No") == "Yes" ? familyInfo : ""}
+			{self.props.form.getOrElse({} as any).isApplying.getOrElse("No") == "Yes" ? familyInfo : ""}
 		</JoomlaMainPage>
 	}
 }

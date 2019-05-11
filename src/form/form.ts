@@ -105,20 +105,20 @@ export const formReducer: <T extends object>(formName: string, defaultState: T) 
 		updated[updateAction.fieldName] = (updateAction.fieldValue == null || updateAction.fieldValue == "") ? none : some(updateAction.fieldValue);
 		return {
 			apiState: startState.apiState,
-			data: some(<T>{...<object>startState.data, ...<object>(updated as FormSubSet)})
+			data: some(<T>{...<object>startState.data.getOrElse({} as any), ...<object>(updated as FormSubSet)})
 		};
 	case "SET_FORM":
 		const setAction = <FormSetAction<T>>action;
 		console.log("about to return")
 		return {
 			apiState: "SUCCESS",
-			data: some(setAction.data)
+			data: setAction.data
 		};
 	case "INITIALIZE_FORM":
 		const setAction2 = <FormSetAction<T>>action;
 		return {
 			apiState: "WAITING",
-			data: some(setAction2.data)
+			data: setAction2.data
 		}
     default:
         return startState;
@@ -140,7 +140,7 @@ interface FormUpdateAction extends Action {
 interface FormSetAction<T> extends Action {
 	type: FormActionType,
     formName: string,
-	data: T
+	data: Option<T>
 }
 
 type FormAction<T> = 

@@ -23,6 +23,7 @@ import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/required"
 import {path as emergContactPath} from "./EmergencyContact"
+import OneWayDataComponent from '../../form/OneWayDataComponent';
 
 export const FORM_NAME = "registrationRequiredInfo"
 
@@ -100,8 +101,13 @@ interface StaticProps { }
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps;
 
-class RequiredInfo extends React.PureComponent<Props> {
+class RequiredInfo extends OneWayDataComponent<Props, Form, typeof validator> {
 	personId: number
+	formName = FORM_NAME
+	getApiWrapper = getWrapper(this.personId)
+	apiToForm = apiToForm
+	formToAPI = formToAPI
+	getData: () => Option<Form>
 	constructor(props: Props) {
 		super(props)
 		console.log("constructor!!!")
@@ -113,10 +119,15 @@ class RequiredInfo extends React.PureComponent<Props> {
 		this.personId = Number((match.params as any).personId);
 
 		console.log("scraped from the url: " + this.personId)
+
+		this.getData = () => this.props.form.data
 		
-	//	get(FORM_NAME, getWrapper(this.personId), apiToForm)
+		get(FORM_NAME, null, getWrapper(this.personId), apiToForm)
 	}
-	render() {
+	renderPlaceholder() {
+		return <span>whatever</span>
+	}
+	renderComponent(data: Form) {
 		console.log("store", getReduxState())
 		const self = this;
 		const reduxAction = self.props.updateField;
@@ -133,24 +144,21 @@ class RequiredInfo extends React.PureComponent<Props> {
 					id="firstName"
 					label="First Name"
 					isRequired={true}
-					value={self.props.form.data.firstName}
+					value={data.firstName}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="middleInitial"
 					label="Middle Initial"
-					value={self.props.form.data.middleInitial}
+					value={data.middleInitial}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="lastName"
 					label="Last Initial"
 					isRequired={true}
-					value={self.props.form.data.lastName}
+					value={data.lastName}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<DateTriPicker<Form, DateTriPickerProps<Form>>
 					years={years}
@@ -158,27 +166,24 @@ class RequiredInfo extends React.PureComponent<Props> {
 					dayID="dobDate"
 					yearID="dobYear"
 					isRequired={true}
-					monthValue={self.props.form.data.dobMonth}
-					dayValue={self.props.form.data.dobDate}
-					yearValue={self.props.form.data.dobYear}
+					monthValue={data.dobMonth}
+					dayValue={data.dobDate}
+					yearValue={data.dobYear}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="childEmail"
 					label="Child Email"
-					value={self.props.form.data.childEmail}
+					value={data.childEmail}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				{(self.props.form.apiState=="WAITING") ? (
 					// TODO: fake input for blurbox, replace with static blurbox
 					<FormInput
 						id="childEmail"
 						label=""
-						value={self.props.form.data.childEmail}
+						value={data.childEmail}
 						reduxAction={reduxAction}
-						blurBox={true}
 					/>
 				) : (
 					<tr>
@@ -197,59 +202,52 @@ class RequiredInfo extends React.PureComponent<Props> {
 					id="addr1"
 					label="Address 1"
 					isRequired={true}
-					value={self.props.form.data.addr1}
+					value={data.addr1}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="addr2"
 					label="Address 2"
-					value={self.props.form.data.addr2}
+					value={data.addr2}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="addr3"
 					label="Address 3"
-					value={self.props.form.data.addr3}
+					value={data.addr3}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="city"
 					label="City"
 					isRequired={true}
-					value={self.props.form.data.city}
+					value={data.city}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormSelect
 					id="state"
 					label="State"
 					isRequired={true}
-					value={self.props.form.data.state}
+					value={data.state}
 					reduxAction={reduxAction}
 					options={states}
 					nullDisplay="- Select -"
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormInput
 					id="zip"
 					label="Zip"
 					isRequired={true}
-					value={self.props.form.data.zip}
+					value={data.zip}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormSelect		// TODO: default to US
 					id="country"
 					label="Country"
 					isRequired={true}
-					value={self.props.form.data.country}
+					value={data.country}
 					reduxAction={reduxAction}
 					options={countries}
 					nullDisplay="- Select -"
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Parent Primary Phone"
@@ -258,13 +256,12 @@ class RequiredInfo extends React.PureComponent<Props> {
 					thirdID="primaryPhoneThird"
 					extID="primaryPhoneExt"
 					typeID="primaryPhoneType"
-					firstValue={self.props.form.data.primaryPhoneFirst}
-					secondValue={self.props.form.data.primaryPhoneSecond}
-					thirdValue={self.props.form.data.primaryPhoneThird}
-					extValue={self.props.form.data.primaryPhoneExt}
-					typeValue={self.props.form.data.primaryPhoneType}
+					firstValue={data.primaryPhoneFirst}
+					secondValue={data.primaryPhoneSecond}
+					thirdValue={data.primaryPhoneThird}
+					extValue={data.primaryPhoneExt}
+					typeValue={data.primaryPhoneType}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Parent Alternate Phone"
@@ -273,13 +270,12 @@ class RequiredInfo extends React.PureComponent<Props> {
 					thirdID="alternatePhoneThird"
 					extID="alternatePhoneExt"
 					typeID="alternatePhoneType"
-					firstValue={self.props.form.data.alternatePhoneFirst}
-					secondValue={self.props.form.data.alternatePhoneSecond}
-					thirdValue={self.props.form.data.alternatePhoneThird}
-					extValue={self.props.form.data.alternatePhoneExt}
-					typeValue={self.props.form.data.alternatePhoneType}
+					firstValue={data.alternatePhoneFirst}
+					secondValue={data.alternatePhoneSecond}
+					thirdValue={data.alternatePhoneThird}
+					extValue={data.alternatePhoneExt}
+					typeValue={data.alternatePhoneType}
 					reduxAction={reduxAction}
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 			</tbody></table>
 		);
@@ -291,30 +287,27 @@ class RequiredInfo extends React.PureComponent<Props> {
 					label="Allergies"
 					rows={4}
 					cols={60}
-					value={self.props.form.data.allergies}
+					value={data.allergies}
 					reduxAction={reduxAction}
 					placeholder="Please leave blank if none"
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormTextArea
 					id="medications"
 					label="Medications"
 					rows={4}
 					cols={60}
-					value={self.props.form.data.medications}
+					value={data.medications}
 					reduxAction={reduxAction}
 					placeholder="Please leave blank if none"
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 				<FormTextArea
 					id="specialNeeds"
 					label="Special Needs"
 					rows={4}
 					cols={60}
-					value={self.props.form.data.specialNeeds}
+					value={data.specialNeeds}
 					reduxAction={reduxAction}
 					placeholder="Please leave blank if none"
-					blurBox={self.props.form.apiState=="WAITING"}
 				/>
 			</tbody></table>
 		);
@@ -333,7 +326,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 			</JoomlaArticleRegion>
 			<Button text="< Back" onClick={this.props.goBack}/>
 			<Button text="Next >" onClick={() => {
-				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data)).then(() => this.props.goNext(this.personId))
+				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(() => this.props.goNext(this.personId))
 			}}/>
 		</JoomlaMainPage>
 	}
