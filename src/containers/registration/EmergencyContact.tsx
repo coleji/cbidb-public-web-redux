@@ -49,7 +49,7 @@ const formDefault = {
 	emerg2PhoneAlternateExt: none as Option<string>,
 }
 
-type Form = typeof formDefault
+export type Form = typeof formDefault
 
 const apiToForm: (api: ApiType) => Form = api => {
 	const {first: emerg1PhonePrimaryFirst, second: emerg1PhonePrimarySecond, third: emerg1PhonePrimaryThird, ext: emerg1PhonePrimaryExt} = splitPhone(api.emerg1PhonePrimary)

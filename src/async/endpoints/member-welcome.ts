@@ -1,7 +1,7 @@
 import * as t from 'io-ts'
 import APIWrapper, { HttpMethod, ServerParams } from '../APIWrapper';
 
-const validator = t.type({
+export const validator = t.type({
 	parentPersonId: t.number,
     userName: t.string,
 	children: t.array(t.type({

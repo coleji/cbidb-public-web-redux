@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as t from 'io-ts'
 import { connect } from "react-redux";
 import { RootState } from '../reducer/rootReducer';
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
@@ -8,8 +9,11 @@ import homePageActions from "./HomePageActions";
 import {FormState, get} from "../form/form"
 import { getReduxState } from "../reducer/store";
 import NavBarLogoutOnly from "../components/NavBarLogoutOnly"
-import {apiw} from "../async/endpoints/member-welcome"
-import { ServerParams } from "../async/APIWrapper";
+import {apiw, validator} from "../async/endpoints/member-welcome"
+import APIWrapper, { ServerParams } from "../async/APIWrapper";
+import OneWayDataComponent from "../form/OneWayDataComponent";
+import makeDefault from "../util/getOptionDefault";
+import { Option } from "fp-ts/lib/Option";
 
 interface ChildrenData {
 	personId: number,
@@ -20,29 +24,30 @@ interface ChildrenData {
 	ratings: string
 }
 
-// TODO: make into options
-export const formDefault = {
-	parentPersonId: null as number,
-	userName: null as string,
-	children: [] as ChildrenData[]
-}
-
-export type Form = typeof formDefault
+export const formDefault = makeDefault(validator)
+export type Form = t.TypeOf<typeof validator>
 
 export const formName = "homePageForm"
 
 interface StateProps {
-	homePageData: typeof formDefault,
+	homePageData: Option<typeof formDefault>,
 	selfServerParams: ServerParams
 }
 
 interface DispatchProps { }
 
-interface StaticProps { }
+interface StaticProps {
+
+}
 
 type Props = StateProps & DispatchProps & StaticProps
 
-class HomePage extends React.PureComponent<Props> {
+class HomePage extends OneWayDataComponent<Props, Form, typeof validator> {
+	formName = formName
+	getApiWrapper = apiw
+	apiToForm = (x: t.TypeOf<typeof validator>) => x
+	formToAPI = (x: Form) => x
+	data = this.props.homePageData
 	constructor(props: Props) {
 		super(props);
 		console.log("home page doing get")
@@ -50,14 +55,17 @@ class HomePage extends React.PureComponent<Props> {
 		get(formName, formDefault, apiw, x => x)
 		console.log("home page did get")
 	}
-	render() {
+	renderPlaceholder() {
+		return <span>whatever</span>
+	}
+	renderComponent(homePageData: typeof formDefault) {
 		//TODO
 		const rowData: {
 			personId: number,
 			name: string,
 			status: React.ReactNode,
 			actions: React.ReactNode
-		}[] = this.props.homePageData.children.map((c: any) => ({
+		}[] = homePageData.children.map((c: any) => ({
 			personId: c.personId,
 			name: c.nameFirst + " " + c.nameLast,
 			status: <span dangerouslySetInnerHTML={{__html: c.status}}/>,
@@ -65,7 +73,7 @@ class HomePage extends React.PureComponent<Props> {
 		}))
 
 		const mainTable = <JoomlaArticleRegion title="My Junior Program Memberships">
-			<JoomlaReport headers={["Name", "Status", "Actions"]} rows={rowData.map(r => [r.name, r.status, r.actions])} waitingOnAPI={this.props.homePageData.parentPersonId == null}/>
+			<JoomlaReport headers={["Name", "Status", "Actions"]} rows={rowData.map(r => [r.name, r.status, r.actions])} waitingOnAPI={homePageData.parentPersonId == null}/>
 		</JoomlaArticleRegion>
 
 		return <JoomlaMainPage navBar={NavBarLogoutOnly()}>

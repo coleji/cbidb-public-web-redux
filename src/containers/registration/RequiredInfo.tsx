@@ -114,7 +114,7 @@ class RequiredInfo extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, getWrapper(this.personId), apiToForm)
+	//	get(FORM_NAME, getWrapper(this.personId), apiToForm)
 	}
 	render() {
 		console.log("store", getReduxState())

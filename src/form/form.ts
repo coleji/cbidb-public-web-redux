@@ -3,7 +3,7 @@ import * as t from 'io-ts'
 
 import {getDispatch, getReduxState} from "../reducer/store"
 import APIWrapper, { PostJSON } from "../async/APIWrapper";
-import { some, none } from "fp-ts/lib/Option";
+import { some, none, Option } from "fp-ts/lib/Option";
 
 export const UPDATE_FORM_DISPATCH_TYPE = "UPDATE_FORM";
 
@@ -20,7 +20,7 @@ type ApiState =
 
 export type FormState<T> = {
 	apiState: ApiState,
-	data?: T
+	data: Option<T>
 }
 
 // export function initialize<T>(formName: string, defaultValue: T) {
@@ -37,7 +37,7 @@ export function success<T>(formName: string, result: T) {
 	dispatch({
 		type: "SET_FORM",
 		formName,
-		data: result
+		data: some(result)
 	})
 }
 
@@ -54,7 +54,7 @@ export const get = <T_Form, T_APIValidator extends t.Any>(
 	dispatch({
 		type: "INITIALIZE_FORM",
 		formName,
-		data: defaultState
+		data: none
 	})
 	// make api call to get form state
 	return apiw.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
@@ -88,7 +88,7 @@ export const formReducer: <T extends object>(formName: string, defaultState: T) 
 <T extends object>(formName: string, defaultState: T) => (state: FormState<T>, action: FormAction<T>) => {
 	const startState = state || {
 		apiState: "UNINITIALIZED",
-		data: defaultState
+		data: none
 	}
 
     type FormSubSet = {
@@ -105,20 +105,20 @@ export const formReducer: <T extends object>(formName: string, defaultState: T) 
 		updated[updateAction.fieldName] = (updateAction.fieldValue == null || updateAction.fieldValue == "") ? none : some(updateAction.fieldValue);
 		return {
 			apiState: startState.apiState,
-			data: <T>{...<object>startState.data, ...<object>(updated as FormSubSet)}
+			data: some(<T>{...<object>startState.data, ...<object>(updated as FormSubSet)})
 		};
 	case "SET_FORM":
 		const setAction = <FormSetAction<T>>action;
 		console.log("about to return")
 		return {
 			apiState: "SUCCESS",
-			data: setAction.data
+			data: some(setAction.data)
 		};
 	case "INITIALIZE_FORM":
 		const setAction2 = <FormSetAction<T>>action;
 		return {
 			apiState: "WAITING",
-			data: setAction2.data
+			data: some(setAction2.data)
 		}
     default:
         return startState;
