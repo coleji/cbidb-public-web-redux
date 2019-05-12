@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { matchPath } from 'react-router-dom';
 import Button from "../components/Button";
-import { RootState } from '../reducer/rootReducer';
+import { RootState } from '../rootReducer';
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import { Dispatch } from 'redux';

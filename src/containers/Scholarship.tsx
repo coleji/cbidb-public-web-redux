@@ -4,10 +4,10 @@ import {Option, none} from 'fp-ts/lib/Option'
 
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
-import { RootState } from '../reducer/rootReducer';
+import { RootState } from '../rootReducer';
 import Currency from "../util/Currency";
 import { RadioGroup, SingleCheckbox } from "../components/InputGroup";
-import { dispatchFormUpdate } from "../form/form";
+import { dispatchFormUpdate } from "../core/form/form";
 import { Select } from "../components/Select";
 import TextInput from "../components/TextInput";
 

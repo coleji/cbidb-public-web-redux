@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 import { CheckboxGroup, RadioGroup, SingleCheckbox } from "../../components/InputGroup";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import TextInput from "../../components/TextInput";
-import { dispatchFormUpdate } from "../../form/form";
-import { RootState } from '../../reducer/rootReducer';
+import { dispatchFormUpdate } from "../../core/form/form";
+import { RootState } from '../../rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import { Option, none, some } from "fp-ts/lib/Option";
 import { Dispatch } from "redux";
-import APIBlockedComponent from "../../form/APIBlockedComponent";
+import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 
 export const formName = "surveyInfoForm"

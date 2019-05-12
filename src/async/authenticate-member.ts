@@ -1,5 +1,5 @@
 import * as t from 'io-ts'
-import APIWrapper, { HttpMethod, ServerParams, PostString } from '../APIWrapper';
+import APIWrapper, { HttpMethod, ServerParams, PostString } from '../core/APIWrapper';
 import memberWelcome from "./member-welcome"
 
 const path = "/authenticate-member"

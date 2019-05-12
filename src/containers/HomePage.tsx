@@ -1,14 +1,14 @@
 import * as React from "react";
 import * as t from 'io-ts'
 import { connect } from "react-redux";
-import { RootState } from '../reducer/rootReducer';
+import { RootState } from '../rootReducer';
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import JoomlaReport from "../theme/joomla/JoomlaReport";
 import homePageActions from "./HomePageActions";
 import NavBarLogoutOnly from "../components/NavBarLogoutOnly"
-import {apiw, validator} from "../async/endpoints/member-welcome"
-import APIBlockedComponent from "../form/APIBlockedComponent";
+import {apiw, validator} from "../async/member-welcome"
+import APIBlockedComponent from "../core/form/APIBlockedComponent";
 
 export type Form = t.TypeOf<typeof validator>
 

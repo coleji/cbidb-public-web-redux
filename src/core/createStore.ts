@@ -1,5 +1,5 @@
 import { createStore as reduxCreateStore, applyMiddleware, compose, Action } from 'redux';
-import { RootReducer, RootState } from './reducer/rootReducer'
+import { RootReducer, RootState } from '../rootReducer'
 
 interface CreateStoreParameters {
   rootReducer: RootReducer,

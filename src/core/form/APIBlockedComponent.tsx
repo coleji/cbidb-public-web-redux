@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as t from 'io-ts'
-import APIWrapper from "../async/APIWrapper";
+import APIWrapper from "../APIWrapper";
 import { Option } from "fp-ts/lib/Option";
 import { get} from "./form"
 

@@ -8,10 +8,10 @@ import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import Currency from "../util/Currency"
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
-import { RootState } from '../reducer/rootReducer'
-import {formReducer, dispatchFormUpdate, FormState} from "../form/form"
-import {login} from "../async/endpoints/authenticate-member"
-import { ServerParams } from "../async/APIWrapper";
+import { RootState } from '../rootReducer'
+import {formReducer, dispatchFormUpdate, FormState} from "../core/form/form"
+import {login} from "../async/authenticate-member"
+import { ServerParams } from "../core/APIWrapper";
 import { none, Option, some } from "fp-ts/lib/Option";
 import { Dispatch } from "redux";
 
@@ -101,6 +101,7 @@ class LoginPage extends React.PureComponent<Props> {
 			</JoomlaArticleRegion>
 		);
 
+		// TODO: some sort of spinner while a login attempt is actively running
 		const loginRegion = (
 			<JoomlaArticleRegion title="I already have an account.">
 				<div>

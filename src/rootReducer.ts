@@ -1,20 +1,20 @@
 import { Action, combineReducers } from "redux";
 import { connectRouter } from 'connected-react-router'
 
-import {FormState, formReducer} from "../form/form"
-import {LoginState, loginReducer} from "./loginStateReducer"
+import {FormState, formReducer} from "./core/form/form"
+import {LoginState, loginReducer} from "./core/reducer/loginStateReducer"
 
-import {loginFormReducer, Form as LoginForm} from "../containers/LoginPage"
-import {Form as RegistrationRequiredInfoForm, formName as registrationRequiredInfoFormName} from "../containers/registration/RequiredInfo"
-import {Form as EmergencyContactForm, formName as emergencyContactFormName} from "../containers/registration/EmergencyContact"
-import {Form as SwimProofForm, formName as swimProofFormName} from "../containers/registration/SwimProof"
-import {Form as SurveyInfoForm, formName as surveyInfoFormName} from "../containers/registration/SurveyInfo"
-import {Form as CreateAccountForm, formName as createAccountFormName} from "../containers/create-acct/CreateAccount"
-import {Form as HomePageForm, formName as homePageFormName} from "../containers/HomePage"
-import {Form as ScholarshipForm, formName as scholarshipFormName} from "../containers/Scholarship"
+import {loginFormReducer, Form as LoginForm} from "./containers/LoginPage"
+import {Form as RegistrationRequiredInfoForm, formName as registrationRequiredInfoFormName} from "./containers/registration/RequiredInfo"
+import {Form as EmergencyContactForm, formName as emergencyContactFormName} from "./containers/registration/EmergencyContact"
+import {Form as SwimProofForm, formName as swimProofFormName} from "./containers/registration/SwimProof"
+import {Form as SurveyInfoForm, formName as surveyInfoFormName} from "./containers/registration/SurveyInfo"
+import {Form as CreateAccountForm, formName as createAccountFormName} from "./containers/create-acct/CreateAccount"
+import {Form as HomePageForm, formName as homePageFormName} from "./containers/HomePage"
+import {Form as ScholarshipForm, formName as scholarshipFormName} from "./containers/Scholarship"
 import * as moment from "moment";
-import {ServerConfig} from "../server/config"
-import { ServerParams } from "../async/APIWrapper";
+import {ServerConfig} from "./core/server/config"
+import { ServerParams } from "./core/APIWrapper";
 
 export interface StaticState {
 	getMoment: () => moment.Moment,

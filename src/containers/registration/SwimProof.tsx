@@ -3,19 +3,19 @@ import { connect } from "react-redux";
 import * as t from 'io-ts'
 import { RadioGroup } from "../../components/InputGroup";
 import ProgressThermometer from "../../components/ProgressThermometer";
-import { dispatchFormUpdate, get, post } from "../../form/form";
-import { RootState } from '../../reducer/rootReducer';
+import { dispatchFormUpdate, get, post } from "../../core/form/form";
+import { RootState } from '../../rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import { Option, none } from "fp-ts/lib/Option";
 import { Dispatch } from "redux";
 import { push } from "connected-react-router";
-import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/swim-proof"
+import {getWrapper, postWrapper, validator} from "../../async/junior/swim-proof"
 import Button from "../../components/Button";
 import {path as emergContactPath} from "./EmergencyContact"
 import {path as surveyPath} from "./SurveyInfo"
-import APIBlockedComponent from "../../form/APIBlockedComponent";
+import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 
 export const formName = "swimProofForm"

@@ -1,8 +1,8 @@
 import * as React from "react";
 
 import PlaceholderLink from "./PlaceholderLink";
-import {getReduxState, getDispatch} from "../reducer/store"
-import {logout} from "../async/endpoints/logout"
+import {getReduxState, getDispatch} from "../core/reducer/store"
+import {logout} from "../async/logout"
 
 export default () => (<React.Fragment>
 	System Time:  <span id="systime">12:12:35 PM</span> (refresh your browser to update!)

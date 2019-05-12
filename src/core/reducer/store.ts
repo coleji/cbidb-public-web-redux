@@ -1,4 +1,4 @@
-import { RootState } from "./rootReducer";
+import { RootState } from "../../rootReducer";
 
 var store: any;
 

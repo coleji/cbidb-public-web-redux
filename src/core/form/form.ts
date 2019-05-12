@@ -2,7 +2,7 @@ import { Dispatch, Action, Reducer } from "redux";
 import * as t from 'io-ts'
 
 import {getDispatch, getReduxState} from "../reducer/store"
-import APIWrapper, { PostJSON } from "../async/APIWrapper";
+import APIWrapper, { PostJSON } from "../APIWrapper";
 import { some, none, Option } from "fp-ts/lib/Option";
 
 type ApiState = 

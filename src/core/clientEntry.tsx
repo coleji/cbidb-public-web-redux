@@ -7,11 +7,11 @@ import { createBrowserHistory } from 'history'
 import * as http from "http"
 import * as https from "https"
 
-import createStore from '../createStore'
+import createStore from './createStore'
 import App from '../containers/App'
-import { setStore } from "../reducer/store"
+import { setStore } from "./reducer/store"
 
-import { makeRootReducer, StaticState } from '../reducer/rootReducer'
+import { makeRootReducer, StaticState } from '../rootReducer'
 import { some, none } from 'fp-ts/lib/Option';
 import {replaceWithOption} from '../util/deserializeOption';
 

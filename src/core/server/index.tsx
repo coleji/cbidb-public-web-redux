@@ -9,16 +9,16 @@ import * as moment from "moment";
 import { routerMiddleware } from 'connected-react-router'
 import { createMemoryHistory } from 'history'
 
-import App from '../containers/App'
+import App from '../../containers/App'
 import createStore from '../createStore'
-import { makeRootReducer, StaticState } from '../reducer/rootReducer'
+import { makeRootReducer, StaticState } from '../../rootReducer'
 import getConfig from './config'
 import {setStore} from "../reducer/store"
-import memberWelcome from "../async/endpoints/member-welcome"
-import { ServerParams } from "../async/APIWrapper";
+import memberWelcome from "../../async/member-welcome"
+import { ServerParams } from "../APIWrapper";
 import { some, none } from "fp-ts/lib/Option";
 
-require("../../lib/array-polyfill")
+require("../../../lib/array-polyfill")
 
 const arr1 = ['a','b','c']
 const arr2 = arr1.zipWithIndex()

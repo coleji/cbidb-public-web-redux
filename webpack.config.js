@@ -4,7 +4,7 @@ module.exports = function (env, argv) {
 
 	// default to the server configuration
 	const base = {
-		entry: './src/server/index.tsx',
+		entry: './src/core/server/index.tsx',
 		output: {
 			filename: 'js/server.js',
 			// path needs to be an ABSOLUTE file path
@@ -51,7 +51,7 @@ module.exports = function (env, argv) {
 
 	// client-specific configurations
 	if (env.platform === 'web') {
-		base.entry = './src/client/clientEntry.tsx';
+		base.entry = './src/core/clientEntry.tsx';
 		base.output.filename = 'js/client.js';
 	}
 

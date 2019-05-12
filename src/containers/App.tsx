@@ -3,8 +3,8 @@ import * as React from 'react';
 import { connect } from "react-redux";
 import { Route, Switch } from 'react-router';
 import Gatekeeper from "../containers/create-acct/Gatekeeper";
-import { LoginState } from "../reducer/loginStateReducer";
-import { RootState } from '../reducer/rootReducer';
+import { LoginState } from "../core/reducer/loginStateReducer";
+import { RootState } from '../rootReducer';
 import JoomlaBase from '../theme/joomla/JoomlaBase';
 import CreateAccount from './create-acct/CreateAccount';
 import HomePage from './HomePage';
@@ -36,7 +36,7 @@ class App extends React.PureComponent<Props> {
 	render() {
 		const self = this;
 		const devTools = (!this.props.isServer) ? (function(){
-			const DevTools = require('../DevTools').default;
+			const DevTools = require('../core/DevTools').default;	// TODO: should be import?
 			return <DevTools />;
 		}()) : undefined;
 		console.log(this.props)

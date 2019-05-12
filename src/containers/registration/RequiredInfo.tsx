@@ -12,17 +12,17 @@ import { Select } from "../../components/Select";
 import TextArea from "../../components/TextArea";
 import TextInput from "../../components/TextInput";
 import { countries, states } from "../../lov";
-import { RootState } from '../../reducer/rootReducer';
+import { RootState } from '../../rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import range from "../../util/range";
-import {getReduxState} from "../../reducer/store"
-import {dispatchFormUpdate, post} from "../../form/form"
+import {getReduxState} from "../../core/reducer/store"
+import {dispatchFormUpdate, post} from "../../core/form/form"
 import Button from "../../components/Button";
-import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/required"
+import {getWrapper, postWrapper, validator} from "../../async/junior/required"
 import {path as emergContactPath} from "./EmergencyContact"
-import APIBlockedComponent from '../../form/APIBlockedComponent';
+import APIBlockedComponent from '../../core/form/APIBlockedComponent';
 import getPersonIdFromPath from '../../util/getPersonIdFromPath';
 
 export const formName = "registrationRequiredInfo"

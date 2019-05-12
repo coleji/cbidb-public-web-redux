@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import PhoneTriBox, { PhoneTriBoxProps, splitPhone, combinePhone } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import TextInput from "../../components/TextInput";
-import {dispatchFormUpdate, post} from "../../form/form"
-import { RootState } from '../../reducer/rootReducer';
+import {dispatchFormUpdate, post} from "../../core/form/form"
+import { RootState } from '../../rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
@@ -13,9 +13,9 @@ import { Option } from "fp-ts/lib/Option";
 import {Dispatch} from "redux";
 import { push } from 'connected-react-router';
 import Button from "../../components/Button";
-import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/emerg-contact"
+import {getWrapper, postWrapper, validator} from "../../async/junior/emerg-contact"
 import {path as swimProofPath} from './SwimProof';
-import APIBlockedComponent from "../../form/APIBlockedComponent";
+import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 
 export const formName = "emergencyContact"
