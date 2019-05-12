@@ -4,14 +4,14 @@ import {Option, some, none} from 'fp-ts/lib/Option'
 import * as React from "react";
 import {Dispatch} from "redux";
 import { connect } from "react-redux";
-import { matchPath } from 'react-router-dom';
 import DateTriPicker, { DateTriPickerProps, componentsToDate, dateStringToComponents } from "../../components/DateTriPicker";
 import PhoneTriBox, { PhoneTriBoxProps, splitPhone, combinePhone } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import { Select } from "../../components/Select";
 import TextArea from "../../components/TextArea";
 import TextInput from "../../components/TextInput";
-import { countries, states } from "../../lov";
+import states from "../../lov/states"
+import countries from "../../lov/countries"
 import { RootState } from '../../rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";

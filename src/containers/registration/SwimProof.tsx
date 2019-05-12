@@ -17,6 +17,7 @@ import {path as emergContactPath} from "./EmergencyContact"
 import {path as surveyPath} from "./SurveyInfo"
 import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
+import swimProofValues from "../../lov/swimProof"
 
 export const formName = "swimProofForm"
 
@@ -70,22 +71,7 @@ class SwimProof extends APIBlockedComponent<Props, Form, typeof validator> {
                     You do not need to present this proof unless asked by Community Boating, however failure to present acceptable proof upon request
                      may result in suspension of membership until adequate proof can be obtained.`
 
-        const swimProofValues = [{
-            key: "-1",
-            display: "None"
-        }, {
-            key: "1",
-            display: "YMCA: Certificate of Completion for Fish Level or above"
-        }, {
-            key: "2",
-            display: "Red Cross: Certificate of Completion for Level V or above"
-        }, {
-            key: "3",
-            display: "Boy/Girl Scouts: Swimming or Lifesaving Merit Badge"
-        }, {
-            key: "4",
-            display: "Letter stating swimming ability signed by lifeguard on pool letterhead, or school swim coach on school letterhead"
-        }]
+
 
         const noProofRegion = (<JoomlaNotitleRegion>
             <div style={({padding: "8px 50px", border: "1px solid #999", margin: "0px 30px"})}>

@@ -12,6 +12,9 @@ import { Option, none, some } from "fp-ts/lib/Option";
 import { Dispatch } from "redux";
 import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
+import ethnicities from "../../lov/ethnicities"
+import genders from "../../lov/genders"
+import referralSources from "../../lov/referralSources"
 
 export const formName = "surveyInfoForm"
 
@@ -27,54 +30,6 @@ export interface Form {
 	school: Option<string>,
 	freeLunch: Option<boolean>
 }
-
-const genders = [{
-	key: "M",
-	display: "Male"
-}, {
-	key: "F",
-	display: "Female"
-}, {
-	key: "O",
-	display: "Other"
-}];
-
-const referralSources = [{
-	key: "Friend",
-	display: "Friend/Family"
-}, {
-	key: "Google"
-}, {
-	key: "Youtube"
-}, {
-	key: "School"
-}, {
-	key: "Facebook"
-}, {
-	key: "Groupon"
-}, {
-	key: "MBTA"
-}, {
-	key: "Twitter"
-}, {
-	key: "Walking By"
-}, {
-	key: "Other"
-}]
-
-const ethnicities = [{
-	key: "Asian/Pacific Islander"
-}, {
-	key: "Caucasian"
-}, {
-	key: "Native American"
-}, {
-	key: "African-American"
-}, {
-	key: "Hispanic"
-}, {
-	key: "Other"
-}]
 
 class FormInput extends TextInput<Form> {}
 class FormRadio extends RadioGroup<Form> {}
