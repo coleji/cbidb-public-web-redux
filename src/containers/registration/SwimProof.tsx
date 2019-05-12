@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import * as t from 'io-ts'
 import { RadioGroup } from "../../components/InputGroup";
 import ProgressThermometer from "../../components/ProgressThermometer";
-import { dispatchFormUpdate, get } from "../../form/form";
+import { dispatchFormUpdate, get, post } from "../../form/form";
 import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
@@ -11,24 +11,20 @@ import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import { Option, none } from "fp-ts/lib/Option";
 import { Dispatch } from "redux";
 import { push } from "connected-react-router";
-import { matchPath } from "react-router";
-import {getWrapper, validator} from "../../async/endpoints/junior/swim-proof"
+import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/swim-proof"
 import Button from "../../components/Button";
 import {path as emergContactPath} from "./EmergencyContact"
 import {path as surveyPath} from "./SurveyInfo"
-
+import APIBlockedComponent from "../../form/APIBlockedComponent";
+import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 
 export const formName = "swimProofForm"
 
 export const path = '/swimproof/:personId'
 
-type API = t.TypeOf<typeof validator>
-
-export const formDefault = {
-	swimProofId: none as Option<string>
+export interface Form {
+	swimProofId: Option<string>
 }
-
-export type Form = typeof formDefault
 
 const mapStateToProps = (state: RootState) => ({
 	form: state.swimProofForm,
@@ -49,30 +45,23 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 class FormRadio extends RadioGroup<Form> {}
 
-interface StaticProps { }
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps;
-
-class SwimProof extends React.PureComponent<Props> {
+class SwimProof extends APIBlockedComponent<Props, Form, typeof validator> {
 	personId: number
+	formName = formName
+	getApiWrapper = () => getWrapper(this.personId)
+	apiToForm = (api: t.TypeOf<typeof validator>) => ({swimProofId: api.swimProofId.map(n => String(n))})
+	formToAPI = (form: Form) => ({swimProofId: form.swimProofId.map(s => Number(s))})
+	getData = () => this.props.form.data
 	constructor(props: Props) {
 		super(props)
-		console.log("constructor!!!")
-		// TODO: typesafe? 
-		const match = matchPath(
-			props.router.location.pathname,
-			{ path }
-			) || {params: {}};
-		this.personId = Number((match.params as any).personId);
-
-		console.log("scraped from the url: " + this.personId)
-		
-		get(formName, formDefault, getWrapper(this.personId), (api: API) => ({
-			...api,
-			swimProofId: api.swimProofId.map(n => n.toString())
-		}))
+		this.personId = getPersonIdFromPath(path, props.router.location.pathname)
 	}
-	render() {
+	renderPlaceholder() {
+		return <span>whatever</span>
+	}
+	renderComponent(data: Form) {
 		console.log("about to render ", this.props.form)
 		const self = this;
         const reduxAction = self.props.updateField;
@@ -124,10 +113,10 @@ class SwimProof extends React.PureComponent<Props> {
 					justElement={true}
 					values={swimProofValues}
 					reduxAction={reduxAction}
-					value={self.props.form.data.getOrElse({} as any).swimProofId.map(n => n.toString())}
+					value={data.swimProofId.map(n => n.toString())}
 				/>
 			</JoomlaArticleRegion>
-            {self.props.form.data.getOrElse({} as any).swimProofId.getOrElse(null) == "-1" ? noProofRegion : ""}
+            {data.swimProofId.getOrElse(null) == "-1" ? noProofRegion : ""}
             <JoomlaNotitleRegion>
                 <span>
                 If you believe you have a proof of swimming ability not on the above list,
@@ -137,10 +126,10 @@ class SwimProof extends React.PureComponent<Props> {
 			</JoomlaNotitleRegion>
 			<Button text="< Back" onClick={this.props.goBack}/>
 			<Button text="Next >" onClick={() => {
-				// post(formName, postWrapper(this.personId))({
-				// 	...this.props.form.data,
-				// 	swimProofId: this.props.form.data.swimProofId.map(s => Number(s))
-				// }).then(() => this.props.goNext(this.personId))
+				post(formName, postWrapper(this.personId))({
+					...this.props.form.data,
+					...this.formToAPI(data)
+				}).then(() => this.props.goNext(this.personId))
 			}}/>
 		</JoomlaMainPage>
 	}

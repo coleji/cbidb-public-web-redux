@@ -15,7 +15,7 @@ extends React.PureComponent<T_Props> {
 	abstract renderComponent(data: T_Form): JSX.Element
 	componentDidMount() {
 		console.log("executing cdm")
-		get(this.formName, null, this.getApiWrapper(), this.apiToForm)
+		get(this.formName, this.getApiWrapper(), this.apiToForm)
 	}
 	render() {
 		return this.getData().isSome() ? this.renderComponent(this.getData().getOrElse(null)) : this.renderPlaceholder()

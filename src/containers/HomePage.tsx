@@ -8,37 +8,18 @@ import JoomlaReport from "../theme/joomla/JoomlaReport";
 import homePageActions from "./HomePageActions";
 import NavBarLogoutOnly from "../components/NavBarLogoutOnly"
 import {apiw, validator} from "../async/endpoints/member-welcome"
-import { ServerParams } from "../async/APIWrapper";
 import APIBlockedComponent from "../form/APIBlockedComponent";
-import makeDefault from "../util/getOptionDefault";
-import { Option } from "fp-ts/lib/Option";
 
-interface ChildrenData {
-	personId: number,
-	nameFirst: string,
-	nameLast: string,
-	status: string,
-	actions: string,
-	ratings: string
-}
-
-export const formDefault = makeDefault(validator)
 export type Form = t.TypeOf<typeof validator>
 
 export const formName = "homePageForm"
 
-interface StateProps {
-	homePageData: Option<typeof formDefault>,
-	selfServerParams: ServerParams
-}
+const mapStateToProps = (state: RootState) => ({
+	homePageData: state.homePageForm.data,
+	selfServerParams: state.staticState.selfServerParams
+})
 
-interface DispatchProps { }
-
-interface StaticProps {
-
-}
-
-type Props = StateProps & DispatchProps & StaticProps
+type Props = ReturnType<typeof mapStateToProps> 
 
 class HomePage extends APIBlockedComponent<Props, Form, typeof validator> {
 	formName = formName
@@ -48,9 +29,9 @@ class HomePage extends APIBlockedComponent<Props, Form, typeof validator> {
 	getData = () => this.props.homePageData
 	renderPlaceholder() {
 		console.log("rendering placeholder")
-		return <span>whatever</span>
+		return <span>whatever</span> // TODO
 	}
-	renderComponent(homePageData: typeof formDefault) {
+	renderComponent(homePageData: Form) {
 		//TODO
 		console.log("rendering component")
 		console.log(this.props.homePageData)
@@ -68,7 +49,7 @@ class HomePage extends APIBlockedComponent<Props, Form, typeof validator> {
 		}))
 
 		const mainTable = <JoomlaArticleRegion title="My Junior Program Memberships">
-			<JoomlaReport headers={["Name", "Status", "Actions"]} rows={rowData.map(r => [r.name, r.status, r.actions])} waitingOnAPI={homePageData.parentPersonId == null}/>
+			<JoomlaReport headers={["Name", "Status", "Actions"]} rows={rowData.map(r => [r.name, r.status, r.actions])}/>
 		</JoomlaArticleRegion>
 
 		return <JoomlaMainPage navBar={NavBarLogoutOnly()}>
@@ -77,12 +58,4 @@ class HomePage extends APIBlockedComponent<Props, Form, typeof validator> {
 	}
 }
 
-export default connect<StateProps, DispatchProps, StaticProps, RootState>(
-	state => ({
-		homePageData: state.homePageForm.data,
-		selfServerParams: state.staticState.selfServerParams
-	}),
-	() => ({
-
-	})
-)(HomePage)
+export default connect(mapStateToProps, () => {})(HomePage)

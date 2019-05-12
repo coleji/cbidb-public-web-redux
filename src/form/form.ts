@@ -5,32 +5,44 @@ import {getDispatch, getReduxState} from "../reducer/store"
 import APIWrapper, { PostJSON } from "../async/APIWrapper";
 import { some, none, Option } from "fp-ts/lib/Option";
 
-export const UPDATE_FORM_DISPATCH_TYPE = "UPDATE_FORM";
-
-export const dispatchFormUpdate: <T>(dispatch: Dispatch<FormAction<T>>, formName: string) => (fieldName: string, fieldValue: any) => void = 
-(dispatch, formName) => (fieldName, fieldValue) => dispatch({
-    type: UPDATE_FORM_DISPATCH_TYPE, formName, fieldName, fieldValue
-})
-
 type ApiState = 
 	| "UNINITIALIZED"
 	| "WAITING"
 	| "SUCCESS"
 	| "FAILURE"
 
+
+type FormActionType =
+	| "UPDATE_FORM"
+	| "SET_FORM"
+	| "INITIALIZE_FORM"
+
+interface FormUpdateAction extends Action {
+	type: FormActionType,
+	formName: string,
+	fieldName: string,
+	fieldValue: any
+}
+
+interface FormSetAction<T> extends Action {
+	type: FormActionType,
+	formName: string,
+	data: Option<T>
+}
+
+type FormAction<T> = 
+	| FormUpdateAction
+	| FormSetAction<T>
+
 export type FormState<T> = {
 	apiState: ApiState,
 	data: Option<T>
 }
 
-// export function initialize<T>(formName: string, defaultValue: T) {
-// 	const dispatch = getDispatch();
-// 	dispatch({
-// 		type: "INITIALIZE_FORM",
-// 		formName,
-// 		data: defaultValue
-// 	})
-// }
+export const dispatchFormUpdate: <T>(dispatch: Dispatch<FormAction<T>>, formName: string) => (fieldName: string, fieldValue: any) => void = 
+(dispatch, formName) => (fieldName, fieldValue) => dispatch({
+    type: "UPDATE_FORM", formName, fieldName, fieldValue
+})
 
 export function success<T>(formName: string, result: T) {
 	const dispatch = getDispatch();
@@ -41,12 +53,8 @@ export function success<T>(formName: string, result: T) {
 	})
 }
 
-// export const get = <T_Form, T_APIValidator extends t.Any>(formName: string, apiw: APIWrapper<T_APIValidator, any, any>, mapper: (api: t.TypeOf<T_APIValidator>) => T_Form) => 
-// 	getWithDefault(formName, {}, apiw, mapper)
-
-export const get = <T_Form, T_APIValidator extends t.Any>(
+export const get = async <T_Form, T_APIValidator extends t.Any>(
 	formName: string,
-	defaultState: T_Form,
 	apiw: APIWrapper<T_APIValidator, any, any>,
 	mapper: (api: t.TypeOf<T_APIValidator>) => T_Form
 ) => {
@@ -84,8 +92,8 @@ export const post = <T extends object>(formName: string, apiw: APIWrapper<any, T
 	})
 }
 
-export const formReducer: <T extends object>(formName: string, defaultState: T) => Reducer<FormState<T>> = 
-<T extends object>(formName: string, defaultState: T) => (state: FormState<T>, action: FormAction<T>) => {
+export const formReducer: <T extends object>(formName: string) => Reducer<FormState<T>> = 
+<T extends object>(formName: string) => (state: FormState<T>, action: FormAction<T>) => {
 	const startState = state || {
 		apiState: "UNINITIALIZED",
 		data: none
@@ -124,25 +132,3 @@ export const formReducer: <T extends object>(formName: string, defaultState: T) 
         return startState;
     }
 }
-
-type FormActionType =
-	| "UPDATE_FORM"
-	| "SET_FORM"
-	| "INITIALIZE_FORM"
-
-interface FormUpdateAction extends Action {
-    type: FormActionType,
-    formName: string,
-	fieldName: string,
-	fieldValue: any
-}
-
-interface FormSetAction<T> extends Action {
-	type: FormActionType,
-    formName: string,
-	data: Option<T>
-}
-
-type FormAction<T> = 
-	| FormUpdateAction
-	| FormSetAction<T>

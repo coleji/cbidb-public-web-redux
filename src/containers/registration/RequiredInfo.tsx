@@ -23,6 +23,7 @@ import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/required"
 import {path as emergContactPath} from "./EmergencyContact"
 import APIBlockedComponent from '../../form/APIBlockedComponent';
+import getPersonIdFromPath from '../../util/getPersonIdFromPath';
 
 export const formName = "registrationRequiredInfo"
 
@@ -96,9 +97,7 @@ class FormInput extends TextInput<Form> {}
 class FormSelect extends Select<Form> {}
 class FormTextArea extends TextArea<Form> {}
 
-interface StaticProps { }
-
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 	personId: number
@@ -109,14 +108,7 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 	getData = () => this.props.form.data
 	constructor(props: Props) {
 		super(props)
-		console.log("setting personId")
-		this.personId = (function() {
-			const match = matchPath(
-				props.router.location.pathname,
-				{ path }
-				) || {params: {}};
-			return Number((match.params as any).personId);
-		}())
+		this.personId = getPersonIdFromPath(path, props.router.location.pathname)
 	}
 	renderPlaceholder() {
 		return <span>whatever</span>

@@ -158,7 +158,7 @@ class LoginPage extends React.PureComponent<Props> {
 	}
 }
 
-const standardFormReducer = formReducer<Form>(formName, formDefault);
+const standardFormReducer = formReducer<Form>(formName);
 
 export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<Form>, action: any) => {
 	const modifiedState = 

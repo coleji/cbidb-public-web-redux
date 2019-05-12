@@ -6,21 +6,18 @@ import Button from "../components/Button";
 import { RootState } from '../reducer/rootReducer';
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
-import {Form as WelcomePackageState} from "../containers/HomePage"
-import { Option } from 'fp-ts/lib/Option';
+import { Dispatch } from 'redux';
 
-interface StateProps {
-	welcomePackage: Option<WelcomePackageState>,
-	router: any
-}
+const mapStateToProps = (state: RootState) => ({
+	welcomePackage: state.homePageForm.data,
+	router: state.router
+})
 
-interface DispatchProps {
-	cancel: () => void
-}
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	cancel: () => dispatch(push('/'))
+})
 
-interface StaticProps { }
-
-type Props = StateProps & DispatchProps & StaticProps
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 export const path = '/ratings/:personId'
 
@@ -62,13 +59,4 @@ class RatingsPage extends React.PureComponent<Props> {
 	}
 }
 
-
-export default connect<StateProps, DispatchProps, StaticProps, RootState>(
-	state => ({
-		welcomePackage: state.homePageForm.data,
-		router: state.router
-	}),
-	dispatch => ({
-		cancel: () => dispatch(push('/'))
-	})
-)(RatingsPage)
+export default connect(mapStateToProps, mapDispatchToProps)(RatingsPage)
