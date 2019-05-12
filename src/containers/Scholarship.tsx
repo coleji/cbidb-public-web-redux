@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import {Option, some, none} from 'fp-ts/lib/Option'
+import {Option, none} from 'fp-ts/lib/Option'
 
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
@@ -11,7 +11,7 @@ import { dispatchFormUpdate } from "../form/form";
 import { Select } from "../components/Select";
 import TextInput from "../components/TextInput";
 
-export const FORM_NAME = "scholarshipForm"
+export const formName = "scholarshipForm"
 
 export interface Form {
 	isApplying: Option<string>,
@@ -210,7 +210,7 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	dispatch => ({
 		updateField: function(name: keyof Form, value: any) {
 			console.log("updating field!")
-			dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+			dispatchFormUpdate(dispatch, formName)(name, value)
 		}
 	})
 )(RatingsPage)

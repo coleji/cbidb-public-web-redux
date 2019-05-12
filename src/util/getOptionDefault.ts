@@ -1,5 +1,5 @@
 import * as t from 'io-ts'
-import { Option, none } from 'fp-ts/lib/Option';
+import { none } from 'fp-ts/lib/Option';
 
 // Given a type validator, return the object that is t.TypeOf<typeof validator> but with all the props as none
 export default function makeDefault<T extends t.Props, U extends t.TypeC<T>>(validator: U): {[K in keyof t.TypeOf<U>]: t.TypeOf<U>[K]} {

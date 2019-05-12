@@ -1,7 +1,6 @@
 import { push } from 'connected-react-router';
 import * as t from 'io-ts'
 import {Option, some, none} from 'fp-ts/lib/Option'
-import * as moment from "moment";
 import * as React from "react";
 import {Dispatch} from "redux";
 import { connect } from "react-redux";
@@ -19,13 +18,13 @@ import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import range from "../../util/range";
 import {getReduxState} from "../../reducer/store"
-import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
+import {dispatchFormUpdate, post} from "../../form/form"
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/required"
 import {path as emergContactPath} from "./EmergencyContact"
 import APIBlockedComponent from '../../form/APIBlockedComponent';
 
-export const FORM_NAME = "registrationRequiredInfo"
+export const formName = "registrationRequiredInfo"
 
 export const path = '/required/:personId'
 
@@ -87,7 +86,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 	updateField: (name: keyof Form, value: string) => {
 		console.log("updating field!")
-		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+		dispatchFormUpdate(dispatch, formName)(name, value)
 	},
 	goBack: () => dispatch(push('/')),	// TODO
 	goNext: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString())))	// TODO
@@ -103,7 +102,7 @@ type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchT
 
 class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 	personId: number
-	formName = FORM_NAME
+	formName = formName
 	getApiWrapper = () => getWrapper(this.personId)
 	apiToForm = apiToForm
 	formToAPI = formToAPI
@@ -321,7 +320,7 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 			</JoomlaArticleRegion>
 			<Button text="< Back" onClick={this.props.goBack}/>
 			<Button text="Next >" onClick={() => {
-				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(() => this.props.goNext(this.personId))
+				post(formName, postWrapper(this.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(() => this.props.goNext(this.personId))
 			}}/>
 		</JoomlaMainPage>
 	}

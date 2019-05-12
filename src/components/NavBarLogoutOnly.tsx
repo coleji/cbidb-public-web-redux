@@ -1,10 +1,7 @@
 import * as React from "react";
-import { push } from 'connected-react-router';
-import { connect } from "react-redux";
 
 import PlaceholderLink from "./PlaceholderLink";
 import {getReduxState, getDispatch} from "../reducer/store"
-import { RootState } from '../reducer/rootReducer';
 import {logout} from "../async/endpoints/logout"
 
 export default () => (<React.Fragment>

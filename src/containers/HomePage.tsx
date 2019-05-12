@@ -6,11 +6,9 @@ import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import JoomlaReport from "../theme/joomla/JoomlaReport";
 import homePageActions from "./HomePageActions";
-import {FormState, get} from "../form/form"
-import { getReduxState } from "../reducer/store";
 import NavBarLogoutOnly from "../components/NavBarLogoutOnly"
 import {apiw, validator} from "../async/endpoints/member-welcome"
-import APIWrapper, { ServerParams } from "../async/APIWrapper";
+import { ServerParams } from "../async/APIWrapper";
 import APIBlockedComponent from "../form/APIBlockedComponent";
 import makeDefault from "../util/getOptionDefault";
 import { Option } from "fp-ts/lib/Option";

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ApexItem, ApexItemProps} from "./ApexItem";
-import { Option, none } from "fp-ts/lib/Option";
+import { none } from "fp-ts/lib/Option";
 
 export interface KeyAndDisplay {
 	key: string,

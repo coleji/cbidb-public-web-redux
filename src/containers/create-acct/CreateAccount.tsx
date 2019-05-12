@@ -12,7 +12,7 @@ import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
 import { Option } from 'fp-ts/lib/Option';
 
 
-export const FORM_NAME = "create-acct"
+export const formName = "create-acct"
 
 export interface Form {
 	firstName: Option<string>
@@ -107,7 +107,7 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 		form: state.createAcctForm.data
 	}),
 	dispatch => ({
-		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value),
+		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, formName)(name, value),
 		cancel: () => dispatch(push('/'))
 	})
 )(CreateAccount)

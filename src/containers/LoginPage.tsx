@@ -13,9 +13,9 @@ import {formReducer, dispatchFormUpdate, FormState} from "../form/form"
 import {login} from "../async/endpoints/authenticate-member"
 import { ServerParams } from "../async/APIWrapper";
 import { none, Option, some } from "fp-ts/lib/Option";
+import { Dispatch } from "redux";
 
-// TODO: duplicated in App and here
-export const FORM_NAME = "login"
+export const formName = "login"
 
 export const formDefault = {
 	username: none as Option<string>,
@@ -24,23 +24,24 @@ export const formDefault = {
 
 export type Form = typeof formDefault
 
-export type StateProps = {
-	jpPrice: Currency,
-	lastSeason: number,
-	form: Form,
-	selfServerParams: ServerParams
-}
+const mapStateToProps = (rootState: RootState) => ({
+	jpPrice: Currency.cents(rootState.staticState.jpPriceCents),
+	lastSeason: rootState.staticState.currentSeason-1,
+	form: {
+		username: rootState.loginForm.data.map(d => d.username).getOrElse(null),
+		password: rootState.loginForm.data.map(d => d.password).getOrElse(null)
+	},
+	selfServerParams: rootState.staticState.selfServerParams
+})
 
-interface DispatchProps {
-	login: (selfServerParams: ServerParams, form: Form) => Promise<void>,
-	updateField: (name: keyof Form, value: string) => void
-}
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	login: (selfServerParams: ServerParams, form: Form) => login(selfServerParams)(dispatch, form.username.getOrElse(""), form.password.getOrElse("")),
+	updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, formName)(name, value)
+})
 
-interface StaticProps {
-	formName: string
-}
+export type StateProps = ReturnType<typeof mapStateToProps>
 
-type Props = StateProps & DispatchProps & StaticProps
+type Props = StateProps & ReturnType<typeof mapDispatchToProps >
 
 class FormInput extends TextInput<Form> {}
 
@@ -157,7 +158,7 @@ class LoginPage extends React.PureComponent<Props> {
 	}
 }
 
-const standardFormReducer = formReducer<Form>(FORM_NAME, formDefault);
+const standardFormReducer = formReducer<Form>(formName, formDefault);
 
 export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<Form>, action: any) => {
 	const modifiedState = 
@@ -167,18 +168,4 @@ export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<
 	return standardFormReducer(modifiedState, action);
 }
 
-export default connect<StateProps, DispatchProps, StaticProps, RootState>(
-	rootState => ({
-		jpPrice: Currency.cents(rootState.staticState.jpPriceCents),
-		lastSeason: rootState.staticState.currentSeason-1,
-		form: {
-			username: rootState.loginForm.data.map(d => d.username).getOrElse(null),
-			password: rootState.loginForm.data.map(d => d.password).getOrElse(null)
-		},
-		selfServerParams: rootState.staticState.selfServerParams
-	}),
-	dispatch => ({
-		login: (selfServerParams: ServerParams, form: Form) => login(selfServerParams)(dispatch, form.username.getOrElse(""), form.password.getOrElse("")),
-		updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
-	})
-)(LoginPage)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)

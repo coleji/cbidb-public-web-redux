@@ -1,4 +1,4 @@
-import { none, some, option, None, Some } from "fp-ts/lib/Option";
+import { none, some, None, Some } from "fp-ts/lib/Option";
 
 export function replaceWithOption(x: any): any {
 	switch (typeof(x)) {

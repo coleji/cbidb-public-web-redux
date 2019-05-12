@@ -1,5 +1,5 @@
 import * as React from "react";
-import { none, Option } from "fp-ts/lib/Option";
+import { Option } from "fp-ts/lib/Option";
 
 export interface ApexItemProps<T_Form, T_ValueType> {
 	id: string & keyof T_Form,

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ApexItem, ApexItemProps } from "./ApexItem";
-import { Option, none } from "fp-ts/lib/Option";
-import { setFlagsFromString } from "v8";
+import { none } from "fp-ts/lib/Option";
 
 interface KeyValuePair {
 	key: string,

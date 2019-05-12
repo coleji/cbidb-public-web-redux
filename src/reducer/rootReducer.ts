@@ -5,15 +5,14 @@ import {FormState, formReducer} from "../form/form"
 import {LoginState, loginReducer} from "./loginStateReducer"
 
 import {loginFormReducer, Form as LoginForm} from "../containers/LoginPage"
-import {Form as RegistrationRequiredInfoForm, FORM_NAME as registrationRequiredInfoFormName} from "../containers/registration/RequiredInfo"
-import {Form as EmergencyContactForm, FORM_NAME as emergencyContactFormName} from "../containers/registration/EmergencyContact"
-import {Form as SwimProofForm, FORM_NAME as swimProofFormName, formDefault as swimProofDefaultState} from "../containers/registration/SwimProof"
-import {Form as SurveyInfoForm, FORM_NAME as surveyInfoFormName} from "../containers/registration/SurveyInfo"
-import {Form as CreateAccountForm, FORM_NAME as createAccountFormName} from "../containers/create-acct/CreateAccount"
+import {Form as RegistrationRequiredInfoForm, formName as registrationRequiredInfoFormName} from "../containers/registration/RequiredInfo"
+import {Form as EmergencyContactForm, formName as emergencyContactFormName} from "../containers/registration/EmergencyContact"
+import {Form as SwimProofForm, formName as swimProofFormName, formDefault as swimProofDefaultState} from "../containers/registration/SwimProof"
+import {Form as SurveyInfoForm, formName as surveyInfoFormName} from "../containers/registration/SurveyInfo"
+import {Form as CreateAccountForm, formName as createAccountFormName} from "../containers/create-acct/CreateAccount"
 import {Form as HomePageForm, formName as homePageFormName, formDefault as homePageDefault} from "../containers/HomePage"
-import {Form as ScholarshipForm, FORM_NAME as scholarshipFormName} from "../containers/Scholarship"
+import {Form as ScholarshipForm, formName as scholarshipFormName} from "../containers/Scholarship"
 import * as moment from "moment";
-import Currency from "../util/Currency";
 import {ServerConfig} from "../server/config"
 import { ServerParams } from "../async/APIWrapper";
 

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import PhoneTriBox, { PhoneTriBoxProps, splitPhone, combinePhone } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import TextInput from "../../components/TextInput";
-import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
+import {get, dispatchFormUpdate, post} from "../../form/form"
 import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
@@ -18,7 +18,7 @@ import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/e
 import {path as swimProofPath} from './SwimProof';
 import makeDefault from "../../util/getOptionDefault";
 
-export const FORM_NAME = "emergencyContact"
+export const formName = "emergencyContact"
 
 export const path = '/emerg/:personId'
 
@@ -96,7 +96,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 	updateField: (name: keyof Form, value: string) => {
 		console.log("updating field!")
-		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+		dispatchFormUpdate(dispatch, formName)(name, value)
 	},
 	goBack: () => dispatch(push('/')),	// TODO
 	goNext: (personId: number) => dispatch(push(swimProofPath.replace(":personId", personId.toString())))	// TODO
@@ -123,7 +123,7 @@ class EmergencyContact extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, formDefault, getWrapper(this.personId), apiToForm)
+		get(formName, formDefault, getWrapper(this.personId), apiToForm)
 	}
 	render() {
 		const self = this;
@@ -228,7 +228,7 @@ class EmergencyContact extends React.PureComponent<Props> {
 			</JoomlaArticleRegion>
 			<Button text="< Back" onClick={this.props.goBack}/>
 			<Button text="Next >" onClick={() => {
-				post(FORM_NAME, postWrapper(this.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(() => this.props.goNext(this.personId))
+				post(formName, postWrapper(this.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(() => this.props.goNext(this.personId))
 			}}/>
 		</JoomlaMainPage>
 	}

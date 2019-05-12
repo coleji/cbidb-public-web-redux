@@ -9,7 +9,6 @@ import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import {Form as WelcomePackageState} from "../containers/HomePage"
 import { Option } from 'fp-ts/lib/Option';
 
-
 interface StateProps {
 	welcomePackage: Option<WelcomePackageState>,
 	router: any

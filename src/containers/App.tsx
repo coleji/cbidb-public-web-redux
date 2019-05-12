@@ -1,7 +1,7 @@
 import { ConnectedRouter } from 'connected-react-router';
 import * as React from 'react';
 import { connect } from "react-redux";
-import { Route, Switch } from 'react-router'; // react-router v4
+import { Route, Switch } from 'react-router';
 import Gatekeeper from "../containers/create-acct/Gatekeeper";
 import { LoginState } from "../reducer/loginStateReducer";
 import { RootState } from '../reducer/rootReducer';
@@ -10,7 +10,6 @@ import CreateAccount from './create-acct/CreateAccount';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
-import Scholarship from './Scholarship';
 import RequiredInfo, {path as requiredInfoPath} from './registration/RequiredInfo';
 import EmergencyContact, {path as emergencyContactPath} from './registration/EmergencyContact';
 import SwimProof, {path as swimProofPath} from './registration/SwimProof';

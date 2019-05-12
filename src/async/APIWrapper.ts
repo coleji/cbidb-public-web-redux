@@ -1,12 +1,11 @@
 import * as t from 'io-ts'
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import * as http from 'http';
-import {FailureType, FailureType_BadReturn, FailureType_Unauthorized} from "./FailureType";
+import {FailureType} from "./FailureType";
 import { Either } from 'fp-ts/lib/Either';
 import * as https from "https"
 import { Option, some, none } from 'fp-ts/lib/Option';
 import { removeOptions } from '../util/deserializeOption';
-import config from '../server/config';
 
 export enum HttpMethod {
 	GET = "GET",

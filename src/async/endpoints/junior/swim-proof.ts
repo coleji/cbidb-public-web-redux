@@ -1,6 +1,6 @@
 import * as t from 'io-ts'
 import APIWrapper, { HttpMethod } from '../../APIWrapper';
-import {OptionalString, OptionalNumber} from '../../../util/OptionalTypeValidators'
+import {OptionalNumber} from '../../../util/OptionalTypeValidators'
 
 export const validator = t.type({
 	swimProofId: OptionalNumber

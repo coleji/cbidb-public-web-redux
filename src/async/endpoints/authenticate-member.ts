@@ -1,4 +1,3 @@
-import * as http from "http"
 import * as t from 'io-ts'
 import APIWrapper, { HttpMethod, ServerParams, PostString } from '../APIWrapper';
 import memberWelcome from "./member-welcome"

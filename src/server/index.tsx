@@ -8,13 +8,10 @@ import * as cookieParser from 'cookie-parser';
 import * as moment from "moment";
 import { routerMiddleware } from 'connected-react-router'
 import { createMemoryHistory } from 'history'
-import * as http from "http"
-import * as https from "https"
 
 import App from '../containers/App'
 import createStore from '../createStore'
 import { makeRootReducer, StaticState } from '../reducer/rootReducer'
-import Currency from "../util/Currency";
 import getConfig from './config'
 import {setStore} from "../reducer/store"
 import memberWelcome from "../async/endpoints/member-welcome"

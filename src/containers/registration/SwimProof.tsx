@@ -3,22 +3,22 @@ import { connect } from "react-redux";
 import * as t from 'io-ts'
 import { RadioGroup } from "../../components/InputGroup";
 import ProgressThermometer from "../../components/ProgressThermometer";
-import { dispatchFormUpdate, get, post } from "../../form/form";
+import { dispatchFormUpdate, get } from "../../form/form";
 import { RootState } from '../../reducer/rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import { Option, none, Some, some } from "fp-ts/lib/Option";
+import { Option, none } from "fp-ts/lib/Option";
 import { Dispatch } from "redux";
 import { push } from "connected-react-router";
 import { matchPath } from "react-router";
-import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/swim-proof"
+import {getWrapper, validator} from "../../async/endpoints/junior/swim-proof"
 import Button from "../../components/Button";
 import {path as emergContactPath} from "./EmergencyContact"
 import {path as surveyPath} from "./SurveyInfo"
 
 
-export const FORM_NAME = "swimProofForm"
+export const formName = "swimProofForm"
 
 export const path = '/swimproof/:personId'
 
@@ -41,7 +41,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 	updateField: (name: keyof Form, value: string) => {
 		console.log("updating field!")
-		dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+		dispatchFormUpdate(dispatch, formName)(name, value)
 	},
 	goBack: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString()))),	// TODO
 	goNext: (personId: number) => dispatch(push(surveyPath.replace(":personId", personId.toString())))	// TODO
@@ -67,7 +67,7 @@ class SwimProof extends React.PureComponent<Props> {
 
 		console.log("scraped from the url: " + this.personId)
 		
-		get(FORM_NAME, formDefault, getWrapper(this.personId), (api: API) => ({
+		get(formName, formDefault, getWrapper(this.personId), (api: API) => ({
 			...api,
 			swimProofId: api.swimProofId.map(n => n.toString())
 		}))
@@ -137,7 +137,7 @@ class SwimProof extends React.PureComponent<Props> {
 			</JoomlaNotitleRegion>
 			<Button text="< Back" onClick={this.props.goBack}/>
 			<Button text="Next >" onClick={() => {
-				// post(FORM_NAME, postWrapper(this.personId))({
+				// post(formName, postWrapper(this.personId))({
 				// 	...this.props.form.data,
 				// 	swimProofId: this.props.form.data.swimProofId.map(s => Number(s))
 				// }).then(() => this.props.goNext(this.personId))

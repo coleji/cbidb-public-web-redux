@@ -11,7 +11,7 @@ import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import { Option, none, some } from "fp-ts/lib/Option";
 
 
-export const FORM_NAME = "surveyInfoForm"
+export const formName = "surveyInfoForm"
 
 export const path = '/survey/:personId'
 
@@ -192,7 +192,7 @@ export default connect<StateProps, DispatchProps, StaticProps, RootState>(
 	dispatch => ({
 		updateField: function(name: keyof Form, value: any) {
 			console.log("updating field!")
-			dispatchFormUpdate(dispatch, FORM_NAME)(name, value)
+			dispatchFormUpdate(dispatch, formName)(name, value)
 		}
 	})
 )(SurveyInfo)
