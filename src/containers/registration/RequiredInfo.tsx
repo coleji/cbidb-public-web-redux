@@ -23,7 +23,7 @@ import {FormState, get, dispatchFormUpdate, post} from "../../form/form"
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/endpoints/junior/required"
 import {path as emergContactPath} from "./EmergencyContact"
-import OneWayDataComponent from '../../form/OneWayDataComponent';
+import APIBlockedComponent from '../../form/APIBlockedComponent';
 
 export const FORM_NAME = "registrationRequiredInfo"
 
@@ -101,28 +101,23 @@ interface StaticProps { }
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps;
 
-class RequiredInfo extends OneWayDataComponent<Props, Form, typeof validator> {
+class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 	personId: number
 	formName = FORM_NAME
-	getApiWrapper = getWrapper(this.personId)
+	getApiWrapper = () => getWrapper(this.personId)
 	apiToForm = apiToForm
 	formToAPI = formToAPI
-	getData: () => Option<Form>
+	getData = () => this.props.form.data
 	constructor(props: Props) {
 		super(props)
-		console.log("constructor!!!")
-		// TODO: typesafe? 
-		const match = matchPath(
-			props.router.location.pathname,
-			{ path }
-			) || {params: {}};
-		this.personId = Number((match.params as any).personId);
-
-		console.log("scraped from the url: " + this.personId)
-
-		this.getData = () => this.props.form.data
-		
-		get(FORM_NAME, null, getWrapper(this.personId), apiToForm)
+		console.log("setting personId")
+		this.personId = (function() {
+			const match = matchPath(
+				props.router.location.pathname,
+				{ path }
+				) || {params: {}};
+			return Number((match.params as any).personId);
+		}())
 	}
 	renderPlaceholder() {
 		return <span>whatever</span>

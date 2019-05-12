@@ -11,7 +11,7 @@ import { getReduxState } from "../reducer/store";
 import NavBarLogoutOnly from "../components/NavBarLogoutOnly"
 import {apiw, validator} from "../async/endpoints/member-welcome"
 import APIWrapper, { ServerParams } from "../async/APIWrapper";
-import OneWayDataComponent from "../form/OneWayDataComponent";
+import APIBlockedComponent from "../form/APIBlockedComponent";
 import makeDefault from "../util/getOptionDefault";
 import { Option } from "fp-ts/lib/Option";
 
@@ -42,20 +42,12 @@ interface StaticProps {
 
 type Props = StateProps & DispatchProps & StaticProps
 
-class HomePage extends OneWayDataComponent<Props, Form, typeof validator> {
+class HomePage extends APIBlockedComponent<Props, Form, typeof validator> {
 	formName = formName
-	getApiWrapper = apiw
+	getApiWrapper = () => apiw
 	apiToForm = (x: t.TypeOf<typeof validator>) => x
 	formToAPI = (x: Form) => x
-	getData: () => Option<Form>
-	constructor(props: Props) {
-		super(props);
-		this.getData = () => this.props.homePageData
-		console.log("home page doing get")
-		console.log(getReduxState())
-		get(formName, formDefault, apiw, x => x)
-		console.log("home page did get")
-	}
+	getData = () => this.props.homePageData
 	renderPlaceholder() {
 		console.log("rendering placeholder")
 		return <span>whatever</span>
