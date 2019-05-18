@@ -89,7 +89,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 		console.log("updating field!")
 		dispatchFormUpdate(dispatch, formName)(name, value)
 	},
-	goBack: () => dispatch(push('/')),	// TODO
+//	goBack: () => dispatch(push('/')),	// TODO
 	//goNext: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString())))	// TODO
 })
 
@@ -98,22 +98,19 @@ class FormSelect extends Select<Form> {}
 class FormTextArea extends TextArea<Form> {}
 
 type StaticProps = {
-	goNext: any
+	personId: number,
+	goNext: () => void,
+	goPrev: () => void
 }
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
 
 class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
-	personId: number
 	formName = formName
-	getApiWrapper = () => getWrapper(this.personId)
+	getApiWrapper = () => getWrapper(this.props.personId)
 	apiToForm = apiToForm
 	formToAPI = formToAPI
 	getData = () => this.props.form.data
-	constructor(props: Props) {
-		super(props)
-		this.personId = getPersonIdFromPath(path, props.router.location.pathname)
-	}
 	renderPlaceholder() {
 		return <span>whatever</span>
 	}
@@ -314,9 +311,9 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 				<br />
 				{specNeedsFields}
 			</JoomlaArticleRegion>
-			<Button text="< Back" onClick={this.props.goBack}/>
+			<Button text="< Back" onClick={this.props.goPrev}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(this.props.goNext())
+				post(formName, postWrapper(this.props.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(this.props.goNext)
 			}}/>
 		</JoomlaMainPage>
 	}

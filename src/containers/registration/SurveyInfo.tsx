@@ -48,19 +48,20 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 	}
 })
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
+type StaticProps = {
+	personId: number,
+	goNext: () => void,
+	goPrev: () => void
+}
+
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
 
 class SurveyInfo extends APIBlockedComponent<Props, Form, any> {
-	personId: number
 	formName = formName
 	getApiWrapper = null as any // () => getWrapper(this.personId)
 	apiToForm = null as any
 	formToAPI = null as any
 	getData = () => this.props.form.data
-	constructor(props: Props) {
-		super(props)
-		this.personId = getPersonIdFromPath(path, props.router.location.pathname)
-	}
 	renderPlaceholder() {
 		return <span>whatever</span>
 	}

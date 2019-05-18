@@ -44,7 +44,7 @@ export const dispatchFormUpdate: <T>(dispatch: Dispatch<FormAction<T>>, formName
     type: "UPDATE_FORM", formName, fieldName, fieldValue
 })
 
-export function success<T>(dispatch: Dispatch<FormAction<T>>, formName: string, result: T) {
+export function set<T>(dispatch: Dispatch<FormAction<T>>, formName: string, result: T) {
 	dispatch({
 		type: "SET_FORM",
 		formName,
@@ -68,7 +68,7 @@ export const get = async <T_Form, T_APIValidator extends t.Any>(
 		console.log("Got result from api: ", result.substr(0,50))
 		const parsedResult = apiw.parseResponse(result)
 		if (parsedResult.type == "Success") {
-			success(dispatch, formName, mapper(parsedResult.result))
+			set(dispatch, formName, mapper(parsedResult.result))
 			return Promise.resolve("blah")
 		} else {
 			console.log(parsedResult.failureType)

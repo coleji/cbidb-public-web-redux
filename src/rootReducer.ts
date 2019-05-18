@@ -44,7 +44,7 @@ export interface RootState {
 	surveyInfoForm: FormState<SurveyInfoForm>,
 	scholarshipForm: FormState<ScholarshipForm>,
 	homePageForm: FormState<HomePageForm>,
-	registrationWizard: FormState<{state: Option<DoublyLinkedList<JSX.Element>>}>
+	registrationWizard: FormState<DoublyLinkedList<JSX.Element>>
 }
 
 export type RootReducer = (state: RootState, action: Action) => RootState
@@ -63,6 +63,6 @@ export const makeRootReducer: (history: any, staticState: StaticState) => RootRe
 		surveyInfoForm: formReducer<SurveyInfoForm>(surveyInfoFormName),
 		scholarshipForm: formReducer<ScholarshipForm>(scholarshipFormName),
 		homePageForm: formReducer<HomePageForm>(homePageFormName),
-		registrationWizard: formReducer<{state: Option<DoublyLinkedList<JSX.Element>>}>(registrationWizardFormName),
+		registrationWizard: formReducer<DoublyLinkedList<JSX.Element>>(registrationWizardFormName),
 	})	
 }

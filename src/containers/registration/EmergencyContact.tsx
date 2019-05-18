@@ -90,25 +90,26 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 		console.log("updating field!")
 		dispatchFormUpdate(dispatch, formName)(name, value)
 	},
-	goBack: () => dispatch(push('/')),	// TODO
-	goNext: (personId: number) => dispatch(push(swimProofPath.replace(":personId", personId.toString())))	// TODO
+	// goBack: () => dispatch(push('/')),	// TODO
+	// goNext: (personId: number) => dispatch(push(swimProofPath.replace(":personId", personId.toString())))	// TODO
 })
 
 class FormInput extends TextInput<Form> {}
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
+type StaticProps = {
+	personId: number,
+	goNext: () => void,
+	goPrev: () => void
+}
+
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
 
 class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator> {
-	personId: number
 	formName = formName
-	getApiWrapper = () => getWrapper(this.personId)
+	getApiWrapper = () => getWrapper(this.props.personId)
 	apiToForm = apiToForm
 	formToAPI = formToAPI
 	getData = () => this.props.form.data
-	constructor(props: Props) {
-		super(props)
-		this.personId = getPersonIdFromPath(path, props.router.location.pathname)
-	}
 	renderPlaceholder() {
 		return <span>whatever</span>
 	}
@@ -213,9 +214,9 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 			<JoomlaArticleRegion title="Who should we contact in the event of an emergency?">
 				{emergFields}
 			</JoomlaArticleRegion>
-			<Button text="< Back" onClick={this.props.goBack}/>
+			<Button text="< Back" onClick={this.props.goPrev}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.personId))(formToAPI(data)).then(() => this.props.goNext(this.personId))
+				post(formName, postWrapper(this.props.personId))(formToAPI(data)).then(this.props.goNext)
 			}}/>
 		</JoomlaMainPage>
 	}

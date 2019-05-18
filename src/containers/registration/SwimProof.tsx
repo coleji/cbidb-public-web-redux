@@ -40,25 +40,27 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 		console.log("updating field!")
 		dispatchFormUpdate(dispatch, formName)(name, value)
 	},
-	goBack: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString()))),	// TODO
-	goNext: (personId: number) => dispatch(push(surveyPath.replace(":personId", personId.toString())))	// TODO
+	// goBack: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString()))),	// TODO
+	// goNext: (personId: number) => dispatch(push(surveyPath.replace(":personId", personId.toString())))	// TODO
 })
 
 class FormRadio extends RadioGroup<Form> {}
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
+
+type StaticProps = {
+	personId: number,
+	goNext: () => void,
+	goPrev: () => void
+}
+
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
 
 class SwimProof extends APIBlockedComponent<Props, Form, typeof validator> {
-	personId: number
 	formName = formName
-	getApiWrapper = () => getWrapper(this.personId)
+	getApiWrapper = () => getWrapper(this.props.personId)
 	apiToForm = (api: t.TypeOf<typeof validator>) => ({swimProofId: api.swimProofId.map(n => String(n))})
 	formToAPI = (form: Form) => ({swimProofId: form.swimProofId.map(s => Number(s))})
 	getData = () => this.props.form.data
-	constructor(props: Props) {
-		super(props)
-		this.personId = getPersonIdFromPath(path, props.router.location.pathname)
-	}
 	renderPlaceholder() {
 		return <span>whatever</span>
 	}
@@ -110,12 +112,12 @@ class SwimProof extends APIBlockedComponent<Props, Form, typeof validator> {
                 please email {self.props.jpDirectorNameFirst} {self.props.jpDirectorNameLast} at <a href={mailto}>{self.props.jpDirectorEmail}</a>.
                 </span>
 			</JoomlaNotitleRegion>
-			<Button text="< Back" onClick={this.props.goBack}/>
+			<Button text="< Back" onClick={this.props.goPrev}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.personId))({
+				post(formName, postWrapper(this.props.personId))({
 					...this.props.form.data,
 					...this.formToAPI(data)
-				}).then(() => this.props.goNext(this.personId))
+				}).then(this.props.goNext)
 			}}/>
 		</JoomlaMainPage>
 	}

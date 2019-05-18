@@ -14,7 +14,7 @@ import RequiredInfo, {path as requiredInfoPath} from './registration/RequiredInf
 import EmergencyContact, {path as emergencyContactPath} from './registration/EmergencyContact';
 import SwimProof, {path as swimProofPath} from './registration/SwimProof';
 import SurveyInfo, {path as surveyPath} from './registration/SurveyInfo';
-import RegistrationWizard from './registration/RegistrationWizard';
+import RegistrationWizard, {path as registrationWizardPath} from './registration/RegistrationWizard';
 
 
 interface StateProps {
@@ -51,7 +51,7 @@ class App extends React.PureComponent<Props> {
 
 		const mustBeLoggedIn = [
 			<Route key={ratingsPagePath} exact path={ratingsPagePath} component={RatingsPage} />,
-			<Route key="reg" path="/required/:personId" component={RegistrationWizard} />,
+			<Route key="reg" path={registrationWizardPath} component={RegistrationWizard} />,
 			// <Route key={requiredInfoPath} exact path={requiredInfoPath} component={RequiredInfo} />,
 			// <Route key={emergencyContactPath} exact path={emergencyContactPath} component={EmergencyContact} />,
 			// <Route key={swimProofPath} exact path={swimProofPath} component={SwimProof} />,
