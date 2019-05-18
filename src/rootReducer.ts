@@ -12,9 +12,12 @@ import {Form as SurveyInfoForm, formName as surveyInfoFormName} from "./containe
 import {Form as CreateAccountForm, formName as createAccountFormName} from "./containers/create-acct/CreateAccount"
 import {Form as HomePageForm, formName as homePageFormName} from "./containers/HomePage"
 import {Form as ScholarshipForm, formName as scholarshipFormName} from "./containers/Scholarship"
+import {formName as registrationWizardFormName} from "./containers/registration/RegistrationWizard"
 import * as moment from "moment";
 import {ServerConfig} from "./core/server/config"
 import { ServerParams } from "./core/APIWrapper";
+import { DoublyLinkedList } from "./util/DoublyLinkedList";
+import { Option } from "fp-ts/lib/Option";
 
 export interface StaticState {
 	getMoment: () => moment.Moment,
@@ -40,7 +43,8 @@ export interface RootState {
 	swimProofForm: FormState<SwimProofForm>,
 	surveyInfoForm: FormState<SurveyInfoForm>,
 	scholarshipForm: FormState<ScholarshipForm>,
-	homePageForm: FormState<HomePageForm>
+	homePageForm: FormState<HomePageForm>,
+	registrationWizard: FormState<{state: Option<DoublyLinkedList<JSX.Element>>}>
 }
 
 export type RootReducer = (state: RootState, action: Action) => RootState
@@ -59,5 +63,6 @@ export const makeRootReducer: (history: any, staticState: StaticState) => RootRe
 		surveyInfoForm: formReducer<SurveyInfoForm>(surveyInfoFormName),
 		scholarshipForm: formReducer<ScholarshipForm>(scholarshipFormName),
 		homePageForm: formReducer<HomePageForm>(homePageFormName),
+		registrationWizard: formReducer<{state: Option<DoublyLinkedList<JSX.Element>>}>(registrationWizardFormName),
 	})	
 }

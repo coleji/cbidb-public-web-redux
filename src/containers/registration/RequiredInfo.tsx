@@ -90,14 +90,18 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 		dispatchFormUpdate(dispatch, formName)(name, value)
 	},
 	goBack: () => dispatch(push('/')),	// TODO
-	goNext: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString())))	// TODO
+	//goNext: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString())))	// TODO
 })
 
 class FormInput extends TextInput<Form> {}
 class FormSelect extends Select<Form> {}
 class FormTextArea extends TextArea<Form> {}
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
+type StaticProps = {
+	goNext: any
+}
+
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
 
 class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 	personId: number
@@ -312,7 +316,7 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 			</JoomlaArticleRegion>
 			<Button text="< Back" onClick={this.props.goBack}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(() => this.props.goNext(this.personId))
+				post(formName, postWrapper(this.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(this.props.goNext())
 			}}/>
 		</JoomlaMainPage>
 	}
