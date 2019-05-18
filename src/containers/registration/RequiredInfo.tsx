@@ -111,6 +111,10 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 	apiToForm = apiToForm
 	formToAPI = formToAPI
 	getData = () => this.props.form.data
+	constructor(props: Props) {
+		super(props)
+		console.log("RequiredInfo constructor: personId is ", this.props.personId)
+	}
 	renderPlaceholder() {
 		return <span>whatever</span>
 	}

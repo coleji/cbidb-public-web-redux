@@ -10,31 +10,43 @@ import CreateAccount from './create-acct/CreateAccount';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
-import RequiredInfo, {path as requiredInfoPath} from './registration/RequiredInfo';
-import EmergencyContact, {path as emergencyContactPath} from './registration/EmergencyContact';
-import SwimProof, {path as swimProofPath} from './registration/SwimProof';
-import SurveyInfo, {path as surveyPath} from './registration/SurveyInfo';
 import RegistrationWizard, {path as registrationWizardPath} from './registration/RegistrationWizard';
+import { Dispatch } from 'redux';
 
+const mapStateToProps = (state: RootState) => ({
+	state,
+	router: state.router,
+	isServer: state.staticState.isServer,
+	login: state.login
+})
 
-interface StateProps {
-	router: Location,
-	isServer: boolean,
-	login: LoginState
-}
-
-interface DispatchProps {
-
-}
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	dispatch
+})
 
 interface SelfProps {
 	history: any
 }
 
-type Props = StateProps & DispatchProps & SelfProps
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & SelfProps
 
 class App extends React.PureComponent<Props> {
+	registrationWizard: React.ComponentType
+	constructor(props: Props) {
+		super(props)
+		console.log("in app constructor")
+		console.log(props.router.location)
+		this.registrationWizard = RegistrationWizard(this.props.state)
+	}
+	componentDidUpdate(prevProps: Props) {
+		if (this.props.router.location !== prevProps.router.location) {
+			console.log("in app CDU")
+			console.log(this.props.router.location)
+			this.registrationWizard = RegistrationWizard(this.props.state)
+		}
+	}
 	render() {
+		console.log("in app render")
 		const self = this;
 		const devTools = (!this.props.isServer) ? (function(){
 			const DevTools = require('../core/DevTools').default;	// TODO: should be import?
@@ -51,7 +63,7 @@ class App extends React.PureComponent<Props> {
 
 		const mustBeLoggedIn = [
 			<Route key={ratingsPagePath} exact path={ratingsPagePath} component={RatingsPage} />,
-			<Route key="reg" path={registrationWizardPath} component={RegistrationWizard} />,
+			<Route key="reg" path={registrationWizardPath} component={this.registrationWizard} />,
 			// <Route key={requiredInfoPath} exact path={requiredInfoPath} component={RequiredInfo} />,
 			// <Route key={emergencyContactPath} exact path={emergencyContactPath} component={EmergencyContact} />,
 			// <Route key={swimProofPath} exact path={swimProofPath} component={SwimProof} />,
@@ -79,11 +91,4 @@ class App extends React.PureComponent<Props> {
 	}
 }
 
-export default connect<StateProps, DispatchProps, SelfProps, RootState>(
-	state => ({
-		router: state.router,
-		isServer: state.staticState.isServer,
-		login: state.login
-	}),
-	() => ({})
-)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
