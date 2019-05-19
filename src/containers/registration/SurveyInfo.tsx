@@ -1,9 +1,10 @@
 import * as React from "react";
+import * as t from 'io-ts'
 import { connect } from "react-redux";
 import { CheckboxGroup, RadioGroup, SingleCheckbox } from "../../components/InputGroup";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import TextInput from "../../components/TextInput";
-import { dispatchFormUpdate } from "../../core/form/form";
+import { dispatchFormUpdate, post } from "../../core/form/form";
 import { RootState } from '../../rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
@@ -15,19 +16,12 @@ import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 import ethnicities from "../../lov/ethnicities"
 import genders from "../../lov/genders"
 import referralSources from "../../lov/referralSources"
+import {getWrapper, postWrapper, validator} from "../../async/junior/survey"
+import Button from "../../components/Button";
 
 export const formName = "surveyInfoForm"
  
-export interface Form {
-    genderID: Option<string>,
-	referral: Option<string[]>,
-	referralOther: Option<string>,
-	language: Option<string>,
-	ethnicity: Option<string[]>,
-	ethnicityOther: Option<string>
-	school: Option<string>,
-	freeLunch: Option<boolean>
-}
+export type Form = t.TypeOf<typeof validator>
 
 class FormInput extends TextInput<Form> {}
 class FormRadio extends RadioGroup<Form> {}
@@ -54,11 +48,11 @@ type StaticProps = {
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
 
-class SurveyInfo extends APIBlockedComponent<Props, Form, any> {
+class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 	formName = formName
-	getApiWrapper = null as any // () => getWrapper(this.props.personId)
-	apiToForm = null as any
-	formToAPI = null as any
+	getApiWrapper = () => getWrapper(this.props.personId)
+	apiToForm = (x: t.TypeOf<typeof validator>) => x
+	formToAPI = (x: Form) => x
 	getData = () => this.props.form.data
 	renderPlaceholder() {
 		return <span>whatever</span>
@@ -146,11 +140,15 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, any> {
 							Eligible for Free/<br />Reduced Price Lunch?
 							</React.Fragment>
 						}
-						value={(data.freeLunch || none)}
+						value={data.freeLunch}
 						reduxAction={reduxAction}
 					/>
                 </tbody></table>
             </JoomlaArticleRegion>
+			<Button text="< Back" onClick={this.props.goPrev}/>
+			<Button text="Next >" onClick={() => {
+				post(formName, postWrapper(this.props.personId))(this.formToAPI(this.props.form.data.getOrElse({} as any))).then(this.props.goNext)
+			}}/>
 		</JoomlaMainPage>
 	}
 }

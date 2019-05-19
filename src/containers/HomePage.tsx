@@ -33,7 +33,7 @@ class HomePage extends APIBlockedComponent<Props, Form, typeof validator> {
 	}
 	renderComponent(homePageData: Form) {
 		//TODO
-		console.log("rendering component")
+		console.log("rendering home page component")
 		console.log(this.props.homePageData)
 		console.log(homePageData)
 		const rowData: {

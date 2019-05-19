@@ -12,6 +12,17 @@ export const OptionalString = new t.Type<Option<string>, string, unknown>(
 	a => a.fold("None", (s) => `some(${s})`)
 )
 
+export const OptionalStringList = new t.Type<Option<string[]>, string, unknown>(
+	'OptionalString',
+	(u): u is Option<string[]> => u instanceof Option,
+	(u, c) =>
+		t.union([t.array(t.string), t.null, t.undefined]).validate(u, c).chain(s => {
+			if (s === null || s === undefined) return t.success(<Option<string[]>>none)
+			else return t.success(some(s))
+		}),
+	a => a.fold("None", (s) => `some(${s})`)
+)
+
 export const OptionalNumber = new t.Type<Option<number>, string, unknown>(
 	'OptionalNumber',
 	(u): u is Option<number> => u instanceof Option,

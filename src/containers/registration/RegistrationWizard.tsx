@@ -27,8 +27,9 @@ export default (state: RootState) => {
 		return [
 			<RequiredInfo {...pageProps} />,
 			<EmergencyContact {...pageProps} />,
-			<SwimProof {...pageProps} />
-	//		<SurveyInfo {...pageProps} />,
+			<SwimProof {...pageProps} />,
+			<SurveyInfo {...pageProps} />,
+			<EmergencyContact {...pageProps} />
 		];
 	}
 

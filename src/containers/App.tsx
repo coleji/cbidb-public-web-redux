@@ -66,7 +66,7 @@ class App extends React.Component<Props> {
 
 		const mustBeLoggedIn = [
 			<Route key={ratingsPagePath} exact path={ratingsPagePath} component={RatingsPage} />,
-			<Route key="reg" path={registrationWizardPath} component={this.registrationWizard} />,
+			<Route key="reg" exact path={registrationWizardPath} component={this.registrationWizard} />,
 			// <Route key={requiredInfoPath} exact path={requiredInfoPath} component={RequiredInfo} />,
 			// <Route key={emergencyContactPath} exact path={emergencyContactPath} component={EmergencyContact} />,
 			// <Route key={swimProofPath} exact path={swimProofPath} component={SwimProof} />,
@@ -78,8 +78,9 @@ class App extends React.Component<Props> {
 		
 		const authedDependedRoutes = isLoggedIn ? mustBeLoggedIn : mustNotBeLoggedIn
 
+		console.log("about to evaluate route: ", this.props.history)
+
 		return (
-			
 			<div>
 				<JoomlaBase>
 					<ConnectedRouter history={this.props.history}>
