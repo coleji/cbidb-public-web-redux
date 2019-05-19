@@ -22,7 +22,15 @@ type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchT
 export const path = '/ratings/:personId'
 
 class RatingsPage extends React.PureComponent<Props> {
+	constructor(props: Props) {
+		super(props)
+		console.log("in ratings page constructor")
+	}
+	componentDidMount() {
+		console.log("in ratings page CDM")
+	}
 	render() {
+		console.log("in ratings page render")
 		const self = this;
 
 		// TODO: typesafe? 

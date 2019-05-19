@@ -14,7 +14,7 @@ extends React.PureComponent<T_Props> {
 	abstract renderPlaceholder(): JSX.Element
 	abstract renderComponent(data: T_Form): JSX.Element
 	componentDidMount() {
-		console.log("executing cdm")
+		console.log("executing APIBlockedComponent CDM")
 		get(this.formName, this.getApiWrapper(), this.apiToForm)
 	}
 	render() {

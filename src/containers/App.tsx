@@ -79,6 +79,7 @@ class App extends React.Component<Props> {
 		const authedDependedRoutes = isLoggedIn ? mustBeLoggedIn : mustNotBeLoggedIn
 
 		console.log("about to evaluate route: ", this.props.history)
+		console.log("router.location", this.props.router.location)
 
 		return (
 			<div>
