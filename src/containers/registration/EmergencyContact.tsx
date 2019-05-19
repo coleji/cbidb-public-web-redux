@@ -14,13 +14,10 @@ import {Dispatch} from "redux";
 import { push } from 'connected-react-router';
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/junior/emerg-contact"
-import {path as swimProofPath} from './SwimProof';
 import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 
 export const formName = "emergencyContact"
-
-export const path = '/emerg/:personId'
 
 type ApiType = t.TypeOf<typeof validator>
 

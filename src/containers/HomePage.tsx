@@ -58,4 +58,4 @@ class HomePage extends APIBlockedComponent<Props, Form, typeof validator> {
 	}
 }
 
-export default connect(mapStateToProps, () => {})(HomePage)
+export default connect(mapStateToProps, () => ({}))(HomePage)

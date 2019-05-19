@@ -29,7 +29,7 @@ export default (state: RootState) => {
 			<RequiredInfo {...pageProps} />,
 			<EmergencyContact {...pageProps} />,
 			<SwimProof {...pageProps} />,
-			<SurveyInfo {...pageProps} />,
+	//		<SurveyInfo {...pageProps} />,
 			<HomePage />
 		];
 	}

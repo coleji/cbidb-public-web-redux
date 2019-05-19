@@ -13,15 +13,11 @@ import { Dispatch } from "redux";
 import { push } from "connected-react-router";
 import {getWrapper, postWrapper, validator} from "../../async/junior/swim-proof"
 import Button from "../../components/Button";
-import {path as emergContactPath} from "./EmergencyContact"
-import {path as surveyPath} from "./SurveyInfo"
 import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 import swimProofValues from "../../lov/swimProof"
 
 export const formName = "swimProofForm"
-
-export const path = '/swimproof/:personId'
 
 export interface Form {
 	swimProofId: Option<string>

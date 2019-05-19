@@ -30,7 +30,7 @@ interface SelfProps {
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & SelfProps
 
-class App extends React.PureComponent<Props> {
+class App extends React.Component<Props> {
 	registrationWizard: React.ComponentType
 	constructor(props: Props) {
 		super(props)
@@ -38,15 +38,18 @@ class App extends React.PureComponent<Props> {
 		console.log(props.router.location)
 		this.registrationWizard = RegistrationWizard(this.props.state)
 	}
-	componentDidUpdate(prevProps: Props) {
-		if (this.props.router.location !== prevProps.router.location) {
-			console.log("in app CDU")
-			console.log(this.props.router.location)
-			this.registrationWizard = RegistrationWizard(this.props.state)
+	shouldComponentUpdate(nextProps: Props) {
+		console.log("in SCU")
+		if (this.props.router.location !== nextProps.router.location) {
+			console.log("location changed!")
+			console.log(nextProps.router.location)
+			this.registrationWizard = RegistrationWizard(nextProps.state)
 		}
+		return true
 	}
 	render() {
 		console.log("in app render")
+		console.log(this.props.state.router.location)
 		const self = this;
 		const devTools = (!this.props.isServer) ? (function(){
 			const DevTools = require('../core/DevTools').default;	// TODO: should be import?

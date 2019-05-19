@@ -21,13 +21,10 @@ import {getReduxState} from "../../core/reducer/store"
 import {dispatchFormUpdate, post} from "../../core/form/form"
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/junior/required"
-import {path as emergContactPath} from "./EmergencyContact"
 import APIBlockedComponent from '../../core/form/APIBlockedComponent';
 import getPersonIdFromPath from '../../util/getPersonIdFromPath';
 
 export const formName = "registrationRequiredInfo"
-
-export const path = '/required/:personId'
 
 type ApiType = t.TypeOf<typeof validator>
 

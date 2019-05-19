@@ -17,9 +17,7 @@ import genders from "../../lov/genders"
 import referralSources from "../../lov/referralSources"
 
 export const formName = "surveyInfoForm"
-
-export const path = '/survey/:personId'
-
+ 
 export interface Form {
     genderID: Option<string>,
 	referral: Option<string[]>,
@@ -58,7 +56,7 @@ type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchT
 
 class SurveyInfo extends APIBlockedComponent<Props, Form, any> {
 	formName = formName
-	getApiWrapper = null as any // () => getWrapper(this.personId)
+	getApiWrapper = null as any // () => getWrapper(this.props.personId)
 	apiToForm = null as any
 	formToAPI = null as any
 	getData = () => this.props.form.data
