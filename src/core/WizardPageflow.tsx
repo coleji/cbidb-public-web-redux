@@ -5,12 +5,15 @@ import { DoublyLinkedList } from "../util/DoublyLinkedList";
 import { set } from "../core/form/form";
 import { Option } from "fp-ts/lib/Option";
 import { connect } from "react-redux";
+import { push } from "connected-react-router";
 
 interface Config {
 	formName: string,
 	placeholder: JSX.Element,
 	getDLL: (state: RootState) =>  Option<DoublyLinkedList<JSX.Element>>,
 	pages: (goNext: () => void, goPrev: () => void) => JSX.Element[],
+	start: string,
+	end: string
 }
 
 const mapStateToProps = (state: RootState) => ({
@@ -45,10 +48,23 @@ export default (config: Config) => {
 			console.log("wizard constructor: setting this.dll ", this.dll)
 			this.goNext = () => {
 				console.log("pushed goNext!")
-				set(self.props.dispatch, config.formName, this.dll.next())
+				if (self.dll.hasNext()) {
+					set(self.props.dispatch, config.formName, this.dll.next())
+				} else {
+					console.log("going back to start: ", config.end)
+					self.props.dispatch(push(config.end))
+				}
+				
 			}
 			this.goPrev = () => {
-				set(self.props.dispatch, config.formName, this.dll.prev())
+				console.log("pushed goPrev!")
+				if (self.dll.hasPrev()) {
+					set(self.props.dispatch, config.formName, this.dll.prev())
+				} else {
+					console.log("going back to start: ", config.start)
+					self.props.dispatch(push(config.start))
+				}
+				
 			}
 	
 			const pages = DoublyLinkedList.from(config.pages(
@@ -56,10 +72,9 @@ export default (config: Config) => {
 				this.goPrev
 			))
 	
-			const next = pages.next()
-			console.log("about to set DLL in redux:  ", next)
-			this.dll = next
-			set(self.props.dispatch, config.formName, next)
+			console.log("about to set DLL in redux:  ", pages)
+			this.dll = pages
+			set(self.props.dispatch, config.formName, pages)
 		}
 		componentWillReceiveProps(props: Props) {
 			this.dll = config.getDLL(props.state).getOrElse(DoublyLinkedList.from([this.placeholder]))

@@ -25,12 +25,10 @@ export default (state: RootState) => {
 		console.log("Inside Reg wizard function.  personId is ", personId)
 
 		return [
-			<HomePage />,
 			<RequiredInfo {...pageProps} />,
 			<EmergencyContact {...pageProps} />,
-			<SwimProof {...pageProps} />,
+			<SwimProof {...pageProps} />
 	//		<SurveyInfo {...pageProps} />,
-			<HomePage />
 		];
 	}
 
@@ -39,6 +37,8 @@ export default (state: RootState) => {
 		formName,
 		getDLL: (state: RootState) => state.registrationWizard.data,
 		placeholder: <JoomlaMainPage />,
-		pages: pages(getPersonIdFromPath(path, state.router.location.pathname))
+		pages: pages(getPersonIdFromPath(path, state.router.location.pathname)),
+		start: "/",
+		end: "/"
 	})
 }
