@@ -20,13 +20,6 @@ import { some, none } from "fp-ts/lib/Option";
 
 require("../../../lib/array-polyfill")
 
-const arr1 = ['a','b','c']
-const arr2 = arr1.zipWithIndex()
-console.log(arr2)
-const s = some("tssdf")
-const n = none
-console.log(s.map(e => e.length))
-
 const app = express();
 
 app.use(cookieParser(""));
@@ -95,7 +88,6 @@ getConfig.then(serverConfig => {
 		// TODO: dont autodetect if the response is a JSON with a `data` property
 		// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
 		.then((json: any) => {
-			console.log("got ", json)
 			if (json && json.userName) {
 				return Promise.resolve({
 					login: {authenticatedUserName: json.userName},	// TODO: should be option?

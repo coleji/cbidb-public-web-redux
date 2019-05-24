@@ -1,14 +1,14 @@
 import * as React from "react";
-import { RootState } from "../../rootReducer";
+import { RootState } from "../../../rootReducer";
 import { Dispatch } from "redux";
-import WizardPageflow from "../../core/WizardPageflow";
-import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
-import HomePage from "../HomePage";
-import RequiredInfo from "./RequiredInfo";
-import EmergencyContact from "./EmergencyContact";
-import SwimProof from "./SwimProof";
-import SurveyInfo from "./SurveyInfo";
-import getPersonIdFromPath from "../../util/getPersonIdFromPath";
+import WizardPageflow from "../../../core/WizardPageflow";
+import JoomlaMainPage from "../../../theme/joomla/JoomlaMainPage";
+import HomePage from "../../HomePage";
+import RequiredInfo from "../RequiredInfo";
+import EmergencyContact from "../EmergencyContact";
+import SwimProof from "../SwimProof";
+import SurveyInfo from "../SurveyInfo";
+import getPersonIdFromPath from "../../../util/getPersonIdFromPath";
 
 export const path = "/required/:personId"
 

@@ -2,6 +2,8 @@ import { ConnectedRouter } from 'connected-react-router';
 import * as React from 'react';
 import { connect } from "react-redux";
 import { Route, Switch } from 'react-router';
+import { Dispatch } from 'redux';
+
 import Gatekeeper from "../containers/create-acct/Gatekeeper";
 import { LoginState } from "../core/reducer/loginStateReducer";
 import { RootState } from '../rootReducer';
@@ -10,8 +12,8 @@ import CreateAccount from './create-acct/CreateAccount';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
-import RegistrationWizard, {path as registrationWizardPath} from './registration/RegistrationWizard';
-import { Dispatch } from 'redux';
+import RegistrationWizard, {path as registrationWizardPath} from './registration/pageflow/RegistrationWizard';
+import {routes as registrationTransparentRoutes} from "./registration/pageflow/RegistrationTransparentFlow"
 
 const mapStateToProps = (state: RootState) => ({
 	state,
@@ -59,19 +61,16 @@ class App extends React.Component<Props> {
 		//const path = this.props.router.pathname
 
 		const mustNotBeLoggedIn = [
-			<Route key="/precreate" path="/precreate" component={Gatekeeper} />,
-			<Route key="/create-acct" path="/create-acct" component={CreateAccount} />,
-			<Route key="default" component={LoginPage} />
+			 <Route key="/precreate" path="/precreate" render={() => <Gatekeeper />} />,
+			 <Route key="/create-acct" path="/create-acct" render={() => <CreateAccount />} />,
+			<Route key="default" render={() => <LoginPage />} />
 		]
 
 		const mustBeLoggedIn = [
-			<Route key={ratingsPagePath} exact path={ratingsPagePath} component={RatingsPage} />,
-			<Route key="reg" exact path={registrationWizardPath} component={this.registrationWizard} />,
-			// <Route key={requiredInfoPath} exact path={requiredInfoPath} component={RequiredInfo} />,
-			// <Route key={emergencyContactPath} exact path={emergencyContactPath} component={EmergencyContact} />,
-			// <Route key={swimProofPath} exact path={swimProofPath} component={SwimProof} />,
-			// <Route key={surveyPath} exact path={surveyPath} component={SurveyInfo} />,
-			<Route key="default" component={HomePage} />
+			<Route key={ratingsPagePath} exact path={ratingsPagePath} render={() => <RatingsPage />} />,
+		//	<Route key="reg" exact path={registrationWizardPath} component={this.registrationWizard} />,
+			...registrationTransparentRoutes,
+			<Route key="default" render={() => <HomePage />} />
 		]
 
 		const isLoggedIn = self.props.login && self.props.login.authenticatedUserName;

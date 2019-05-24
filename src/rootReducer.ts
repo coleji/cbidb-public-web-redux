@@ -12,7 +12,7 @@ import {Form as SurveyInfoForm, formName as surveyInfoFormName} from "./containe
 import {Form as CreateAccountForm, formName as createAccountFormName} from "./containers/create-acct/CreateAccount"
 import {Form as HomePageForm, formName as homePageFormName} from "./containers/HomePage"
 import {Form as ScholarshipForm, formName as scholarshipFormName} from "./containers/Scholarship"
-import {formName as registrationWizardFormName} from "./containers/registration/RegistrationWizard"
+import {formName as registrationWizardFormName} from "./containers/registration/pageflow/RegistrationWizard"
 import * as moment from "moment";
 import {ServerConfig} from "./core/server/config"
 import { ServerParams } from "./core/APIWrapper";
