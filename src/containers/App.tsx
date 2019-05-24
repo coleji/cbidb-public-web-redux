@@ -13,7 +13,7 @@ import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
 import RegistrationWizard, {path as registrationWizardPath} from './registration/pageflow/RegistrationWizard';
-import {routes as registrationTransparentRoutes} from "./registration/pageflow/RegistrationTransparentFlow"
+import RegistrationTransparentFlow from "./registration/pageflow/RegistrationTransparentFlow"
 
 const mapStateToProps = (state: RootState) => ({
 	state,
@@ -32,6 +32,8 @@ interface SelfProps {
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & SelfProps
 
+// TODO: make a wizard manager, call its update() in App constructor and SCU,
+// wizard routes just call that route in the WM which returns HomePage if that route is not active in the WM
 class App extends React.Component<Props> {
 	registrationWizard: React.ComponentType
 	constructor(props: Props) {
@@ -60,6 +62,8 @@ class App extends React.Component<Props> {
 		console.log(this.props)
 		//const path = this.props.router.pathname
 
+		const x = Gatekeeper
+
 		const mustNotBeLoggedIn = [
 			 <Route key="/precreate" path="/precreate" render={() => <Gatekeeper />} />,
 			 <Route key="/create-acct" path="/create-acct" render={() => <CreateAccount />} />,
@@ -67,9 +71,8 @@ class App extends React.Component<Props> {
 		]
 
 		const mustBeLoggedIn = [
-			<Route key={ratingsPagePath} exact path={ratingsPagePath} render={() => <RatingsPage />} />,
-		//	<Route key="reg" exact path={registrationWizardPath} component={this.registrationWizard} />,
-			...registrationTransparentRoutes,
+			<Route key={ratingsPagePath} exact path={ratingsPagePath} render={(props) => <RatingsPage />} />,
+			...RegistrationTransparentFlow(this.props.dispatch).routes,
 			<Route key="default" render={() => <HomePage />} />
 		]
 
