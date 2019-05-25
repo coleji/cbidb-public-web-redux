@@ -25,12 +25,12 @@ export default (state: RootState) => {
 		console.log("Inside Reg wizard function.  personId is ", personId)
 
 		return [
-			<RequiredInfo {...pageProps} />,
-			<EmergencyContact {...pageProps} />,
-			<SwimProof {...pageProps} />,
-			<SurveyInfo {...pageProps} />,
-			<EmergencyContact {...pageProps} />
-		];
+			// <RequiredInfo {...pageProps} />,
+			// <EmergencyContact {...pageProps} />,
+			// <SwimProof {...pageProps} />,
+			// <SurveyInfo {...pageProps} />,
+			// <EmergencyContact {...pageProps} />
+		] as JSX.Element[];
 	}
 
 	console.log("returning class")

@@ -23,6 +23,7 @@ import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/junior/required"
 import APIBlockedComponent from '../../core/form/APIBlockedComponent';
 import getPersonIdFromPath from '../../util/getPersonIdFromPath';
+import Breadcrumb from '../../core/Breadcrumb';
 
 export const formName = "registrationRequiredInfo"
 
@@ -97,7 +98,8 @@ class FormTextArea extends TextArea<Form> {}
 type StaticProps = {
 	personId: number,
 	goNext: () => void,
-	goPrev: () => void
+	goPrev: () => void,
+	breadcrumb: Breadcrumb
 }
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
@@ -301,7 +303,7 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 		);
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
-				<ProgressThermometer />
+				{this.props.breadcrumb}
 			</JoomlaNotitleRegion>
 			<JoomlaArticleRegion title="All information on this page is required (if applicable).">
 				{reqFields}

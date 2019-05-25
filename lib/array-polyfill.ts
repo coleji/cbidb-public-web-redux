@@ -4,7 +4,8 @@ interface Array<T> {
 	zipWithIndex(): [T, number][]
 	grouped(size: number): T[][]
 	contains(e: T): boolean
-	flatMap<U>(f: (e: T, i: number) => U[]): U[]
+	flatMap<U>(f: (e: T, i: number) => U[]): U[],
+	splitAt(at: number): Array<T>[]
 }
 	
 // Array.prototype.find = function(p: any) {
@@ -54,4 +55,10 @@ Array.prototype.flatMap = function<U>(f: (e: any, i: number) => Array<U>) {
 		ret = ret.concat(f(element, i))
 	}
 	return ret;
+}
+
+Array.prototype.splitAt = function(at: number) {
+	const left = this.filter((e: any, i: number) => i < at)
+	const right = this.filter((e: any, i: number) => i >= at)
+	return [left, right]
 }

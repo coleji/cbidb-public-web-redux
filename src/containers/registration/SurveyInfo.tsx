@@ -18,6 +18,7 @@ import genders from "../../lov/genders"
 import referralSources from "../../lov/referralSources"
 import {getWrapper, postWrapper, validator} from "../../async/junior/survey"
 import Button from "../../components/Button";
+import Breadcrumb from "../../core/Breadcrumb";
 
 export const formName = "surveyInfoForm"
  
@@ -43,7 +44,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 type StaticProps = {
 	personId: number,
 	goNext: () => void,
-	goPrev: () => void
+	goPrev: () => void,
+	breadcrumb: Breadcrumb
 }
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
@@ -65,7 +67,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
-				<ProgressThermometer />
+				{this.props.breadcrumb}
 			</JoomlaNotitleRegion>
             <JoomlaArticleRegion title="This information is helpful but not required.">
                 <table><tbody>

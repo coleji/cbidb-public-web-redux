@@ -4,43 +4,44 @@ import { RouteComponentProps, StaticContext, Route } from "react-router";
 import { Dispatch } from "redux";
 import { push } from "connected-react-router";
 
-interface Props<T extends object> {
+export interface TransparentPageflowElement {
+	path: string,
+	clazz: ConnectedComponentClass<any, any>,
+	breadcrumbHTML: JSX.Element
+}
+
+export interface Config {
 	dispatch: Dispatch,
 	start: string,
 	end: string,
-	componentProps: (routeProps: RouteComponentProps<any, StaticContext, any>) => T,
-	elements: {
-		path: string,
-		clazz: ConnectedComponentClass<any, any>
-	}[]
+	elements: TransparentPageflowElement[]
 }
+
+type MapRoutePropsToComponentProps<T> = 
+	(routeProps: RouteComponentProps<any, StaticContext, any>) => (config: Config) => T
 
 export default class TransparentPageflow<T extends object> {
 	routes: JSX.Element[]
-	componentProps: (routeProps: RouteComponentProps<any, StaticContext, any>) => T
-	getConcretePath = (path: string) => (componentProps: T) => {
-		var ret = path
-		for (let prop in componentProps) {
-			console.log("path is " + ret)
-			console.log(`trying to replace ${":" + prop} with ${String(componentProps[prop])}`)
-			ret = ret.replace(":" + prop, String(componentProps[prop]))
-		}
-		console.log("done replacing:  " + ret)
-		return ret;
-	}
-	constructor(props: Props<T>) {
-		this.componentProps = props.componentProps
-		this.routes = props.elements.map((e, i) => {
+	mapRouteToComponentProps: (routeProps: RouteComponentProps<any, StaticContext, any>) => (config: Config) => T
+	getConcretePath: (path: string) => (componentProps: T) => string 
+	constructor(
+		config: Config,
+		mapRoutePropsToComponentProps: MapRoutePropsToComponentProps<T>,
+		getConcretePath: (path: string) => (componentProps: T) => string
+	) {
+		this.mapRouteToComponentProps = mapRoutePropsToComponentProps
+		this.getConcretePath = getConcretePath
+		this.routes = config.elements.map((e, i) => {
 			const Clazz = e.clazz
-			const next = i==props.elements.length-1 ? () => props.end : this.getConcretePath(props.elements[i+1].path)
-			const prev = i==0 ? () => props.start : this.getConcretePath(props.elements[i-1].path)
+			const next = i==config.elements.length-1 ? () => config.end : this.getConcretePath(config.elements[i+1].path)
+			const prev = i==0 ? () => config.start : this.getConcretePath(config.elements[i-1].path)
 			return (<Route
 				key={e.path}
 				path={e.path}
 				render={(routeProps) => <Clazz
-					{...this.componentProps(routeProps)}
-					goNext={() => { props.dispatch(push(next(this.componentProps(routeProps)))) }}
-					goPrev={() => { props.dispatch(push(prev(this.componentProps(routeProps)))) }}
+					{...this.mapRouteToComponentProps(routeProps)}
+					goNext={() => { config.dispatch(push(next(this.mapRouteToComponentProps(routeProps)(config)))) }}
+					goPrev={() => { config.dispatch(push(prev(this.mapRouteToComponentProps(routeProps)(config)))) }}
 				/>}
 			/>)
 		})
