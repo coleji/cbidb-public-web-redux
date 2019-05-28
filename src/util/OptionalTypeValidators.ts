@@ -3,7 +3,7 @@ import { Option, some, none } from 'fp-ts/lib/Option';
 
 export const OptionalString = new t.Type<Option<string>, string, unknown>(
 	'OptionalString',
-	(u): u is Option<string> => u instanceof Option,
+	(u): u is Option<string> => u instanceof Option, // TODO: this is not the Option you think it is.  Replace with something like (undefined !== u["_tag"])
 	(u, c) =>
 		t.union([t.string, t.null, t.undefined]).validate(u, c).chain(s => {
 			if (s === null || s === undefined) return t.success(<Option<string>>none)
