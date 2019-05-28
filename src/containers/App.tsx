@@ -52,7 +52,7 @@ class App extends React.Component<Props> {
 		return true
 	}
 	render() {
-		console.log("in app render")
+		console.log("=========================================== in app render")
 		console.log(this.props.state.router.location)
 		const self = this;
 		const devTools = (!this.props.isServer) ? (function(){

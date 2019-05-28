@@ -19,6 +19,7 @@ const mapElementToBreadcrumbState: (element: TransparentPageflowElement) => Stat
 })
 
 export default (dispatch: Dispatch) => {
+	console.log("In Registration Transparent flow constructor")
 	const config: Config = {
 		dispatch,
 		start: "/",
@@ -45,7 +46,7 @@ export default (dispatch: Dispatch) => {
 
 	const mapRouteToComponentProps = (routeProps: RouteComponentProps<any, StaticContext, any>) => (config: Config) => {
 		const personIdString = routeProps.match.params[personIdParam]
-		console.log("routeProps:  ", routeProps)
+		console.log("@@@@@@@@@@@@@@@@   routeProps:  ", routeProps)
 		console.log("personIdString: ", personIdString)
 		const personId = Number(personIdString)
 		const index = config.elements.findIndex(e => {

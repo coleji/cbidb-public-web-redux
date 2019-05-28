@@ -29,6 +29,7 @@ export default class TransparentPageflow<T extends object> {
 		mapRoutePropsToComponentProps: MapRoutePropsToComponentProps<T>,
 		getConcretePath: (path: string) => (componentProps: T) => string
 	) {
+		console.log("In TransparentPageflow constructor")
 		this.mapRouteToComponentProps = mapRoutePropsToComponentProps
 		this.getConcretePath = getConcretePath
 		this.routes = config.elements.map((e, i) => {
@@ -38,11 +39,16 @@ export default class TransparentPageflow<T extends object> {
 			return (<Route
 				key={e.path}
 				path={e.path}
-				render={(routeProps) => <Clazz
-					{...this.mapRouteToComponentProps(routeProps)}
-					goNext={() => { config.dispatch(push(next(this.mapRouteToComponentProps(routeProps)(config)))) }}
-					goPrev={() => { config.dispatch(push(prev(this.mapRouteToComponentProps(routeProps)(config)))) }}
-				/>}
+				render={(routeProps) => {
+					console.log("In route.render(), routeprops are ", routeProps)
+					const componentProps = this.mapRouteToComponentProps(routeProps)(config)
+					console.log("componentProps are ", componentProps)
+					return (<Clazz
+						{...componentProps}
+						goNext={() => { config.dispatch(push(next(componentProps))) }}
+						goPrev={() => { config.dispatch(push(prev(componentProps))) }}
+					/>)}
+				}
 			/>)
 		})
 	}
