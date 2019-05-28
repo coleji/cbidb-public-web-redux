@@ -93,6 +93,9 @@ export const post = <T extends object>(formName: string, apiw: APIWrapper<any, T
 
 export const formReducer: <T extends object>(formName: string) => Reducer<FormState<T>> = 
 <T extends object>(formName: string) => (state: FormState<T>, action: FormAction<T>) => {
+	if (!state) {
+		console.log("Form reducer found falsy state, setting to default  ", state)
+	}
 	const startState = state || {
 		apiState: "UNINITIALIZED",
 		data: none

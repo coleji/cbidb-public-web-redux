@@ -51,7 +51,7 @@ export type RootReducer = (state: RootState, action: Action) => RootState
 
 export const makeRootReducer: (history: any, staticState: StaticState) => RootReducer = 
 (history, staticState) => {
-	return combineReducers({
+	const rootReducer = combineReducers({
 		router: connectRouter(history),
 		staticState: () => staticState,
 		login: loginReducer,
@@ -64,5 +64,9 @@ export const makeRootReducer: (history: any, staticState: StaticState) => RootRe
 		scholarshipForm: formReducer<ScholarshipForm>(scholarshipFormName),
 		homePageForm: formReducer<HomePageForm>(homePageFormName),
 		registrationWizard: formReducer<DoublyLinkedList<JSX.Element>>(registrationWizardFormName),
-	})	
+	})
+	return (state: RootState, action: Action<any>) => {
+		if (action.type == "LOGOUT") return rootReducer(undefined, action)
+		else return rootReducer(state, action)
+	}
 }
