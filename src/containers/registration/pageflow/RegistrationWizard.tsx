@@ -11,6 +11,7 @@ import SurveyInfo from "../SurveyInfo";
 import getPersonIdFromPath from "../../../util/getPersonIdFromPath";
 import ProgressThermometer from "../../../components/ProgressThermometer";
 import { State } from "../../../core/Breadcrumb";
+import Scholarship from "../../Scholarship";
 
 export const path = "/required/:personId"
 
@@ -35,22 +36,29 @@ export default (state: RootState) => {
 		}
 	}
 
+	const maybeScholarship: WizardNode[] = (state.homePageForm.data.getOrElse({} as any).hasEIIResponse ? [] : [{
+		clazz: Scholarship,
+		breadcrumbHTML: <React.Fragment>Family<br />Information</React.Fragment>
+	}])
+
+	const nodes: WizardNode[] = maybeScholarship.concat([{
+		clazz: RequiredInfo,
+		breadcrumbHTML: <React.Fragment>Required<br />Info</React.Fragment>
+	}, {
+		clazz: EmergencyContact,
+		breadcrumbHTML: <React.Fragment>Emergency<br />Contact</React.Fragment>
+	}, {
+		clazz: SwimProof,
+		breadcrumbHTML: <React.Fragment>Swim<br />Proof</React.Fragment>
+	}, {
+		clazz: SurveyInfo,
+		breadcrumbHTML: <React.Fragment>Survey<br />Information</React.Fragment>
+	}])
+
 	console.log("returning class")
 	return WizardPageflow({
 		formName,
-		nodes: [{
-			clazz: RequiredInfo,
-			breadcrumbHTML: <React.Fragment>Required<br />Info</React.Fragment>
-		}, {
-			clazz: EmergencyContact,
-			breadcrumbHTML: <React.Fragment>Emergency<br />Contact</React.Fragment>
-		}, {
-			clazz: SwimProof,
-			breadcrumbHTML: <React.Fragment>Swim<br />Proof</React.Fragment>
-		}, {
-			clazz: SurveyInfo,
-			breadcrumbHTML: <React.Fragment>Survey<br />Information</React.Fragment>
-		}],
+		nodes,
 		getDLL: (state: RootState) => state.registrationWizard.data,
 		placeholder: <JoomlaMainPage />,
 		getComponentProps: getComponentProps(getPersonIdFromPath(path, state.router.location.pathname)),
