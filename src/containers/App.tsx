@@ -72,7 +72,8 @@ class App extends React.Component<Props> {
 
 		const mustBeLoggedIn = [
 			<Route key={ratingsPagePath} exact path={ratingsPagePath} render={(props) => <RatingsPage />} />,
-			...RegistrationTransparentFlow(this.props.dispatch).routes,
+			<Route key="reg" exact path={registrationWizardPath} component={this.registrationWizard} />,
+			//...RegistrationTransparentFlow(this.props.dispatch).routes,
 			<Route key="default" render={() => <HomePage />} />
 		]
 

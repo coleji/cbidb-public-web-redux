@@ -3,7 +3,8 @@ import APIWrapper, { HttpMethod, ServerParams } from '../core/APIWrapper';
 
 export const validator = t.type({
 	parentPersonId: t.number,
-    userName: t.string,
+	userName: t.string,
+	hasEIIResponse: t.boolean,
 	children: t.array(t.type({
 		personId: t.number,
 		nameFirst: t.string,

@@ -4,14 +4,20 @@ import { Dispatch } from "redux";
 import { DoublyLinkedList } from "../util/DoublyLinkedList";
 import { set } from "../core/form/form";
 import { Option } from "fp-ts/lib/Option";
-import { connect } from "react-redux";
+import { connect, ConnectedComponentClass } from "react-redux";
 import { push } from "connected-react-router";
 
-interface Config {
+export interface WizardNode {
+	clazz: ConnectedComponentClass<any, any>,
+	breadcrumbHTML: JSX.Element
+}
+
+interface Config<T_CompProps> {
 	formName: string,
 	placeholder: JSX.Element,
 	getDLL: (state: RootState) =>  Option<DoublyLinkedList<JSX.Element>>,
-	pages: (goNext: () => void, goPrev: () => void) => JSX.Element[],
+	getComponentProps: (goNext: () => void, goPrev: () => void, prevNodes: WizardNode[], currNode: WizardNode, nextNodes: WizardNode[]) => T_CompProps,
+	nodes: WizardNode[],
 	start: string,
 	end: string
 }
@@ -26,7 +32,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
-export default (config: Config) => {
+export default function<T_CompProps>(config: Config<T_CompProps>) {
 	class WizardPageflow<T> extends React.PureComponent<T & Props> {
 		personId: number
 		placeholder: JSX.Element
@@ -51,7 +57,7 @@ export default (config: Config) => {
 				if (self.dll.hasNext()) {
 					set(self.props.dispatch, config.formName, this.dll.next())
 				} else {
-					console.log("going back to start: ", config.end)
+					console.log("going to end: ", config.end)
 					self.props.dispatch(push(config.end))
 				}
 				
@@ -66,15 +72,21 @@ export default (config: Config) => {
 				}
 				
 			}
+
+			const nodes = config.nodes.map((node, i, arr) => {
+				const prevNodes = arr.filter((ee, ii) => ii < i)
+				const nextNodes = arr.filter((ee, ii) => ii > i)
+				const Clazz = node.clazz
+				return <Clazz 
+					{...config.getComponentProps(self.goNext, self.goPrev, prevNodes, node, nextNodes)}
+				/>
+			})
 	
-			const pages = DoublyLinkedList.from(config.pages(
-				this.goNext,
-				this.goPrev
-			))
+			const dll = DoublyLinkedList.from(nodes)
 	
-			console.log("about to set DLL in redux:  ", pages)
-			this.dll = pages
-			set(self.props.dispatch, config.formName, pages)
+			console.log("about to set DLL in redux:  ", dll)
+			this.dll = dll
+			set(self.props.dispatch, config.formName, dll)
 		}
 		componentWillReceiveProps(props: Props) {
 			this.dll = config.getDLL(props.state).getOrElse(DoublyLinkedList.from([this.placeholder]))
@@ -83,7 +95,6 @@ export default (config: Config) => {
 		render() {
 			console.log("rendering.....")
 			console.log(this.dll)
-			//return <RequiredInfo goNext={this.props.goNext} />
 			return this.dll.curr
 		}
 	}
