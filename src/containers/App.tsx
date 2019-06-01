@@ -13,7 +13,7 @@ import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
 import RegistrationWizard, {path as registrationWizardPath} from './registration/pageflow/RegistrationWizard';
-import RegistrationTransparentFlow from "./registration/pageflow/RegistrationTransparentFlow"
+//import RegistrationTransparentFlow from "./registration/pageflow/RegistrationTransparentFlow"
 
 const mapStateToProps = (state: RootState) => ({
 	state,

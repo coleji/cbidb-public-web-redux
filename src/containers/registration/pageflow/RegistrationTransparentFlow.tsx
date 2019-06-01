@@ -9,6 +9,7 @@ import { Dispatch } from "redux";
 import ProgressThermometer from "../../../components/ProgressThermometer";
 import { State } from "../../../core/Breadcrumb";
 
+/*
 const personIdParam = "personId"
 
 const makeConcretePath = (path: string) => (personId: string) => path.replace(":"+personIdParam, personId)
@@ -72,3 +73,4 @@ export default (dispatch: Dispatch) => {
 		(path: string) => (componentProps) => makeConcretePath(path)(String(componentProps.personId))
 	)
 }
+*/
