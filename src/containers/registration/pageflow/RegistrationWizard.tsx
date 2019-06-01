@@ -13,7 +13,7 @@ import ProgressThermometer from "../../../components/ProgressThermometer";
 import { State } from "../../../core/Breadcrumb";
 import Scholarship from "../../Scholarship";
 
-export const path = "/required/:personId"
+export const path = "/reg/:personId"
 
 export const formName = "registrationWizard"
 
