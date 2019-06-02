@@ -12,14 +12,18 @@ export interface WizardNode {
 	breadcrumbHTML: JSX.Element
 }
 
+export type ElementDLL = DoublyLinkedList<JSX.Element>
+
 interface Config<T_CompProps> {
 	formName: string,
 	placeholder: JSX.Element,
-	getDLL: (state: RootState) =>  Option<DoublyLinkedList<JSX.Element>>,
+	getDLL: (state: RootState) =>  Option<ElementDLL>,
 	getComponentProps: (goNext: () => void, goPrev: () => void, prevNodes: WizardNode[], currNode: WizardNode, nextNodes: WizardNode[]) => T_CompProps,
 	nodes: WizardNode[],
 	start: string,
-	end: string
+	end: string,
+	getNextDLL: Option<(dll: ElementDLL) => ElementDLL>,
+	getPrevDLL: Option<(dll: ElementDLL) => ElementDLL>
 }
 
 const mapStateToProps = (state: RootState) => ({
@@ -32,13 +36,16 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
+
 export default function<T_CompProps>(config: Config<T_CompProps>) {
 	class WizardPageflow<T> extends React.PureComponent<T & Props> {
 		personId: number
 		placeholder: JSX.Element
 		goNext: () => void
 		goPrev: () => void
-		dll: DoublyLinkedList<JSX.Element>
+		dll: ElementDLL
+		static getNextDLL: (dll: ElementDLL) => ElementDLL = dll => dll.next()
+		static getPrevDLL: (dll: ElementDLL) => ElementDLL = dll => dll.prev()
 		constructor(props: T & Props) {
 			console.log("in wizard pageflow constructor")
 			super(props)
@@ -55,7 +62,7 @@ export default function<T_CompProps>(config: Config<T_CompProps>) {
 			this.goNext = () => {
 				console.log("pushed goNext!")
 				if (self.dll.hasNext()) {
-					set(self.props.dispatch, config.formName, this.dll.next())
+					set(self.props.dispatch, config.formName, config.getNextDLL.getOrElse(WizardPageflow.getNextDLL)(this.dll))
 				} else {
 					console.log("going to end: ", config.end)
 					self.props.dispatch(push(config.end))
@@ -65,7 +72,7 @@ export default function<T_CompProps>(config: Config<T_CompProps>) {
 			this.goPrev = () => {
 				console.log("pushed goPrev!")
 				if (self.dll.hasPrev()) {
-					set(self.props.dispatch, config.formName, this.dll.prev())
+					set(self.props.dispatch, config.formName, config.getPrevDLL.getOrElse(WizardPageflow.getPrevDLL)(this.dll))
 				} else {
 					console.log("going back to start: ", config.start)
 					self.props.dispatch(push(config.start))

@@ -7,9 +7,13 @@ import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import { RootState } from '../rootReducer';
 import Currency from "../util/Currency";
 import { RadioGroup, SingleCheckbox } from "../components/InputGroup";
-import { dispatchFormUpdate } from "../core/form/form";
+import { dispatchFormUpdate, post } from "../core/form/form";
 import { Select } from "../components/Select";
 import TextInput from "../components/TextInput";
+import Button from "../components/Button";
+import { postWrapper} from "../async/junior/scholarship"
+import { Dispatch } from "redux";
+import {formName as RegistrationWizardFormName} from "./registration/pageflow/RegistrationWizard"
 
 export const formName = "scholarshipForm"
 
@@ -30,19 +34,29 @@ class FormRadio extends RadioGroup<Form> {}
 class FormSelect extends Select<Form> {}
 class FormBoolean extends SingleCheckbox<Form>{}
 
-interface StateProps {
-	form: Option<Form>,
-	jpPrice: Currency,
-	currentSeason: number
+const mapStateToProps = (state: RootState) => ({
+	form: state.scholarshipForm.data,
+	jpPrice: Currency.cents(state.staticState.jpPriceCents),
+	currentSeason: state.staticState.currentSeason,
+	parentPersonId: state.homePageForm.data.getOrElse(null).parentPersonId,
+	registrationWizard: state.registrationWizard.data
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	dispatch, 
+	updateField: function(name: keyof Form, value: any) {
+		console.log("updating field!")
+		dispatchFormUpdate(dispatch, formName)(name, value)
+	}
+})
+
+interface StaticProps {
+	personId: number,
+	goNext: () => void,
+	goPrev: () => void,
 }
 
-interface DispatchProps {
-	updateField: (name: keyof Form, value: string) => void
-}
-
-interface StaticProps { }
-
-type Props = StateProps & DispatchProps & StaticProps
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
 
 function generateOptions(singular: string, plural: string, min: number, max: number) {
 	var ret = [];
@@ -56,7 +70,7 @@ function generateOptions(singular: string, plural: string, min: number, max: num
 	return ret;
 }
 
-class RatingsPage extends React.PureComponent<Props> {
+class ScholarshipPage extends React.PureComponent<Props> {
 	render() {
 		const self = this;
 
@@ -194,21 +208,13 @@ class RatingsPage extends React.PureComponent<Props> {
 				</div>
 			</JoomlaArticleRegion>
 			{self.props.form.chain(f => f.isApplying).getOrElse(null) == "Yes" ? familyInfo : ""}
+			<Button text="< Back" onClick={this.props.goPrev}/>
+			<Button text="Next >" onClick={() => {
+				post(formName, postWrapper(this.props.parentPersonId))({}).then(this.props.goNext)
+			}}/>
 		</JoomlaMainPage>
 	}
 }
 
 
-export default connect<StateProps, DispatchProps, StaticProps, RootState>(
-	state => ({
-		form: state.scholarshipForm.data,
-		jpPrice: Currency.cents(state.staticState.jpPriceCents),
-		currentSeason: state.staticState.currentSeason
-	}),
-	dispatch => ({
-		updateField: function(name: keyof Form, value: any) {
-			console.log("updating field!")
-			dispatchFormUpdate(dispatch, formName)(name, value)
-		}
-	})
-)(RatingsPage)
+export default connect(mapStateToProps, mapDispatchToProps)(ScholarshipPage)
