@@ -1,6 +1,8 @@
 import * as t from 'io-ts'
 import APIWrapper, { HttpMethod, ServerParams, PostString } from '../core/APIWrapper';
 import memberWelcome from "./member-welcome"
+import {formName as homePageFormName} from "../containers/HomePage"
+import { some } from 'fp-ts/lib/Option';
 
 const path = "/authenticate-member"
 
@@ -33,8 +35,12 @@ export const login = (serverParams: ServerParams) => (dispatch: (action: any) =>
 			}))
 			.then(data => {
 				console.log("welcome package: ", data)
+				dispatch({
+					type: "SET_FORM", 
+					formName: homePageFormName,
+					data: some(data)
+				})
 				dispatch({type: "LOGIN_SUCCESS", userName})
-				dispatch({type: "WELCOME_PKG_UPDATE", ...((<any>data).data)})
 			})	
 		}
 	})

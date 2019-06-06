@@ -13,8 +13,8 @@ extends React.PureComponent<T_Props> {
 	abstract formToAPI: (formState: T_Form) => t.TypeOf<T_APIValidator>
 	abstract renderPlaceholder(): JSX.Element
 	abstract renderComponent(data: T_Form): JSX.Element
-	componentDidMount() {
-		console.log("executing APIBlockedComponent CDM")
+	componentWillMount() {
+		console.log("executing APIBlockedComponent CWM")
 		get(this.formName, this.getApiWrapper(), this.apiToForm)
 	}
 	render() {
