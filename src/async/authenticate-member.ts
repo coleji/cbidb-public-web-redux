@@ -21,7 +21,7 @@ export const login = (serverParams: ServerParams) => (dispatch: (action: any) =>
 	return apiw.send(serverParams)(payload)
 	.then(data => {
 		console.log("login result: ", data)
-		if (String(data) == "false") {
+		if (String(data) != "true") {
 			dispatch({type: "LOGIN_FAILURE"})
 		} else {
 			console.log("about to query welcome pkg")

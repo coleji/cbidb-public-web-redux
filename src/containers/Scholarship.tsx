@@ -11,7 +11,8 @@ import { dispatchFormUpdate, post } from "../core/form/form";
 import { Select } from "../components/Select";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
-import { postWrapper} from "../async/junior/scholarship"
+import { postWrapper as postNo} from "../async/junior/scholarship-no"
+import { postWrapper as postYes} from "../async/junior/scholarship-yes"
 import { Dispatch } from "redux";
 import {formName as RegistrationWizardFormName} from "./registration/pageflow/RegistrationWizard"
 
@@ -20,7 +21,7 @@ export const formName = "scholarshipForm"
 export interface Form {
 	isApplying: Option<string>,
 	numberAdults: Option<string>,
-	haveInsurange: Option<string>,
+	haveInsurance: Option<string>,
 	numberInfants: Option<string>,
 	numberPreschoolers: Option<string>,
 	numberSchoolagers: Option<string>,
@@ -100,7 +101,7 @@ class ScholarshipPage extends React.PureComponent<Props> {
 						<tr>
 							<td>Do you have employment based health insurance?</td>
 							<td><FormSelect
-								id="haveInsurange"
+								id="haveInsurance"
 								justElement={true}
 								nullDisplay="- Select -"
 								options={[{
@@ -108,7 +109,7 @@ class ScholarshipPage extends React.PureComponent<Props> {
 								}, {
 									key: "N", display: "No"
 								}]}
-								value={self.props.form.chain(f => f.haveInsurange)}
+								value={self.props.form.chain(f => f.haveInsurance)}
 								reduxAction={self.props.updateField}
 							/></td>
 						</tr>	
@@ -190,6 +191,25 @@ class ScholarshipPage extends React.PureComponent<Props> {
 				</JoomlaArticleRegion>
 			</React.Fragment>
 
+		const next = <Button text="Next >" onClick={() => {
+			const form = self.props.form.getOrElse({} as any)
+			const isApplying = form.isApplying.getOrElse("No") == "Yes"
+			if (isApplying) {
+				post(formName, postYes(this.props.parentPersonId))({
+					numberWorkers: Number(form.numberAdults.getOrElse("0")),
+					hasBenefits: form.haveInsurance.getOrElse("N") == "Y",
+					infantCount:  Number(form.numberInfants.getOrElse("0")),
+					preschoolerCount:  Number(form.numberPreschoolers.getOrElse("0")),
+					schoolagerCount:  Number(form.numberSchoolagers.getOrElse("0")),
+					teenagerCount:  Number(form.numberTeenagers.getOrElse("0")),
+					income:  Number(form.income.getOrElse("0"))
+				}).then(this.props.goNext)
+			} else {
+				post(formName, postNo(this.props.parentPersonId))({}).then(this.props.goNext)
+			}
+			
+		}}/>
+
 		return <JoomlaMainPage>
 			<JoomlaArticleRegion title="Scholarships are available to provide sailing for all.">
 				We strive to make Junior Memberships affordable for all.<br />
@@ -209,9 +229,14 @@ class ScholarshipPage extends React.PureComponent<Props> {
 			</JoomlaArticleRegion>
 			{self.props.form.chain(f => f.isApplying).getOrElse(null) == "Yes" ? familyInfo : ""}
 			<Button text="< Back" onClick={this.props.goPrev}/>
-			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.props.parentPersonId))({}).then(this.props.goNext)
-			}}/>
+
+			{(function() {
+				const form = self.props.form.getOrElse({} as any)
+				const isApplying = (form.isApplying || none).getOrElse("")
+				const doAgree = (form.doAgree || none).getOrElse(false)
+				if (isApplying == "No" || (isApplying == "Yes" && doAgree)) return next
+				else return null
+			}())}
 		</JoomlaMainPage>
 	}
 }

@@ -8,7 +8,7 @@ export const validator = t.type({
 
 })
 
-const path = "/junior/scholarship"
+const path = "/junior/scholarship-no"
 
 export const postWrapper = (personId: number) => new APIWrapper<typeof t.string, t.TypeOf<typeof validator>, {personId: number}>({
 	path,
