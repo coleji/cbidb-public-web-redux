@@ -81,7 +81,7 @@ getConfig.then(serverConfig => {
 		}
 		const apiServerParams: ServerParams = {
 			...serverConfig.API,
-			staticHeaders: { "Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"] }
+			staticHeaders: req.cookies["CBIDB-SEC"] ? { "Cookie": "CBIDB-SEC=" + req.cookies["CBIDB-SEC"] } : {}
 		}
 		memberWelcome(apiServerParams)
 		.then((response: any) => JSON.parse(response))

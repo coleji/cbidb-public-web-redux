@@ -1,7 +1,7 @@
 import { ConnectedRouter } from 'connected-react-router';
 import * as React from 'react';
 import { connect } from "react-redux";
-import { Route, Switch } from 'react-router';
+import { Route, Switch, Redirect } from 'react-router';
 import { Dispatch } from 'redux';
 
 import Gatekeeper from "../containers/create-acct/Gatekeeper";
@@ -43,7 +43,7 @@ class App extends React.Component<Props> {
 		this.registrationWizard = RegistrationWizard(this.props.state)
 	}
 	shouldComponentUpdate(nextProps: Props) {
-		console.log("in SCU")
+		console.log("in SCU", nextProps)
 		if (this.props.router.location !== nextProps.router.location) {
 			console.log("location changed!")
 			console.log(nextProps.router.location)
@@ -67,10 +67,13 @@ class App extends React.Component<Props> {
 		const mustNotBeLoggedIn = [
 			 <Route key="/precreate" path="/precreate" render={() => <Gatekeeper />} />,
 			 <Route key="/create-acct" path="/create-acct" render={() => <CreateAccount />} />,
-			<Route key="default" render={() => <LoginPage />} />
+			<Route key="login" path="/login" render={() => <LoginPage />} />,
+			<Route key="default" render={() => <Redirect to="/login"/>} />,
+			
 		]
 
 		const mustBeLoggedIn = [
+			<Route key="login" path="/login" render={() => <Redirect to="/"/>} />,
 			<Route key={ratingsPagePath} exact path={ratingsPagePath} render={(props) => <RatingsPage />} />,
 			<Route key="reg" exact path={registrationWizardPath} render={() => {
 				const Clazz = this.registrationWizard
