@@ -13,6 +13,7 @@ import ProgressThermometer from "../../../components/ProgressThermometer";
 import { State } from "../../../core/Breadcrumb";
 import Scholarship from "../../Scholarship";
 import { none, some } from "fp-ts/lib/Option";
+import TermsConditions from "../TermsConditions";
 
 export const path = "/reg/:personId"
 
@@ -54,6 +55,9 @@ export default (state: RootState) => {
 	}, {
 		clazz: SurveyInfo,
 		breadcrumbHTML: <React.Fragment>Survey<br />Information</React.Fragment>
+	}, {
+		clazz: TermsConditions,
+		breadcrumbHTML: <React.Fragment>Terms and <br />Conditions</React.Fragment>
 	}]
 
 	const nodes: WizardNode[] = maybeScholarship.concat(otherNodes)

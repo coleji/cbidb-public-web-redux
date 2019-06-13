@@ -66,7 +66,11 @@ export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, stri
 	isCheckbox = false;
 	values = this.props.values;
 	isChecked = (key: string) => this.props.value.getOrElse("") == key
-	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value);
+	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => {
+		if (this.props.reduxAction) {
+			this.props.reduxAction(this.props.id, ev.target.value)
+		}
+	}
 }
 
 export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, string[]> {
