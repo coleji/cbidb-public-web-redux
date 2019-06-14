@@ -10,6 +10,9 @@ export default class Joomla8_4 extends Page<Joomla8_4Props> {
 	render() {
 		return (
 			<div className="rt-container">
+				<style dangerouslySetInnerHTML={{__html: `
+					.article-body { font-size: 1.2em !important }
+				`}} />
 				<div className="rt-grid-8">
 					<div id="rt-main-column" className="page-content-light">
 						<div className="rt-block component-block" style={({minHeight: "350px"})}>
