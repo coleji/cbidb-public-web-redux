@@ -7,7 +7,7 @@ function testBit(num: number, bit: number){
     return ((num>>bit) % 2 != 0)
 }
 
-//TODO: paths are duplicated here
+//TODO: paths are duplicated here, import from classes and replace :personId
 export default (bv: number, juniorId: number) => {
 	const req = registrationPath.replace(":personId", String(juniorId))
     const actions = [{
@@ -18,7 +18,7 @@ export default (bv: number, juniorId: number) => {
         element: <Link to={"/ratings/" + juniorId}>{"View Ratings"}</Link>
     }, {
         place: 5,
-        element: <PlaceholderLink>{"Signup for Summer Classes"}</PlaceholderLink>
+        element: <Link to={"/class/" + juniorId}>{"Signup for Summer Classes"}</Link>
     }, {
         place: 6,
         element: <PlaceholderLink>{"Signup for Fall Classes"}</PlaceholderLink>
