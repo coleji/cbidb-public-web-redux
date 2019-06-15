@@ -13,6 +13,7 @@ import {Form as CreateAccountForm, formName as createAccountFormName} from "./co
 import {Form as HomePageForm, formName as homePageFormName} from "./containers/HomePage"
 import {Form as ScholarshipForm, formName as scholarshipFormName} from "./containers/Scholarship"
 import {formName as registrationWizardFormName} from "./containers/registration/pageflow/RegistrationWizard"
+import {Form as SelectClassTypeForm, formName as selectClassTypeFormName} from "./containers/class-signup/SelectClassType"
 import * as moment from "moment";
 import {ServerConfig} from "./core/server/config"
 import { ServerParams } from "./core/APIWrapper";
@@ -45,6 +46,7 @@ export interface RootState {
 	scholarshipForm: FormState<ScholarshipForm>,
 	homePageForm: FormState<HomePageForm>,
 	registrationWizard: FormState<DoublyLinkedList<JSX.Element>>
+	selectClassTypeForm: FormState<SelectClassTypeForm>,
 }
 
 export type RootReducer = (state: RootState, action: Action) => RootState
@@ -64,6 +66,7 @@ export const makeRootReducer: (history: any, staticState: StaticState) => RootRe
 		scholarshipForm: formReducer<ScholarshipForm>(scholarshipFormName),
 		homePageForm: formReducer<HomePageForm>(homePageFormName),
 		registrationWizard: formReducer<DoublyLinkedList<JSX.Element>>(registrationWizardFormName),
+		selectClassTypeForm: formReducer<SelectClassTypeForm>(selectClassTypeFormName),
 	})
 	return (state: RootState, action: Action<any>) => {
 		if (action.type == "LOGOUT") return rootReducer(undefined, action)
