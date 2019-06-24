@@ -14,19 +14,17 @@ import robosail from "./robosail"
 import funGames from "./fun-games"
 
 
-export default (
-	<React.Fragment>
-		{asDiv(mercFastTrack)}
-		{asDiv(mainsail)}
-		{asDiv(mercClinic)}
-		{asDiv(sup)}
-		{asDiv(paddleAdventure)}
-		{asDiv(ws)}
-		{asDiv(advWSClinic)}
-		{asDiv(wsRacingClinic)}
-		{asDiv(envSci)}
-		{asDiv(raceTeam)}
-		{asDiv(robosail)}
-		{asDiv(funGames)}
-	</React.Fragment>
-);
+export default ([
+	mercFastTrack,
+	mainsail,
+	mercClinic,
+	sup,
+	paddleAdventure,
+	ws,
+	advWSClinic,
+	wsRacingClinic,
+	envSci,
+	raceTeam,
+	robosail,
+	funGames
+]);
