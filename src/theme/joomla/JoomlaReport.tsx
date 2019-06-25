@@ -2,7 +2,8 @@ import * as React from "react";
 
 interface Props {
 	headers: string[],
-	rows: React.ReactNode[][]
+	rows: React.ReactNode[][],
+	cellStyles?: React.CSSProperties[]
 }
 
 export default (props: Props) => (
@@ -14,13 +15,19 @@ export default (props: Props) => (
 				</th>
 			))}
 		</tr>
-		{props.rows.zipWithIndex().map(rowTuple => {
-			const isEven = rowTuple[1] % 2 == 0;
+		{props.rows.zipWithIndex().map(([row, rowIndex]) => {
+			const isEven = rowIndex % 2 == 0;
+			const styles = props.cellStyles || []
+			console.log(styles)
 			return (
-				<tr className="highlight-row" key={`row_${rowTuple[1]}`}>
-					{rowTuple[0].zipWithIndex().map(cellTuple => (
-						<td className="data" style={({background: isEven ? "#FAFAFA" : "$F0F0F0", padding: "10px"})} key={`cell_${cellTuple[1]}`}>
-						{cellTuple[0]}
+				<tr className="highlight-row" key={`row_${rowIndex}`}>
+					{row.zipWithIndex().map(([cellContents, cellIndex]) => (
+						<td
+							className="data"
+							style={{...(styles[cellIndex] || {}), background: isEven ? "#FAFAFA" : "$F0F0F0", padding: "10px"}}
+							key={`cell_${cellIndex}`}
+						>
+							{cellContents}
 						</td>
 					))}
 				</tr>

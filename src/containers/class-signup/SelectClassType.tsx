@@ -19,6 +19,7 @@ import {getWrapper,  validator} from "../../async/junior/see-types"
 import { matchPath } from "react-router";
 import { arch } from "os";
 import {ClassType} from "./class-description"
+import JpClassesAvailTable from "../../components/JpClassesAvailTable";
 
 export const formName = "selectClassType"
 
@@ -125,6 +126,9 @@ class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator>
 				{intermediateRegion}
 				{advancedRegion}
 				{otherRegion}
+				<JoomlaArticleRegion title="Class Availability">
+					<JpClassesAvailTable />
+				</JoomlaArticleRegion>
 			</React.Fragment>
 		);
 
