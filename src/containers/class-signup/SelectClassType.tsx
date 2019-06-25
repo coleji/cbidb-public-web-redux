@@ -20,6 +20,8 @@ import { matchPath } from "react-router";
 import { arch } from "os";
 import {ClassType} from "./class-description"
 import JpClassesAvailTable from "../../components/JpClassesAvailTable";
+import {getWrapper as getInstances} from "../../async/junior/get-class-instances"
+import { getReduxState } from "../../core/reducer/store";
 
 export const formName = "selectClassType"
 
@@ -72,6 +74,26 @@ class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator>
 		this.personId = (match.params as any).personId;
 
 		console.log("scraped from the url: " + this.personId)
+		const apiw = getInstances(1221, this.personId);
+		apiw.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
+			console.log("Got result from api: ", result)
+			const parsedResult = apiw.parseResponse(result)
+			console.log(parsedResult)
+			// if (parsedResult.type == "Success") {
+			// 	set(dispatch, formName, mapper(parsedResult.result))
+			// 	return Promise.resolve("blah")
+			// } else {
+			// 	console.log(parsedResult.failureType)
+			// 	console.log(parsedResult.err)
+			// 	return Promise.reject(parsedResult.failureType)
+			// }
+			// set form to result from api
+			
+		}).catch(err => {
+			console.log("Error: ", err)
+		}).then(() => {
+			console.log("finished form get")
+		})
 	}
 	renderPlaceholder() {
 		return <span>whatever</span>
