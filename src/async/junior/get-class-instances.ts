@@ -3,8 +3,14 @@ import APIWrapper, { HttpMethod } from '../../core/APIWrapper';
 import {OptionalString} from '../../util/OptionalTypeValidators'
 
 export const validator = t.array(t.type({
-	typeId: t.number,
-	canSee: t.boolean
+	instanceId: t.number,
+	className: t.string,
+	firstDay: t.string,
+	lastDay: t.string,
+	classTime: t.string,
+	notes: OptionalString,
+	spotsLeft: t.string,
+	action: t.string
 }))
 
 

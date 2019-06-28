@@ -3,9 +3,7 @@ import * as t from 'io-ts'
 import { connect } from "react-redux";
 import { RadioGroup } from "../../components/InputGroup";
 import { RootState } from '../../rootReducer';
-import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import { Dispatch } from "redux";
-import Breadcrumb from "../../core/Breadcrumb";
 import Joomla8_4 from "../../theme/joomla/Joomla8_4";
 import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
 import { asDiv, asFragment } from "./class-description"
@@ -17,11 +15,8 @@ import other from './types/other'
 import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import {getWrapper,  validator} from "../../async/junior/see-types"
 import { matchPath } from "react-router";
-import { arch } from "os";
 import {ClassType} from "./class-description"
 import JpClassesAvailTable from "../../components/JpClassesAvailTable";
-import {getWrapper as getInstances} from "../../async/junior/get-class-instances"
-import { getReduxState } from "../../core/reducer/store";
 
 export const formName = "selectClassType"
 
@@ -74,32 +69,14 @@ class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator>
 		this.personId = (match.params as any).personId;
 
 		console.log("scraped from the url: " + this.personId)
-		const apiw = getInstances(1221, this.personId);
-		apiw.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
-			console.log("Got result from api: ", result)
-			const parsedResult = apiw.parseResponse(result)
-			console.log(parsedResult)
-			// if (parsedResult.type == "Success") {
-			// 	set(dispatch, formName, mapper(parsedResult.result))
-			// 	return Promise.resolve("blah")
-			// } else {
-			// 	console.log(parsedResult.failureType)
-			// 	console.log(parsedResult.err)
-			// 	return Promise.reject(parsedResult.failureType)
-			// }
-			// set form to result from api
-			
-		}).catch(err => {
-			console.log("Error: ", err)
-		}).then(() => {
-			console.log("finished form get")
-		})
 	}
 	renderPlaceholder() {
 		return <span>whatever</span>
 	}
 	renderComponent(data: Form) {
 		const self = this;
+		const asFragmentCurried = asFragment(this.personId)
+		const asDivCurried = asDiv(this.personId)
 		console.log(data)
 
 		const canSeeClass = (c: ClassType) => !!data.classTypesHash[String(c.typeId)];
@@ -107,7 +84,7 @@ class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator>
 		const beginnerRegion = (canSeeClass(beginner)
 			? (
 				<JoomlaArticleRegion title={<React.Fragment>First Step: <i>Beginner Sailing</i></React.Fragment>}>
-					{asFragment(beginner)}
+					{asFragmentCurried(beginner)}
 				</JoomlaArticleRegion>
 			)
 			: ""
@@ -116,7 +93,7 @@ class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator>
 		const intermediateRegion = (canSeeClass(intermediate)
 			? (
 				<JoomlaArticleRegion title={<React.Fragment>Next Step: <i>Intermediate Sailing</i></React.Fragment>}>
-					{asFragment(intermediate)}
+					{asFragmentCurried(intermediate)}
 				</JoomlaArticleRegion>
 			)
 			: ""
@@ -126,7 +103,7 @@ class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator>
 		const advancedRegion = (advancedCanSee.length > 0
 			? (
 				<JoomlaArticleRegion title={<React.Fragment>Next Step: Advanced Classes</React.Fragment>}>
-					{advancedCanSee.map(asDiv)}
+					{advancedCanSee.map(asDivCurried)}
 				</JoomlaArticleRegion>
 			)
 			: ""
@@ -136,7 +113,7 @@ class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator>
 		const otherRegion = (otherCanSee.length > 0
 			? (
 				<JoomlaArticleRegion title="Other Available Classes">
-					{otherCanSee.map(asDiv)}
+					{otherCanSee.map(asDivCurried)}
 				</JoomlaArticleRegion>
 			)
 			: ""
@@ -148,9 +125,6 @@ class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator>
 				{intermediateRegion}
 				{advancedRegion}
 				{otherRegion}
-				<JoomlaArticleRegion title="Class Availability">
-					<JpClassesAvailTable />
-				</JoomlaArticleRegion>
 			</React.Fragment>
 		);
 

@@ -14,6 +14,7 @@ import LoginPage from './LoginPage';
 import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
 import RegistrationWizard, {path as registrationWizardPath} from './registration/pageflow/RegistrationWizard';
 import SelectClassType, {path as selectClassTypePath} from "./class-signup/SelectClassType"
+import SelectClassTime, {path as selectClassTimePath} from "./class-signup/SelectClassTime"
 //import RegistrationTransparentFlow from "./registration/pageflow/RegistrationTransparentFlow"
 
 const mapStateToProps = (state: RootState) => ({
@@ -77,6 +78,7 @@ class App extends React.Component<Props> {
 			<Route key="login" path="/login" render={() => <Redirect to="/"/>} />,
 			<Route key={ratingsPagePath} exact path={ratingsPagePath} render={(props) => <RatingsPage />} />,
 			<Route key="class" path={selectClassTypePath} render={() => <SelectClassType />} />,
+			<Route key="classTime" path={selectClassTimePath} render={() => <SelectClassTime />} />,
 			<Route key="reg" exact path={registrationWizardPath} render={() => {
 				const Clazz = this.registrationWizard
 				return <Clazz />
