@@ -12,6 +12,9 @@ import SelectClassTime, { path as selectClassTimePath, path } from "./containers
 import { History } from 'history';
 import PageWrapper from './components/Page/PageWrapper';
 import extractURLParams from './util/extractURLParams';
+import {Form as HomePageForm} from "./containers/HomePage"
+import {apiw as welcomeAPI} from "./async/member-welcome"
+import { getReduxState } from './core/reducer/store';
 
 export default function (history: History<any>, isLoggedIn: boolean) {
 	function pathAndParamsExtractor<T>(path: string) {
@@ -35,7 +38,25 @@ export default function (history: History<any>, isLoggedIn: boolean) {
 	const mustBeLoggedIn = [
 		<Route key="login" path="/login" render={() => <Redirect to="/" />} />,
 		<Route key="ratings" path={paths.ratings.path} render={() => <PageWrapper
-			component={() => <RatingsPage personId={paths.ratings.getParams(history.location.pathname).personId} />}
+			component={(async: HomePageForm) => <RatingsPage welcomePackage={async}personId={paths.ratings.getParams(history.location.pathname).personId} />}
+			shadowComponent={<span>hi!</span>}
+			getAsyncProps={() => {
+				return welcomeAPI.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
+					console.log("Got result from api: ", result.substr(0,50))
+					const parsedResult = welcomeAPI.parseResponse(result)
+					if (parsedResult.type == "Success") {
+						return Promise.resolve(parsedResult.result)
+					} else {
+						console.log(parsedResult.failureType)
+						console.log(parsedResult.err)
+						return Promise.reject(parsedResult.failureType)
+					}
+					// set form to result from api
+					
+				}).catch(err => {
+					console.log("Error: ", err)
+				})
+			}}
 		/>} />,
 		<Route key="class" path={selectClassTypePath} render={() => <SelectClassType />} />,
 		<Route key="classTime" path={selectClassTimePath} render={() => <SelectClassTime />} />,

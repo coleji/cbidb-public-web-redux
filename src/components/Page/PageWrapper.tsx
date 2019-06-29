@@ -4,7 +4,7 @@ import ComponentWrapper from "./ComponentWrapper";
 interface Props<T_Async> {
     component: (asyncProps: T_Async) => JSX.Element
     getAsyncProps?: () => Promise<T_Async>,
-    shadowComponent?: React.ComponentType
+    shadowComponent?: JSX.Element
 }
 
 interface State<T> {
@@ -22,10 +22,13 @@ export default class PageWrapper<T_Async> extends React.Component<Props<T_Async>
                 readyToRender: false,
                 componentAsyncProps: null
             }
-            this.props.getAsyncProps().then(asyncProps => self.setState({
-                readyToRender: true,
-                componentAsyncProps: asyncProps
-            }));
+            this.props.getAsyncProps().then(asyncProps => {
+                console.log("about to set state: ", asyncProps)
+                self.setState({
+                    readyToRender: true,
+                    componentAsyncProps: asyncProps
+                });  
+            })
         } else {
             this.state = {
                 readyToRender: true,
@@ -40,8 +43,7 @@ export default class PageWrapper<T_Async> extends React.Component<Props<T_Async>
         if (this.state.readyToRender) {
             return this.props.component(this.state.componentAsyncProps)
         } else {
-            const ShadowComponent = this.props.shadowComponent;
-            return <ShadowComponent />
+            return this.props.shadowComponent
         }
     }
 }

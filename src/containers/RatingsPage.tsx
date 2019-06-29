@@ -7,6 +7,7 @@ import { RootState } from '../rootReducer';
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import { Dispatch } from 'redux';
+import {Form as HomePageForm} from "./HomePage"
 
 // const mapStateToProps = (state: RootState) => ({
 // 	welcomePackage: state.homePageForm.data,
@@ -22,7 +23,8 @@ import { Dispatch } from 'redux';
 // export const path = '/ratings/:personId'
 
 export interface Props {
-	personId: number
+	personId: number,
+	welcomePackage: HomePageForm
 }
 
 export default class RatingsPage extends React.PureComponent<Props> {
@@ -37,25 +39,15 @@ export default class RatingsPage extends React.PureComponent<Props> {
 		console.log("in ratings page render")
 		const self = this;
 
-		// TODO: typesafe? 
-		// const match = matchPath(
-		// 	self.props.router.location.pathname,
-		// 	{ path }
-		//   ) || {params: {}};
-		// const personId = (match.params as any).personId;
-
-		// console.log("scraped from the url: " + personId)
-
-		//const kid = this.props.welcomePackage.getOrElse({} as any).children.find(e => e.personId == this.props.personId)
+		const kid = this.props.welcomePackage.children.find(e => e.personId == this.props.personId)
 
 		// TODO: specific kid.  Also welcome package seems to sometimes be empty
-		//const ratings = kid ? kid.ratings : "<span></span>"
+		const ratings = kid ? kid.ratings : "<span></span>"
 
 		// TODO: grab specific child based on url
 		return <JoomlaMainPage>
 			<JoomlaArticleRegion title="Ratings">
-				{/* <span dangerouslySetInnerHTML={{__html: ratings}}/> */}
-				<span>{this.props.personId}</span>
+				<span dangerouslySetInnerHTML={{__html: ratings}}/>
 				<p>
 					<span style={{fontWeight: "bold", color:"red"}}>Acquired Rating</span>
 					<br />
