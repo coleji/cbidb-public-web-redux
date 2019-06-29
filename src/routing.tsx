@@ -45,21 +45,7 @@ export default function (history: History<any>, isLoggedIn: boolean) {
 			/>}
 			shadowComponent={<span>hi!</span>}
 			getAsyncProps={() => {
-				return welcomeAPI.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
-					console.log("Got result from api: ", result.substr(0,50))
-					const parsedResult = welcomeAPI.parseResponse(result)
-					if (parsedResult.type == "Success") {
-						return Promise.resolve(parsedResult.result)
-					} else {
-						console.log(parsedResult.failureType)
-						console.log(parsedResult.err)
-						return Promise.reject(parsedResult.failureType)
-					}
-					// set form to result from api
-					
-				}).catch(err => {
-					console.log("Error: ", err)
-				})
+				return welcomeAPI.do().catch(err => Promise.resolve(null));  // TODO: handle failure
 			}}
 		/>} />,
 		<Route key="class" path={selectClassTypePath} render={() => <SelectClassType />} />,

@@ -6,6 +6,7 @@ import { Either } from 'fp-ts/lib/Either';
 import * as https from "https"
 import { Option, some, none } from 'fp-ts/lib/Option';
 import { removeOptions } from '../util/deserializeOption';
+import { getReduxState } from './reducer/store';
 
 export enum HttpMethod {
 	GET = "GET",
@@ -70,6 +71,24 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON, T_FixedPa
 	config: Config<T_Validator, T_FixedParams>
 	constructor(config: Config<T_Validator, T_FixedParams>) {
 		this.config = config;
+	}
+	do(): Promise<ApiResult<t.TypeOf<T_Validator>>> {
+		return this.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
+			console.log("Got result from api: ", result.substr(0,50))
+			const parsedResult = this.parseResponse(result)
+			if (parsedResult.type == "Success") {
+				return Promise.resolve(parsedResult.result)
+			} else {
+				console.log(parsedResult.failureType)
+				console.log(parsedResult.err)
+				return Promise.reject(parsedResult.failureType)
+			}
+			// set form to result from api
+			
+		}).catch(err => {
+			console.log("Error: ", err)
+			return Promise.reject(err)
+		})
 	}
 	parseResponse: (response: string) => ApiResult<t.TypeOf<T_Validator>> = response => {
 		type Result = t.TypeOf<T_Validator>;
