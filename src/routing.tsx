@@ -38,7 +38,11 @@ export default function (history: History<any>, isLoggedIn: boolean) {
 	const mustBeLoggedIn = [
 		<Route key="login" path="/login" render={() => <Redirect to="/" />} />,
 		<Route key="ratings" path={paths.ratings.path} render={() => <PageWrapper
-			component={(async: HomePageForm) => <RatingsPage welcomePackage={async}personId={paths.ratings.getParams(history.location.pathname).personId} />}
+			component={(async: HomePageForm) => <RatingsPage
+				history={history}
+				welcomePackage={async}
+				personId={paths.ratings.getParams(history.location.pathname).personId}
+			/>}
 			shadowComponent={<span>hi!</span>}
 			getAsyncProps={() => {
 				return welcomeAPI.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {

@@ -8,6 +8,7 @@ import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import { Dispatch } from 'redux';
 import {Form as HomePageForm} from "./HomePage"
+import { History } from 'history';
 
 // const mapStateToProps = (state: RootState) => ({
 // 	welcomePackage: state.homePageForm.data,
@@ -24,7 +25,8 @@ import {Form as HomePageForm} from "./HomePage"
 
 export interface Props {
 	personId: number,
-	welcomePackage: HomePageForm
+	welcomePackage: HomePageForm,
+	history: History<any>
 }
 
 export default class RatingsPage extends React.PureComponent<Props> {
@@ -58,7 +60,7 @@ export default class RatingsPage extends React.PureComponent<Props> {
 				<p style={{fontSize: "0.9em", color: "#777", fontStyle: "italic"}}>
 					*Expired ratings can be renewed in the first days of your class
 				</p>
-				{/* <Button text="< Back" onClick={this.props.cancel}/> */}
+				<Button text="< Back" onClick={() => history.back()}/>
 			</JoomlaArticleRegion>
 		</JoomlaMainPage>
 	}
