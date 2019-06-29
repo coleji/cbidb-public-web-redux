@@ -1,4 +1,4 @@
-import { ConnectedRouter } from 'connected-react-router';
+import { ConnectedRouter, routerActions } from 'connected-react-router';
 import * as React from 'react';
 import { connect } from "react-redux";
 import { Route, Switch, Redirect } from 'react-router';
@@ -11,10 +11,10 @@ import JoomlaBase from '../theme/joomla/JoomlaBase';
 import CreateAccount from './create-acct/CreateAccount';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
-import RatingsPage, { path as ratingsPagePath } from './RatingsPage';
 import RegistrationWizard, {path as registrationWizardPath} from './registration/pageflow/RegistrationWizard';
 import SelectClassType, {path as selectClassTypePath} from "./class-signup/SelectClassType"
 import SelectClassTime, {path as selectClassTimePath} from "./class-signup/SelectClassTime"
+import router from "../routing"
 //import RegistrationTransparentFlow from "./registration/pageflow/RegistrationTransparentFlow"
 
 const mapStateToProps = (state: RootState) => ({
@@ -64,32 +64,8 @@ class App extends React.Component<Props> {
 		console.log(this.props)
 		//const path = this.props.router.pathname
 
-		const x = Gatekeeper
 
-		const mustNotBeLoggedIn = [
-			 <Route key="/precreate" path="/precreate" render={() => <Gatekeeper />} />,
-			 <Route key="/create-acct" path="/create-acct" render={() => <CreateAccount />} />,
-			<Route key="login" path="/login" render={() => <LoginPage />} />,
-			<Route key="default" render={() => <Redirect to="/login"/>} />,
-			
-		]
-
-		const mustBeLoggedIn = [
-			<Route key="login" path="/login" render={() => <Redirect to="/"/>} />,
-			<Route key={ratingsPagePath} exact path={ratingsPagePath} render={(props) => <RatingsPage />} />,
-			<Route key="class" path={selectClassTypePath} render={() => <SelectClassType />} />,
-			<Route key="classTime" path={selectClassTimePath} render={() => <SelectClassTime />} />,
-			<Route key="reg" exact path={registrationWizardPath} render={() => {
-				const Clazz = this.registrationWizard
-				return <Clazz />
-			}} />,
-			//...RegistrationTransparentFlow(this.props.dispatch).routes,
-			<Route key="default" render={() => <HomePage />} />
-		]
-
-		const isLoggedIn = self.props.login && self.props.login.authenticatedUserName;
-		
-		const authedDependedRoutes = isLoggedIn ? mustBeLoggedIn : mustNotBeLoggedIn
+		const isLoggedIn = !!self.props.login && !!self.props.login.authenticatedUserName;
 
 		console.log("about to evaluate route: ", this.props.history)
 		console.log("router.location", this.props.router.location)
@@ -97,11 +73,7 @@ class App extends React.Component<Props> {
 		return (
 			<div>
 				<JoomlaBase>
-					<ConnectedRouter history={this.props.history}>
-						<Switch>
-							{...authedDependedRoutes}
-						</Switch>
-					</ConnectedRouter>
+					{router(self.props.history, isLoggedIn)}
 					{devTools}
 				</JoomlaBase>
 			</div>

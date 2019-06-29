@@ -8,20 +8,24 @@ import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import { Dispatch } from 'redux';
 
-const mapStateToProps = (state: RootState) => ({
-	welcomePackage: state.homePageForm.data,
-	router: state.router
-})
+// const mapStateToProps = (state: RootState) => ({
+// 	welcomePackage: state.homePageForm.data,
+// 	router: state.router
+// })
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	cancel: () => dispatch(push('/'))
-})
+// const mapDispatchToProps = (dispatch: Dispatch) => ({
+// 	cancel: () => dispatch(push('/'))
+// })
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
+// type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
-export const path = '/ratings/:personId'
+// export const path = '/ratings/:personId'
 
-class RatingsPage extends React.PureComponent<Props> {
+export interface Props {
+	personId: number
+}
+
+export default class RatingsPage extends React.PureComponent<Props> {
 	constructor(props: Props) {
 		super(props)
 		console.log("in ratings page constructor")
@@ -34,23 +38,24 @@ class RatingsPage extends React.PureComponent<Props> {
 		const self = this;
 
 		// TODO: typesafe? 
-		const match = matchPath(
-			self.props.router.location.pathname,
-			{ path }
-		  ) || {params: {}};
-		const personId = (match.params as any).personId;
+		// const match = matchPath(
+		// 	self.props.router.location.pathname,
+		// 	{ path }
+		//   ) || {params: {}};
+		// const personId = (match.params as any).personId;
 
-		console.log("scraped from the url: " + personId)
+		// console.log("scraped from the url: " + personId)
 
-		const kid = this.props.welcomePackage.getOrElse({} as any).children.find(e => e.personId == personId)
+		//const kid = this.props.welcomePackage.getOrElse({} as any).children.find(e => e.personId == this.props.personId)
 
 		// TODO: specific kid.  Also welcome package seems to sometimes be empty
-		const ratings = kid ? kid.ratings : "<span></span>"
+		//const ratings = kid ? kid.ratings : "<span></span>"
 
 		// TODO: grab specific child based on url
 		return <JoomlaMainPage>
 			<JoomlaArticleRegion title="Ratings">
-				<span dangerouslySetInnerHTML={{__html: ratings}}/>
+				{/* <span dangerouslySetInnerHTML={{__html: ratings}}/> */}
+				<span>{this.props.personId}</span>
 				<p>
 					<span style={{fontWeight: "bold", color:"red"}}>Acquired Rating</span>
 					<br />
@@ -61,10 +66,8 @@ class RatingsPage extends React.PureComponent<Props> {
 				<p style={{fontSize: "0.9em", color: "#777", fontStyle: "italic"}}>
 					*Expired ratings can be renewed in the first days of your class
 				</p>
-				<Button text="< Back" onClick={this.props.cancel}/>
+				{/* <Button text="< Back" onClick={this.props.cancel}/> */}
 			</JoomlaArticleRegion>
 		</JoomlaMainPage>
 	}
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(RatingsPage)
