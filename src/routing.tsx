@@ -14,9 +14,9 @@ import PageWrapper from './components/Page/PageWrapper';
 import extractURLParams from './util/extractURLParams';
 import {Form as HomePageForm} from "./containers/HomePage"
 import {apiw as welcomeAPI} from "./async/member-welcome"
-import { getReduxState } from './core/reducer/store';
 
 export default function (history: History<any>, isLoggedIn: boolean) {
+	console.log("inside routing function")
 	function pathAndParamsExtractor<T>(path: string) {
 		return {
 			path,
@@ -64,6 +64,10 @@ export default function (history: History<any>, isLoggedIn: boolean) {
 
 	return (<Router history={history}>
 		<Switch>
+			{(function(){
+				console.log("rerendering router component")
+				return ""
+			}())}
 			{...authedDependedRoutes}
 		</Switch>
 	</Router>);

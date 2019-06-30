@@ -15,6 +15,7 @@ interface State<T> {
 export default class PageWrapper<T_Async> extends React.Component<Props<T_Async>, State<T_Async>> {
     constructor(props: Props<T_Async>) {
         super(props);
+        console.log("constructing a PageWrapper")
         const self = this
         
         if (this.props.getAsyncProps != undefined) {

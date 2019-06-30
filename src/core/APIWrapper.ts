@@ -152,7 +152,7 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON, T_FixedPa
 					...postValues.map(v => v.headers).getOrElse(<any>{})
 				}
 			};
-			
+			console.trace()
 			console.log("making request to " + options.hostname + ":" + options.port + options.path)
 			console.log(options)
 			console.log("serverParams: ", serverParams)
