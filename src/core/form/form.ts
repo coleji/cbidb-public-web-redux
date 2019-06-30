@@ -65,7 +65,7 @@ export const get = async <T_Form, T_APIValidator extends t.Any>(
 	})
 	// make api call to get form state
 	return apiw.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
-		console.log("Got result from api: ", result.substr(0,50))
+//		console.log("Got result from api: ", result.substr(0,50))
 		const parsedResult = apiw.parseResponse(result)
 		if (parsedResult.type == "Success") {
 			set(dispatch, formName, mapper(parsedResult.result))
@@ -86,7 +86,7 @@ export const get = async <T_Form, T_APIValidator extends t.Any>(
 
 export const post = <T extends object>(formName: string, apiw: APIWrapper<any, T, any>) => (dataForAPI: T) => {
 	return apiw.send(getReduxState().staticState.selfServerParams)(PostJSON(dataForAPI)).then((result: string) => {
-		console.log("Got result from api: ", result)
+	//	console.log("Got result from api: ", result)
 		return Promise.resolve("blah")
 	})
 }
@@ -94,7 +94,7 @@ export const post = <T extends object>(formName: string, apiw: APIWrapper<any, T
 export const formReducer: <T extends object>(formName: string) => Reducer<FormState<T>> = 
 <T extends object>(formName: string) => (state: FormState<T>, action: FormAction<T>) => {
 	if (!state) {
-		console.log("Form reducer found falsy state, setting to default  ", state)
+//		console.log("Form reducer found falsy state, setting to default  ", state)
 	}
 	const startState = state || {
 		apiState: "UNINITIALIZED",
@@ -107,7 +107,7 @@ export const formReducer: <T extends object>(formName: string) => Reducer<FormSt
 
     if (action.formName != formName) return startState;
     
-    console.log("ACTION: ", action)
+ //   console.log("ACTION: ", action)
     switch (action.type) {
 	case "UPDATE_FORM":
 		const updateAction = <FormUpdateAction>action;

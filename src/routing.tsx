@@ -15,8 +15,20 @@ import extractURLParams from './util/extractURLParams';
 import {Form as HomePageForm} from "./containers/HomePage"
 import {apiw as welcomeAPI} from "./async/member-welcome"
 
-export default function (history: History<any>, isLoggedIn: boolean) {
+export interface AutoResolver {
+	resolveOnAsyncComplete: () => void,
+	autoResolve: () => void
+}
+
+export default function (history: History<any>, isLoggedIn: boolean, resolveOnAsyncComplete: () => void) {
 	console.log("inside routing function")
+	var asyncResolver: AutoResolver = {
+		resolveOnAsyncComplete,
+		autoResolve: () => {
+			console.log("about to permit an autoresolve, this aint no sync thing")
+			resolveOnAsyncComplete()
+		}
+	};
 	function pathAndParamsExtractor<T>(path: string) {
 		return {
 			path,
@@ -47,6 +59,7 @@ export default function (history: History<any>, isLoggedIn: boolean) {
 			getAsyncProps={() => {
 				return welcomeAPI.do().catch(err => Promise.resolve(null));  // TODO: handle failure
 			}}
+			asyncResolver={asyncResolver}
 		/>} />,
 		<Route key="class" path={selectClassTypePath} render={() => <SelectClassType />} />,
 		<Route key="classTime" path={selectClassTimePath} render={() => <SelectClassTime />} />,
@@ -62,13 +75,25 @@ export default function (history: History<any>, isLoggedIn: boolean) {
 
 	const authedDependedRoutes = isLoggedIn ? mustBeLoggedIn : mustNotBeLoggedIn
 
-	return (<Router history={history}>
-		<Switch>
-			{(function(){
-				console.log("rerendering router component")
-				return ""
-			}())}
-			{...authedDependedRoutes}
-		</Switch>
-	</Router>);
+	class AutoResolveTriggerComponent extends React.PureComponent {
+		render() {
+			console.log("rerendering router component")
+			console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%% calling autoresolve");
+			asyncResolver.autoResolve();
+			return ""
+		}
+	}
+
+	console.log("routing function returning Router component")
+	return (
+		<React.Fragment>
+			<Router history={history}>
+				<Switch>
+					
+					{...authedDependedRoutes}
+				</Switch>
+			</Router>
+			<AutoResolveTriggerComponent />
+		</React.Fragment>
+	);
 } 

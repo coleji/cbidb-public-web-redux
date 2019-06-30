@@ -28,10 +28,10 @@ export default function createStore(params: CreateStoreParameters) {
 		),
 		DevTools.instrument()
 	]
-	console.log("opening with seed state: ", params.seedState)
+//	console.log("opening with seed state: ", params.seedState)
 	const initialState = rootReducer(params.seedState, {type: "whatever"})
 
-	console.log(initialState)
+//	console.log(initialState)
 
 	const store = reduxCreateStore(
 		rootReducer, // new root reducer with router state

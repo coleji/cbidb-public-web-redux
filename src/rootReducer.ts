@@ -31,7 +31,8 @@ export interface StaticState {
 	currentSeason: number,
 	apiServerParams: ServerParams,
 	selfServerParams: ServerParams,
-	serverConfig: ServerConfig
+	serverConfig: ServerConfig,
+	serverToUseForAPI: ServerParams
 }
 
 export interface RootState {

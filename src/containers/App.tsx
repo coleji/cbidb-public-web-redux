@@ -29,7 +29,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 })
 
 interface SelfProps {
-	history: any
+	history: any,
+	resolveOnAsyncComplete: () => {}
 }
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & SelfProps
@@ -55,25 +56,25 @@ class App extends React.Component<Props> {
 	}
 	render() {
 		console.log("=========================================== in app render")
-		console.log(this.props.state.router.location)
+//		console.log(this.props.state.router.location)
 		const self = this;
 		const devTools = (!this.props.isServer) ? (function(){
 			const DevTools = require('../core/DevTools').default;	// TODO: should be import?
 			return <DevTools />;
 		}()) : undefined;
-		console.log(this.props)
+//		console.log(this.props)
 		//const path = this.props.router.pathname
 
 
 		const isLoggedIn = !!self.props.login && !!self.props.login.authenticatedUserName;
 
-		console.log("about to evaluate route: ", this.props.history)
-		console.log("router.location", this.props.router.location)
+//		console.log("about to evaluate route: ", this.props.history)
+	//	console.log("router.location", this.props.router.location)
 
 		return (
 			<div>
 				<JoomlaBase>
-					{router(self.props.history, isLoggedIn)}
+					{router(self.props.history, isLoggedIn, this.props.resolveOnAsyncComplete)}
 					{devTools}
 				</JoomlaBase>
 			</div>

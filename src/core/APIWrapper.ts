@@ -73,20 +73,22 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON, T_FixedPa
 		this.config = config;
 	}
 	do(): Promise<ApiResult<t.TypeOf<T_Validator>>> {
-		return this.send(getReduxState().staticState.selfServerParams)(null).then((result: string) => {
+		return this.send(getReduxState().staticState.serverToUseForAPI)(null).then((result: string) => {
 			console.log("Got result from api: ", result.substr(0,50))
 			const parsedResult = this.parseResponse(result)
 			if (parsedResult.type == "Success") {
+				console.log("retuirning! ")
 				return Promise.resolve(parsedResult.result)
 			} else {
-				console.log(parsedResult.failureType)
-				console.log(parsedResult.err)
+		//		console.log(parsedResult.failureType)
+		//		console.log(parsedResult.err)
 				return Promise.reject(parsedResult.failureType)
 			}
 			// set form to result from api
 			
 		}).catch(err => {
 			console.log("Error: ", err)
+			console.trace();
 			return Promise.reject(err)
 		})
 	}

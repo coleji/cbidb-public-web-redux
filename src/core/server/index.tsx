@@ -27,6 +27,9 @@ app.use(cookieParser(""));
 app.use(express.static("dist"))
 app.use(express.static("public"))
 
+var Global: {[K: string]: any} = {};
+
+
 getConfig.then(serverConfig => {
 	const targetUrl = [
 		serverConfig.API.https ? 'https' : 'http',
@@ -73,7 +76,12 @@ getConfig.then(serverConfig => {
 		res.end(JSON.stringify(json));
 	});
 
+	app.get("/favicon.ico", (req, res, next) => {
+		res.status(404).send("");
+	})
+
 	app.get("*", (req, res, next) => {
+		console.log(" //////////////////////////////////////   server just received a request:  ", req.path)
 		console.log("cookie is " + req.cookies["CBIDB-SEC"])
 		const selfServerParams: ServerParams = {
 			...serverConfig.SELF,
@@ -98,7 +106,7 @@ getConfig.then(serverConfig => {
 			console.log("server side get welcome pkg failed", e)
 			Promise.resolve({})
 		})
-		.then(seedState => {
+		.then(seedState => new Promise<{}>((resolve, reject) => {
 			console.log("about to create store server side")
 			const history = createMemoryHistory({
 				initialEntries: [req.path]
@@ -113,7 +121,8 @@ getConfig.then(serverConfig => {
 				currentSeason: 2019,
 				apiServerParams: apiServerParams,
 				selfServerParams: selfServerParams,
-				serverConfig
+				serverConfig,
+				serverToUseForAPI: apiServerParams
 			}
 			const rootReducer = makeRootReducer(history, staticState)
 	
@@ -128,32 +137,59 @@ getConfig.then(serverConfig => {
 			});
 
 			setStore(store);
-	
-			const markup = renderToString(
+
+			Global["initialState"] = {
+				...initialState,
+				serverToUseForAPI: selfServerParams
+			};
+
+			console.log("server side, about to call App")
+			const x = (
 				<Provider store={store}>
-					<App history={history}/>
+					<App history={history} resolveOnAsyncComplete={resolve as any}/>
 				</Provider>
-			)
+			);
+			Global["provider"] =x
+			console.log("server side, finsihed calling App")
+
+			// trigger the components to actually attempt a render
+			renderToString(Global["provider"]);
+
+			console.log("server side, triggered a render of App")
+
+			console.log("did all the server things, waiting on that resolve.....")
+			
+		})).then(() => {
 			const helmet = Helmet.renderStatic();
+
+			console.log("here we go final render trigger...")
+
+			const resString = `
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb">
+				<head>
+				${helmet.title.toString()}
+				${helmet.meta.toString()}
+				${helmet.link.toString()}
+				${helmet.script.toString()}
+				<script src="/js/client.js" defer></script>
+				<script>
+				var initialStateFromServer = ${JSON.stringify(Global["initialState"])}
+				</script>
+				</head>
+				<body class="main-overlay-dark primary-overlay-dark readonstyle-button font-family-momentum font-size-is-default logo-enabled-1 logo-style-light menu-type-fusionmenu typography-style-light col12 menu-resources  option-com-content view-article">
+				<div id="app">${renderToString(Global["provider"])}</div>
+				</body>
+			</html>
+			`;
+
+			console.log("##############################################################")
+			console.log("##############################################################")
+			console.log("############           SERVER IS DONE           ##############")
+			console.log("##############################################################")
+			console.log("##############################################################")
 	
-			res.send(`
-		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb">
-			<head>
-			${helmet.title.toString()}
-			${helmet.meta.toString()}
-			${helmet.link.toString()}
-			${helmet.script.toString()}
-			<script src="/js/client.js" defer></script>
-			<script>
-			var initialStateFromServer = ${JSON.stringify(initialState)}
-			</script>
-			</head>
-			<body class="main-overlay-dark primary-overlay-dark readonstyle-button font-family-momentum font-size-is-default logo-enabled-1 logo-style-light menu-type-fusionmenu typography-style-light col12 menu-resources  option-com-content view-article">
-			<div id="app">${markup}</div>
-			</body>
-		</html>
-		`)
+			res.send(resString)
 		})
 		.catch(e => {
 			console.log("Error: ", e)
