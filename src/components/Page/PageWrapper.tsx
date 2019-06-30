@@ -24,18 +24,27 @@ export default class PageWrapper<T_Async> extends React.Component<Props<T_Async>
         };
         
         if (this.props.getAsyncProps != undefined) {
-            this.state = {
-                readyToRender: false,
-                componentAsyncProps: null
-            }
-            this.props.getAsyncProps().then(asyncProps => {
-                console.log("$$$$$$$$$$$$$$$$   about to set state, has stuff?: ", asyncProps != null)
-                self.setState({
+            if (this.props.asyncResolver.asyncResult == null) {
+                this.state = {
+                    readyToRender: false,
+                    componentAsyncProps: null
+                }
+                this.props.getAsyncProps().then(asyncProps => {
+                    console.log("$$$$$$$$$$$$$$$$   about to set state, has stuff?: ", asyncProps != null)
+                    self.setState({
+                        readyToRender: true,
+                        componentAsyncProps: asyncProps
+                    });
+                    this.props.asyncResolver.resolveOnAsyncComplete(asyncProps)
+                })
+            } else {
+                console.log("ready for that real render")
+                this.state = {
                     readyToRender: true,
-                    componentAsyncProps: asyncProps
-                });
-                this.props.asyncResolver.resolveOnAsyncComplete()
-            })
+                    componentAsyncProps: this.props.asyncResolver.asyncResult
+                }
+            }
+            
         } else {
             this.state = {
                 readyToRender: true,

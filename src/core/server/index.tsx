@@ -136,33 +136,39 @@ getConfig.then(serverConfig => {
 				}
 			});
 
+			Global["initialState"] = initialState;
+
 			setStore(store);
 
-			Global["initialState"] = {
-				...initialState,
-				serverToUseForAPI: selfServerParams
-			};
-
-			console.log("server side, about to call App")
-			const x = (
-				<Provider store={store}>
-					<App history={history} resolveOnAsyncComplete={resolve as any}/>
+			Global["store"] = store;
+			Global["history"] = history;
+			Global["asyncResult"] = null;
+			Global["makeProvider"] = () => (
+				<Provider store={Global["store"]}>
+					<App history={Global["history"]} resolveOnAsyncComplete={resolve as any} asyncResult={Global["asyncResult"]}/>
 				</Provider>
 			);
-			Global["provider"] =x
-			console.log("server side, finsihed calling App")
+
+
+
 
 			// trigger the components to actually attempt a render
-			renderToString(Global["provider"]);
+			renderToString(Global["makeProvider"]());
 
 			console.log("server side, triggered a render of App")
 
 			console.log("did all the server things, waiting on that resolve.....")
 			
-		})).then(() => {
+		})).then((asyncResult: any) => {
+			console.log("asyncResutl is ", asyncResult)
+			Global["asyncResult"] = asyncResult;
+			Global["initialState"].asyncResult = asyncResult;
+			delete Global["initialState"].staticState.apiServerParams;
+			Global["initialState"].staticState.serverToUseForAPI = selfServerParams
 			const helmet = Helmet.renderStatic();
 
 			console.log("here we go final render trigger...")
+			console.log("strignifying intial state: ", Global["initialState"] )
 
 			const resString = `
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -178,7 +184,7 @@ getConfig.then(serverConfig => {
 				</script>
 				</head>
 				<body class="main-overlay-dark primary-overlay-dark readonstyle-button font-family-momentum font-size-is-default logo-enabled-1 logo-style-light menu-type-fusionmenu typography-style-light col12 menu-resources  option-com-content view-article">
-				<div id="app">${renderToString(Global["provider"])}</div>
+				<div id="app">${renderToString(Global["makeProvider"]())}</div>
 				</body>
 			</html>
 			`;

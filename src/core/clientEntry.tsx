@@ -61,7 +61,7 @@ setStore(store)
 
 hydrate(
 	<Provider store={store}>
-		<App history={history} resolveOnAsyncComplete={() => ({})} />
+		<App history={history} resolveOnAsyncComplete={() => ({})} asyncResult={seedState.asyncResult} />
 	</Provider>,
 	document.getElementById('app')
 );

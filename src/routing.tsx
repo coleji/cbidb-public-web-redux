@@ -16,17 +16,19 @@ import {Form as HomePageForm} from "./containers/HomePage"
 import {apiw as welcomeAPI} from "./async/member-welcome"
 
 export interface AutoResolver {
-	resolveOnAsyncComplete: () => void,
+	asyncResult: any,
+	resolveOnAsyncComplete: (asyncResult: any) => void,
 	autoResolve: () => void
 }
 
-export default function (history: History<any>, isLoggedIn: boolean, resolveOnAsyncComplete: () => void) {
+export default function (history: History<any>, isLoggedIn: boolean, resolveOnAsyncComplete: (asyncResult: any) => void, asyncResult: any) {
 	console.log("inside routing function")
 	var asyncResolver: AutoResolver = {
+		asyncResult,
 		resolveOnAsyncComplete,
 		autoResolve: () => {
 			console.log("about to permit an autoresolve, this aint no sync thing")
-			resolveOnAsyncComplete()
+			resolveOnAsyncComplete(null)
 		}
 	};
 	function pathAndParamsExtractor<T>(path: string) {
