@@ -15,6 +15,8 @@ import { postWrapper as postNo} from "../async/junior/scholarship-no"
 import { postWrapper as postYes} from "../async/junior/scholarship-yes"
 import { Dispatch } from "redux";
 import {formName as RegistrationWizardFormName} from "./registration/pageflow/RegistrationWizard"
+import formUpdateState from '../util/form-update-state'
+import { History } from "history";
 
 export const formName = "scholarshipForm"
 
@@ -35,29 +37,32 @@ class FormRadio extends RadioGroup<Form> {}
 class FormSelect extends Select<Form> {}
 class FormBoolean extends SingleCheckbox<Form>{}
 
-const mapStateToProps = (state: RootState) => ({
-	form: state.scholarshipForm.data,
-	jpPrice: Currency.cents(state.staticState.jpPriceCents),
-	currentSeason: state.staticState.currentSeason,
-	parentPersonId: state.homePageForm.data.getOrElse(null).parentPersonId,
-	registrationWizard: state.registrationWizard.data
-})
+// const mapStateToProps = (state: RootState) => ({
+// 	form: state.scholarshipForm.data,
+// 	jpPrice: Currency.cents(state.staticState.jpPriceCents),
+// 	currentSeason: state.staticState.currentSeason,
+// 	parentPersonId: state.homePageForm.data.getOrElse(null).parentPersonId,
+// 	registrationWizard: state.registrationWizard.data
+// })
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	dispatch, 
-	updateField: function(name: keyof Form, value: any) {
-		console.log("updating field!")
-		dispatchFormUpdate(dispatch, formName)(name, value)
-	}
-})
+// const mapDispatchToProps = (dispatch: Dispatch) => ({
+// 	dispatch, 
+// 	updateField: function(name: keyof Form, value: any) {
+// 		console.log("updating field!")
+// 		dispatchFormUpdate(dispatch, formName)(name, value)
+// 	}
+// })
 
-interface StaticProps {
-	personId: number,
-	goNext: () => void,
-	goPrev: () => void,
+interface Props {
+	currentSeason: number,
+	jpPrice: Currency,
+	parentPersonId: number,
+	history: History<any>
 }
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
+interface State {
+	formData: Form
+}
 
 function generateOptions(singular: string, plural: string, min: number, max: number) {
 	var ret = [];
@@ -71,9 +76,26 @@ function generateOptions(singular: string, plural: string, min: number, max: num
 	return ret;
 }
 
-class ScholarshipPage extends React.PureComponent<Props> {
+export default class ScholarshipPage extends React.Component<Props, State> {
+	constructor(props: Props) {
+		super(props);
+		this.state = {
+			formData: {
+				isApplying: none,
+				numberAdults: none,
+				haveInsurance: none,
+				numberInfants: none,
+				numberPreschoolers: none,
+				numberSchoolagers: none,
+				numberTeenagers: none,
+				income: none,
+				doAgree: none
+			}
+		};
+	}
 	render() {
 		const self = this;
+		const updateState = formUpdateState(this.state, this.setState.bind(this), "formData");
 
 		const radioValues = [{
 			key: "No",
@@ -94,8 +116,8 @@ class ScholarshipPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("Adult", "Adults", 0, 3)}
-								value={self.props.form.chain(f => f.numberAdults)}
-								updateAction={self.props.updateField}
+								value={self.state.formData.numberAdults}
+								updateAction={updateState}
 							/></td>
 						</tr>	
 						<tr>
@@ -109,8 +131,8 @@ class ScholarshipPage extends React.PureComponent<Props> {
 								}, {
 									key: "N", display: "No"
 								}]}
-								value={self.props.form.chain(f => f.haveInsurance)}
-								updateAction={self.props.updateField}
+								value={self.state.formData.haveInsurance}
+								updateAction={updateState}
 							/></td>
 						</tr>	
 						<tr>
@@ -120,8 +142,8 @@ class ScholarshipPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("Infant", "Infants", 0, 7)}
-								value={self.props.form.chain(f => f.numberInfants)}
-								updateAction={self.props.updateField}
+								value={self.state.formData.numberInfants}
+								updateAction={updateState}
 							/></td>
 						</tr>	
 						<tr>
@@ -131,8 +153,8 @@ class ScholarshipPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("Preschooler", "Preschoolers", 0, 7)}
-								value={self.props.form.chain(f => f.numberPreschoolers)}
-								updateAction={self.props.updateField}
+								value={self.state.formData.numberPreschoolers}
+								updateAction={updateState}
 							/></td>
 						</tr>	
 						<tr>
@@ -142,8 +164,8 @@ class ScholarshipPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("School-age Child", "School-age Children", 0, 7)}
-								value={self.props.form.chain(f => f.numberSchoolagers)}
-								updateAction={self.props.updateField}
+								value={self.state.formData.numberSchoolagers}
+								updateAction={updateState}
 							/></td>
 						</tr>	
 						<tr>
@@ -153,14 +175,14 @@ class ScholarshipPage extends React.PureComponent<Props> {
 								justElement={true}
 								nullDisplay="- Select -"
 								options={generateOptions("Teenager", "Teenagers", 0, 7)}
-								value={self.props.form.chain(f => f.numberTeenagers)}
-								updateAction={self.props.updateField}
+								value={self.state.formData.numberTeenagers}
+								updateAction={updateState}
 							/></td>
 						</tr>	
 						<tr>
 							<td>Please enter your Adjusted Gross Income:*</td>
 							<td>
-								<FormInput id="income" justElement={true} value={self.props.form.chain(f => f.income)} updateAction={self.props.updateField} />
+								<FormInput id="income" justElement={true} value={self.state.formData.income} updateAction={updateState} />
 								<span style={{color: "#777", fontSize: "0.9em"}}>(ex. $50,000)</span>
 							</td>
 						</tr>	
@@ -187,12 +209,12 @@ class ScholarshipPage extends React.PureComponent<Props> {
 					I also understand that CBI reserves the right to require documentation at any point in the application process.`}
 					<br />
 					<br />
-					<FormBoolean id="doAgree" justElement={true} value={(self.props.form.getOrElse({} as any).doAgree || none)} label="I agree to the above terms for scholarship application." updateAction={self.props.updateField}/>
+					<FormBoolean id="doAgree" justElement={true} value={(self.state.formData.doAgree || none)} label="I agree to the above terms for scholarship application." updateAction={updateState}/>
 				</JoomlaArticleRegion>
 			</React.Fragment>
 
 		const next = <Button text="Next >" onClick={() => {
-			const form = self.props.form.getOrElse({} as any)
+			const form = self.state.formData
 			const isApplying = form.isApplying.getOrElse("No") == "Yes"
 			if (isApplying) {
 				post(formName, postYes(this.props.parentPersonId))({
@@ -203,9 +225,9 @@ class ScholarshipPage extends React.PureComponent<Props> {
 					schoolagerCount:  Number(form.numberSchoolagers.getOrElse("0")),
 					teenagerCount:  Number(form.numberTeenagers.getOrElse("0")),
 					income:  Number(form.income.getOrElse("0"))
-				}).then(this.props.goNext)
+				}).then(() => history.back())
 			} else {
-				post(formName, postNo(this.props.parentPersonId))({}).then(this.props.goNext)
+				post(formName, postNo(this.props.parentPersonId))({}).then(() => history.back())
 			}
 			
 		}}/>
@@ -224,14 +246,14 @@ class ScholarshipPage extends React.PureComponent<Props> {
 				<br />
 				<br />
 				<div style={{marginLeft: "20px"}}>
-					<FormRadio id="isApplying" justElement={true} values={radioValues} updateAction={self.props.updateField} value={self.props.form.chain(f => f.isApplying)}/>
+					<FormRadio id="isApplying" justElement={true} values={radioValues} updateAction={updateState} value={self.state.formData.isApplying}/>
 				</div>
 			</JoomlaArticleRegion>
-			{self.props.form.chain(f => f.isApplying).getOrElse(null) == "Yes" ? familyInfo : ""}
-			<Button text="< Back" onClick={this.props.goPrev}/>
+			{self.state.formData.isApplying.getOrElse(null) == "Yes" ? familyInfo : ""}
+			<Button text="< Back" onClick={() => history.back()}/>
 
 			{(function() {
-				const form = self.props.form.getOrElse({} as any)
+				const form = self.state.formData
 				const isApplying = (form.isApplying || none).getOrElse("")
 				const doAgree = (form.doAgree || none).getOrElse(false)
 				if (isApplying == "No" || (isApplying == "Yes" && doAgree)) return next
@@ -240,6 +262,3 @@ class ScholarshipPage extends React.PureComponent<Props> {
 		</JoomlaMainPage>
 	}
 }
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(ScholarshipPage)

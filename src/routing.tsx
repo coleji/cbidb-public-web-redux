@@ -21,6 +21,8 @@ import {getWrapper as surveyAPI, validator as surveyValidator} from "./async/jun
 import EmergencyContact from './containers/registration/EmergencyContact';
 import SurveyInfo from './containers/registration/SurveyInfo';
 import TermsConditions from './containers/registration/TermsConditions';
+import ScholarshipPage from './containers/Scholarship';
+import Currency from './util/Currency';
 
 export interface AutoResolver {
 	clientSideAsyncResult: any,
@@ -141,9 +143,20 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 		// 	}}
 		// 	asyncResolver={asyncResolver}
 		// />} />,
+		// <Route key="reg" path={paths.reg.path} render={() => <PageWrapper
+		// 	component={() => <TermsConditions
+		// 		history={history}
+		// 	/>}
+		// 	urlProps={{}}
+		// 	shadowComponent={<span>hi!</span>}
+		// 	asyncResolver={asyncResolver}
+		// />} />,
 		<Route key="reg" path={paths.reg.path} render={() => <PageWrapper
-			component={() => <TermsConditions
+			component={() => <ScholarshipPage
 				history={history}
+				parentPersonId={188911} //TODO: replace with app state
+				currentSeason={2018}
+				jpPrice={Currency.dollars(300)}
 			/>}
 			urlProps={{}}
 			shadowComponent={<span>hi!</span>}
