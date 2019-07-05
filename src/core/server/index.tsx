@@ -142,10 +142,10 @@ getConfig.then(serverConfig => {
 
 			Global["store"] = store;
 			Global["history"] = history;
-			Global["asyncResult"] = null;
+			Global["clientSideAsyncResult"] = null;
 			Global["makeProvider"] = () => (
 				<Provider store={Global["store"]}>
-					<App history={Global["history"]} resolveOnAsyncComplete={resolve as any} asyncResult={Global["asyncResult"]}/>
+					<App history={Global["history"]} serverSideResolveOnAsyncComplete={resolve as any} clientSideAsyncResult={Global["clientSideAsyncResult"]}/>
 				</Provider>
 			);
 
@@ -159,10 +159,10 @@ getConfig.then(serverConfig => {
 
 			console.log("did all the server things, waiting on that resolve.....")
 			
-		})).then((asyncResult: any) => {
-			console.log("asyncResutl is ", asyncResult)
-			Global["asyncResult"] = asyncResult;
-			Global["initialState"].asyncResult = asyncResult;
+		})).then((clientSideAsyncResult: any) => {
+			console.log("asyncResutl is ", clientSideAsyncResult)
+			Global["clientSideAsyncResult"] = clientSideAsyncResult;
+			Global["initialState"].clientSideAsyncResult = clientSideAsyncResult;
 			delete Global["initialState"].staticState.apiServerParams;
 			Global["initialState"].staticState.serverToUseForAPI = selfServerParams
 			const helmet = Helmet.renderStatic();

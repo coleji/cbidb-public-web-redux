@@ -18,30 +18,34 @@ export default class PageWrapper<T_Async> extends React.Component<Props<T_Async>
         super(props);
         console.log("constructing a PageWrapper")
         const self = this
-
-        this.props.asyncResolver.autoResolve = () => {
-            console.log("intercepted attempt to autoresolve; we got a live one here")
-        };
         
         if (this.props.getAsyncProps != undefined) {
-            if (this.props.asyncResolver.asyncResult == null) {
+            if (this.props.asyncResolver.clientSideAsyncResult == null) {
+				// This is an API-dependent component and we don't have an API result on hand.
+				// stomp on that autoResolve cuz we're gonna render the shadowComponent while we wait for API
+				this.props.asyncResolver.autoResolve = () => {
+					console.log("intercepted attempt to autoresolve; we got a live one here")
+				};
+
                 this.state = {
                     readyToRender: false,
                     componentAsyncProps: null
-                }
+				}
+				// When API comes back, manually trigger `serverSideResolveOnAsyncComplete`
+				// (if this is clientside, that fn will not do anything and that's fine)
                 this.props.getAsyncProps().then(asyncProps => {
                     console.log("$$$$$$$$$$$$$$$$   about to set state, has stuff?: ", asyncProps != null)
                     self.setState({
                         readyToRender: true,
                         componentAsyncProps: asyncProps
                     });
-                    this.props.asyncResolver.resolveOnAsyncComplete(asyncProps)
+                    this.props.asyncResolver.serverSideResolveOnAsyncComplete(asyncProps)
                 })
             } else {
                 console.log("ready for that real render")
                 this.state = {
                     readyToRender: true,
-                    componentAsyncProps: this.props.asyncResolver.asyncResult
+                    componentAsyncProps: this.props.asyncResolver.clientSideAsyncResult
                 }
             }
             

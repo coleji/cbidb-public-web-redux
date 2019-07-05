@@ -30,8 +30,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 interface SelfProps {
 	history: any,
-	resolveOnAsyncComplete: (asyncResult: any) => {},
-	asyncResult: any
+	serverSideResolveOnAsyncComplete: (clientSideAsyncResult: any) => {},
+	clientSideAsyncResult: any
 }
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & SelfProps
@@ -39,13 +39,13 @@ type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchT
 // TODO: make a wizard manager, call its update() in App constructor and SCU,
 // wizard routes just call that route in the WM which returns HomePage if that route is not active in the WM
 class App extends React.Component<Props> {
-	asyncResult: any
+	clientSideAsyncResult: any
 	registrationWizard: React.ComponentType
 	constructor(props: Props) {
 		super(props)
 		console.log("in app constructor")
-		console.log("asyncResult from server: ", this.props.asyncResult)
-		this.asyncResult = this.props.asyncResult;
+		console.log("asyncResult from server: ", this.props.clientSideAsyncResult)
+		this.clientSideAsyncResult = this.props.clientSideAsyncResult;
 		console.log(props.router.location)
 		this.registrationWizard = RegistrationWizard(this.props.state)
 	}
@@ -78,12 +78,12 @@ class App extends React.Component<Props> {
 		const ret = (
 			<div>
 				<JoomlaBase>
-					{router(self.props.history, isLoggedIn, this.props.resolveOnAsyncComplete, this.asyncResult)}
+					{router(self.props.history, isLoggedIn, this.props.serverSideResolveOnAsyncComplete, this.clientSideAsyncResult)}
 					{devTools}
 				</JoomlaBase>
 			</div>
 		);
-		this.asyncResult = null;
+		this.clientSideAsyncResult = null;
 
 		return ret;
 	}
