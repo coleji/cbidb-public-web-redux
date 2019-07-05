@@ -19,8 +19,8 @@ export default class TextArea<T> extends ApexItem<T, Props & ApexItemProps<T, st
 		}
 
 		const onChange =
-			this.props.reduxAction
-				? (ev: React.ChangeEvent<HTMLTextAreaElement>) => this.props.reduxAction(this.props.id, ev.target.value)
+			this.props.updateAction
+				? (ev: React.ChangeEvent<HTMLTextAreaElement>) => this.props.updateAction(this.props.id, ev.target.value)
 				: this.props.onChange;
 
 		return (<textarea

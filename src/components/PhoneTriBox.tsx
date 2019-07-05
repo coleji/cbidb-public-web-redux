@@ -16,7 +16,7 @@ export interface PhoneTriBoxProps<U> {
     thirdValue: Option<string>,
     extValue: Option<string>
     typeValue: Option<string>,
-    reduxAction?: (name: string, value: string) => void,
+    updateAction?: (name: string, value: string) => void,
     isRequired?: boolean
 }
 
@@ -65,7 +65,7 @@ export default class PhoneTriBox<U, T extends PhoneTriBoxProps<U>> extends React
         const second = <TextInput<U>
             id={self.props.secondID}
             value={self.props.secondValue}
-            reduxAction={self.props.reduxAction}
+            updateAction={self.props.updateAction}
             isRequired={self.props.isRequired}
             size={3}
             maxLength={3}
@@ -74,7 +74,7 @@ export default class PhoneTriBox<U, T extends PhoneTriBoxProps<U>> extends React
         const third = <TextInput<U>
             id={self.props.thirdID}
             value={self.props.thirdValue}
-            reduxAction={self.props.reduxAction}
+            updateAction={self.props.updateAction}
             isRequired={self.props.isRequired}
             size={4}
             maxLength={4}
@@ -83,7 +83,7 @@ export default class PhoneTriBox<U, T extends PhoneTriBoxProps<U>> extends React
         const ext = <TextInput<U>
             id={self.props.extID}
             value={self.props.extValue}
-            reduxAction={self.props.reduxAction}
+            updateAction={self.props.updateAction}
             isRequired={self.props.isRequired}
             size={5}
             justElement={true}
@@ -93,7 +93,7 @@ export default class PhoneTriBox<U, T extends PhoneTriBoxProps<U>> extends React
 				id={self.props.firstID}
 				label={self.props.label}
 				value={self.props.firstValue}
-				reduxAction={self.props.reduxAction}
+				updateAction={self.props.updateAction}
 				isRequired={self.props.isRequired}
 				size={3}
 				maxLength={3}
@@ -114,7 +114,7 @@ export default class PhoneTriBox<U, T extends PhoneTriBoxProps<U>> extends React
 				label="Type"
 				isRequired={self.props.isRequired}
 				value={self.props.typeValue}
-				reduxAction={self.props.reduxAction}
+				updateAction={self.props.updateAction}
 				options={["Home", "Work", "Cell"].map(k => ({key: k, display: k}))}
 				nullDisplay="- Select -"
 			/>

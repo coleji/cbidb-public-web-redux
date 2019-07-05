@@ -9,7 +9,7 @@ interface KeyValuePair {
 
 interface Props {
 	id: string,
-    reduxAction?: (name: string, value: any) => void
+    updateAction?: (name: string, value: any) => void
 	columns?: number,
 	blurBox?: boolean
 }
@@ -67,8 +67,8 @@ export class RadioGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, stri
 	values = this.props.values;
 	isChecked = (key: string) => this.props.value.getOrElse("") == key
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => {
-		if (this.props.reduxAction) {
-			this.props.reduxAction(this.props.id, ev.target.value)
+		if (this.props.updateAction) {
+			this.props.updateAction(this.props.id, ev.target.value)
 		}
 	}
 }
@@ -83,10 +83,10 @@ export class CheckboxGroup<T_Form> extends InputGroup<T_Form, PropsWithValues, s
 	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => {
 		const value = (this.props.value || none).getOrElse([])
 		if (ev.target.checked) {
-			this.props.reduxAction(this.props.id, value.concat([ev.target.value]));
+			this.props.updateAction(this.props.id, value.concat([ev.target.value]));
 		} else {
 			const newValues = value.filter(e => e != ev.target.value)
-			this.props.reduxAction(this.props.id, newValues);
+			this.props.updateAction(this.props.id, newValues);
 		}
 	}
 }
@@ -96,5 +96,5 @@ export class SingleCheckbox<T_Form> extends InputGroup<T_Form, Props, boolean> {
 	isCheckbox = true;
 	isChecked = (key: string) => (this.props.value || none).getOrElse(false)  // TODO
 	values = [{key: "isTrue", display: this.props.justElement ? this.props.label : ""}];
-	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.checked);
+	onClick = (ev: React.ChangeEvent<HTMLInputElement>) => this.props.updateAction(this.props.id, ev.target.checked);
 }

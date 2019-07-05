@@ -76,7 +76,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
                         label="Gender"
                         columns={3}
                         values={genders}
-                        reduxAction={reduxAction}
+                        updateAction={reduxAction}
                         value={data.genderID || none}
                     />
 					<FormCheckbox
@@ -88,7 +88,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 						}
                         columns={3}
                         values={referralSources}
-                        reduxAction={reduxAction}
+                        updateAction={reduxAction}
 						value={(data.referral || none)}
                     />
 					{
@@ -97,7 +97,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 							id="referralOther"
 							label="Other"
 							value={data.referralOther || none}
-							reduxAction={reduxAction}
+							updateAction={reduxAction}
 						/>
 						: null
 					}
@@ -109,14 +109,14 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 							</React.Fragment>
 						}
 						value={data.language || none}
-						reduxAction={reduxAction}
+						updateAction={reduxAction}
 					/>
 					<FormCheckbox
                         id="ethnicity"
                         label="Ethnicity"
                         columns={3}
                         values={ethnicities}
-                        reduxAction={reduxAction}
+                        updateAction={reduxAction}
 						value={(data.ethnicity || none)}
                     />
 					{
@@ -125,7 +125,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 							id="ethnicityOther"
 							label="Other"
 							value={data.ethnicityOther || none}
-							reduxAction={reduxAction}
+							updateAction={reduxAction}
 						/>
 						: null
 					}
@@ -133,7 +133,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 						id="school"
 						label="School"
 						value={data.school || none}
-						reduxAction={reduxAction}
+						updateAction={reduxAction}
 					/>
 					<FormBoolean
 						id="freeLunch"
@@ -143,7 +143,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 							</React.Fragment>
 						}
 						value={data.freeLunch}
-						reduxAction={reduxAction}
+						updateAction={reduxAction}
 					/>
                 </tbody></table>
             </JoomlaArticleRegion>

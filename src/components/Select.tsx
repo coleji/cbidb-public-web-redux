@@ -14,7 +14,7 @@ interface Props {
 
 export class Select<T> extends ApexItem<T, Props & ApexItemProps<T, string>, string> {
 	getElement() {
-		const onChange = (ev: React.ChangeEvent<HTMLSelectElement>) => this.props.reduxAction(this.props.id, ev.target.value);
+		const onChange = (ev: React.ChangeEvent<HTMLSelectElement>) => this.props.updateAction(this.props.id, ev.target.value);
 
 		const nullOption: React.ReactNode[] = this.props.nullDisplay === undefined
 		? []

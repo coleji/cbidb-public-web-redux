@@ -13,7 +13,7 @@ export interface DateTriPickerProps<U> {
 	monthValue: Option<string>,
 	dayValue: Option<string>,
 	yearValue: Option<string>,
-	reduxAction?: (name: string, value: string) => void,
+	updateAction?: (name: string, value: string) => void,
 	isRequired?: boolean
 }
 
@@ -60,7 +60,7 @@ export default class DateTriPicker<U, T extends DateTriPickerProps<U>> extends R
 				id={self.props.dayID}
 				justElement={true}
 				value={self.props.dayValue}
-				reduxAction={self.props.reduxAction}
+				updateAction={self.props.updateAction}
 				options={days}
 				nullDisplay="- Day -"
 			/>
@@ -68,7 +68,7 @@ export default class DateTriPicker<U, T extends DateTriPickerProps<U>> extends R
 				id={self.props.yearID}
 				justElement={true}
 				value={self.props.yearValue}
-				reduxAction={self.props.reduxAction}
+				updateAction={self.props.updateAction}
 				options={self.props.years.reverse().map(i => ({key: String(i), display: String(i)}))}
 				nullDisplay="- Year -"
 			/>
@@ -87,7 +87,7 @@ export default class DateTriPicker<U, T extends DateTriPickerProps<U>> extends R
 			id={self.props.monthID}
 			label="Date of Birth"
 			value={self.props.monthValue}
-			reduxAction={self.props.reduxAction}
+			updateAction={self.props.updateAction}
 			options={dobMonthValues}
 			appendToElementCell={dobDateAndYear}
 			nullDisplay="- Month -"

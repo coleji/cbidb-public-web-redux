@@ -1,9 +1,6 @@
-import { push } from 'connected-react-router';
 import * as t from 'io-ts'
 import {Option, some, none} from 'fp-ts/lib/Option'
 import * as React from "react";
-import {Dispatch} from "redux";
-import { connect } from "react-redux";
 import DateTriPicker, { DateTriPickerProps, componentsToDate, dateStringToComponents } from "../../components/DateTriPicker";
 import PhoneTriBox, { PhoneTriBoxProps, splitPhone, combinePhone } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
@@ -24,6 +21,9 @@ import {getWrapper, postWrapper, validator} from "../../async/junior/required"
 import APIBlockedComponent from '../../core/form/APIBlockedComponent';
 import getPersonIdFromPath from '../../util/getPersonIdFromPath';
 import Breadcrumb from '../../core/Breadcrumb';
+import { History } from 'history';
+import moment = require('moment');
+import formUpdateState from '../../util/form-update-state'
 
 export const formName = "registrationRequiredInfo"
 
@@ -76,53 +76,36 @@ const formToAPI: (form: Form) => ApiType = form => {
 	}
 }
 
-const mapStateToProps = (state: RootState) => ({
-	getMoment: state.staticState.getMoment,
-	form: state.registrationRequiredInfoForm,
-	router: state.router
-})
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	updateField: (name: keyof Form, value: string) => {
-		console.log("updating field!")
-		dispatchFormUpdate(dispatch, formName)(name, value)
-	},
-//	goBack: () => dispatch(push('/')),	// TODO
-	//goNext: (personId: number) => dispatch(push(emergContactPath.replace(":personId", personId.toString())))	// TODO
-})
-
 class FormInput extends TextInput<Form> {}
 class FormSelect extends Select<Form> {}
 class FormTextArea extends TextArea<Form> {}
 
-type StaticProps = {
+interface Props {
 	personId: number,
-	goNext: () => void,
-	goPrev: () => void,
-	breadcrumb: Breadcrumb
+	initialFormData: ApiType,
+	// goNext: () => void,
+	// goPrev: () => void,
+	// breadcrumb: Breadcrumb,
+	history: History<any>
 }
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
+interface State {
+	formData: Form
+}
 
-class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
-	formName = formName
-	getApiWrapper = () => getWrapper(this.props.personId)
-	apiToForm = apiToForm
-	formToAPI = formToAPI
-	getData = () => this.props.form.data
+export default class RequiredInfo extends React.PureComponent<Props, State> {
 	constructor(props: Props) {
-		super(props)
-		console.log("RequiredInfo constructor: personId is ", this.props.personId)
+		super(props);
+		this.state = {
+			formData: apiToForm(this.props.initialFormData)
+		};
 	}
-	renderPlaceholder() {
-		return <span>whatever</span>
-	}
-	renderComponent(data: Form) {
-		console.log("store", getReduxState())
+	render() {
+		const formData = this.state.formData;
 		const self = this;
-		const reduxAction = self.props.updateField;
+		const updateState = formUpdateState(this.state, this.setState, "formData");
 
-		const thisYear = Number(self.props.getMoment().format("YYYY"))
+		const thisYear = Number(moment().format("YYYY"))
 		const years = range(thisYear-20, thisYear)
 
 		// TODO: DOB constituent dropdowns could react to each others changes
@@ -134,21 +117,21 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 					id="firstName"
 					label="First Name"
 					isRequired={true}
-					value={data.firstName}
-					reduxAction={reduxAction}
+					value={formData.firstName}
+					updateAction={updateState}
 				/>
 				<FormInput
 					id="middleInitial"
 					label="Middle Initial"
-					value={data.middleInitial}
-					reduxAction={reduxAction}
+					value={formData.middleInitial}
+					updateAction={updateState}
 				/>
 				<FormInput
 					id="lastName"
 					label="Last Initial"
 					isRequired={true}
-					value={data.lastName}
-					reduxAction={reduxAction}
+					value={formData.lastName}
+					updateAction={updateState}
 				/>
 				<DateTriPicker<Form, DateTriPickerProps<Form>>
 					years={years}
@@ -156,27 +139,20 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 					dayID="dobDate"
 					yearID="dobYear"
 					isRequired={true}
-					monthValue={data.dobMonth}
-					dayValue={data.dobDate}
-					yearValue={data.dobYear}
-					reduxAction={reduxAction}
+					monthValue={formData.dobMonth}
+					dayValue={formData.dobDate}
+					yearValue={formData.dobYear}
+					updateAction={updateState}
 				/>
 				<FormInput
 					id="childEmail"
 					label="Child Email"
-					value={data.childEmail}
-					reduxAction={reduxAction}
+					value={formData.childEmail}
+					updateAction={updateState}
 				/>
-				{(self.props.form.apiState=="WAITING") ? (
-					// TODO: fake input for blurbox, replace with static blurbox
-					<FormInput
-						id="childEmail"
-						label=""
-						value={data.childEmail}
-						reduxAction={reduxAction}
-					/>
-				) : (
-					<tr>
+				{// TODO: actual parent email
+				}
+				<tr>
 					<td style={{ textAlign: "right" }}>
 						<label>
 							<span className="optional">Parent Email</span>
@@ -186,40 +162,39 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 						abcd@efg.com
 					</td>
 				</tr>
-				)}
 				
 				<FormInput
 					id="addr1"
 					label="Address 1"
 					isRequired={true}
-					value={data.addr1}
-					reduxAction={reduxAction}
+					value={formData.addr1}
+					updateAction={updateState}
 				/>
 				<FormInput
 					id="addr2"
 					label="Address 2"
-					value={data.addr2}
-					reduxAction={reduxAction}
+					value={formData.addr2}
+					updateAction={updateState}
 				/>
 				<FormInput
 					id="addr3"
 					label="Address 3"
-					value={data.addr3}
-					reduxAction={reduxAction}
+					value={formData.addr3}
+					updateAction={updateState}
 				/>
 				<FormInput
 					id="city"
 					label="City"
 					isRequired={true}
-					value={data.city}
-					reduxAction={reduxAction}
+					value={formData.city}
+					updateAction={updateState}
 				/>
 				<FormSelect
 					id="state"
 					label="State"
 					isRequired={true}
-					value={data.state}
-					reduxAction={reduxAction}
+					value={formData.state}
+					updateAction={updateState}
 					options={states}
 					nullDisplay="- Select -"
 				/>
@@ -227,15 +202,15 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 					id="zip"
 					label="Zip"
 					isRequired={true}
-					value={data.zip}
-					reduxAction={reduxAction}
+					value={formData.zip}
+					updateAction={updateState}
 				/>
 				<FormSelect		// TODO: default to US
 					id="country"
 					label="Country"
 					isRequired={true}
-					value={data.country}
-					reduxAction={reduxAction}
+					value={formData.country}
+					updateAction={updateState}
 					options={countries}
 					nullDisplay="- Select -"
 				/>
@@ -246,12 +221,12 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 					thirdID="primaryPhoneThird"
 					extID="primaryPhoneExt"
 					typeID="primaryPhoneType"
-					firstValue={data.primaryPhoneFirst}
-					secondValue={data.primaryPhoneSecond}
-					thirdValue={data.primaryPhoneThird}
-					extValue={data.primaryPhoneExt}
-					typeValue={data.primaryPhoneType}
-					reduxAction={reduxAction}
+					firstValue={formData.primaryPhoneFirst}
+					secondValue={formData.primaryPhoneSecond}
+					thirdValue={formData.primaryPhoneThird}
+					extValue={formData.primaryPhoneExt}
+					typeValue={formData.primaryPhoneType}
+					updateAction={updateState}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Parent Alternate Phone"
@@ -260,12 +235,12 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 					thirdID="alternatePhoneThird"
 					extID="alternatePhoneExt"
 					typeID="alternatePhoneType"
-					firstValue={data.alternatePhoneFirst}
-					secondValue={data.alternatePhoneSecond}
-					thirdValue={data.alternatePhoneThird}
-					extValue={data.alternatePhoneExt}
-					typeValue={data.alternatePhoneType}
-					reduxAction={reduxAction}
+					firstValue={formData.alternatePhoneFirst}
+					secondValue={formData.alternatePhoneSecond}
+					thirdValue={formData.alternatePhoneThird}
+					extValue={formData.alternatePhoneExt}
+					typeValue={formData.alternatePhoneType}
+					updateAction={updateState}
 				/>
 			</tbody></table>
 		);
@@ -277,8 +252,8 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 					label="Allergies"
 					rows={4}
 					cols={60}
-					value={data.allergies}
-					reduxAction={reduxAction}
+					value={formData.allergies}
+					updateAction={updateState}
 					placeholder="Please leave blank if none"
 				/>
 				<FormTextArea
@@ -286,8 +261,8 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 					label="Medications"
 					rows={4}
 					cols={60}
-					value={data.medications}
-					reduxAction={reduxAction}
+					value={formData.medications}
+					updateAction={updateState}
 					placeholder="Please leave blank if none"
 				/>
 				<FormTextArea
@@ -295,15 +270,15 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 					label="Special Needs"
 					rows={4}
 					cols={60}
-					value={data.specialNeeds}
-					reduxAction={reduxAction}
+					value={formData.specialNeeds}
+					updateAction={updateState}
 					placeholder="Please leave blank if none"
 				/>
 			</tbody></table>
 		);
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
-				{this.props.breadcrumb}
+				{/* {this.props.breadcrumb} */}
 			</JoomlaNotitleRegion>
 			<JoomlaArticleRegion title="All information on this page is required (if applicable).">
 				{reqFields}
@@ -314,12 +289,10 @@ class RequiredInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 				<br />
 				{specNeedsFields}
 			</JoomlaArticleRegion>
-			<Button text="< Back" onClick={this.props.goPrev}/>
+			{/* <Button text="< Back" onClick={this.props.goPrev}/>
 			<Button text="Next >" onClick={() => {
 				post(formName, postWrapper(this.props.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(this.props.goNext)
-			}}/>
+			}}/> */}
 		</JoomlaMainPage>
 	}
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(RequiredInfo)

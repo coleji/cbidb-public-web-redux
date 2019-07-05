@@ -11,7 +11,7 @@ export interface ApexItemProps<T_Form, T_ValueType> {
 	appendToElementCell?: React.ReactNode,
 	onChange?: (event: React.ChangeEvent) => void,
 	onEnter?: () => void,
-	reduxAction?: (name: string, value: string) => void,
+	updateAction?: (name: string, value: string) => void,
 	justElement?: boolean,
 	isRequired?: boolean
 }
@@ -20,7 +20,7 @@ export abstract class ApexItem<T_Form, T_OwnProps, T_ValueType> extends React.Pu
 	abstract getElement(): React.ReactNode
 	// constructor(props: T_OwnProps & ApexItemProps<T_Form, T_ValueType>) {
 	// 	super(props)
-	// 	if (this.props.reduxAction) this.props.reduxAction(this.props.id, null)
+	// 	if (this.props.updateAction) this.props.updateAction(this.props.id, null)
 	// }
 	getLabel() {
 		return (

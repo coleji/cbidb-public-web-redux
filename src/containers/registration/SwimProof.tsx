@@ -98,7 +98,7 @@ class SwimProof extends APIBlockedComponent<Props, Form, typeof validator> {
 					id="swimProofId"
 					justElement={true}
 					values={swimProofValues}
-					reduxAction={reduxAction}
+					updateAction={reduxAction}
 					value={data.swimProofId.map(n => n.toString())}
 				/>
 			</JoomlaArticleRegion>

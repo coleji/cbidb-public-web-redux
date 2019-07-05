@@ -17,8 +17,8 @@ export default class TextInput<T> extends ApexItem<T, Props & ApexItemProps<T, s
 		}
 		
 		const onChange = (
-			this.props.reduxAction
-			? (ev: React.ChangeEvent<HTMLInputElement>) => this.props.reduxAction(this.props.id, ev.target.value)
+			this.props.updateAction
+			? (ev: React.ChangeEvent<HTMLInputElement>) => this.props.updateAction(this.props.id, ev.target.value)
 			: this.props.onChange
 		);
 

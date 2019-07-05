@@ -18,7 +18,7 @@ import TermsConditions from "../TermsConditions";
 export const path = "/reg/:personId"
 
 export const formName = "registrationWizard"
-
+/*
 const mapElementToBreadcrumbState: (element: WizardNode) => State = e => ({
 	path: null,
 	display: e.breadcrumbHTML
@@ -80,3 +80,5 @@ export default (state: RootState) => {
 		getPrevDLL: none
 	})
 }
+
+*/

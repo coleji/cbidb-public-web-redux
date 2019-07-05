@@ -123,14 +123,14 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					label="Emergency Contact #1 Name"
 					isRequired={true}
 					value={data.emerg1Name}
-					reduxAction={reduxAction}
+					updateAction={reduxAction}
 				/>
 				<FormInput
 					id="emerg1Relation"
 					label="Relation"
 					isRequired={true}
 					value={data.emerg1Relation}
-					reduxAction={reduxAction}
+					updateAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Primary Phone"
@@ -145,7 +145,7 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					thirdValue={data.emerg1PhonePrimaryThird}
 					extValue={data.emerg1PhonePrimaryExt}
 					typeValue={data.emerg1PhonePrimaryType}
-					reduxAction={reduxAction}
+					updateAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Alternate Phone"
@@ -159,19 +159,19 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					thirdValue={data.emerg1PhoneAlternateThird}
 					extValue={data.emerg1PhoneAlternateExt}
 					typeValue={data.emerg1PhoneAlternateType}
-					reduxAction={reduxAction}
+					updateAction={reduxAction}
 				/>
 				<FormInput
 					id="emerg2Name"
 					label="Emergency Contact #2 Name"
 					value={data.emerg2Name}
-					reduxAction={reduxAction}
+					updateAction={reduxAction}
 				/>
 				<FormInput
 					id="emerg2Relation"
 					label="Relation"
 					value={data.emerg2Relation}
-					reduxAction={reduxAction}
+					updateAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Primary Phone"
@@ -185,7 +185,7 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					thirdValue={data.emerg2PhonePrimaryThird}
 					extValue={data.emerg2PhonePrimaryExt}
 					typeValue={data.emerg2PhonePrimaryType}
-					reduxAction={reduxAction}
+					updateAction={reduxAction}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Alternate Phone"
@@ -199,7 +199,7 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					thirdValue={data.emerg2PhoneAlternateThird}
 					extValue={data.emerg2PhoneAlternateExt}
 					typeValue={data.emerg2PhoneAlternateType}
-					reduxAction={reduxAction}
+					updateAction={reduxAction}
 				/>
 
 			</tbody></table>

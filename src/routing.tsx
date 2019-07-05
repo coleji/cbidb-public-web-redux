@@ -1,19 +1,21 @@
 import * as React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router';
-
+import * as t from 'io-ts'
 import Gatekeeper from "./containers/create-acct/Gatekeeper";
 import CreateAccount from './containers/create-acct/CreateAccount';
 import HomePage from './containers/HomePage';
 import LoginPage from './containers/LoginPage';
 import RatingsPage from './containers/RatingsPage';
-import RegistrationWizard, { path as registrationWizardPath } from './containers/registration/pageflow/RegistrationWizard';
+//import RegistrationWizard, { path as registrationWizardPath } from './containers/registration/pageflow/RegistrationWizard';
 import SelectClassType, { path as selectClassTypePath } from "./containers/class-signup/SelectClassType"
 import SelectClassTime, { path as selectClassTimePath, path } from "./containers/class-signup/SelectClassTime"
 import { History } from 'history';
 import PageWrapper from './components/Page/PageWrapper';
 import extractURLParams from './util/extractURLParams';
 import {Form as HomePageForm} from "./containers/HomePage"
+import RequiredInfo from "./containers/registration/RequiredInfo"
 import {apiw as welcomeAPI} from "./async/member-welcome"
+import {getWrapper as requiredInfoAPI, validator as requiredInfoValidator} from "./async/junior/required"
 
 export interface AutoResolver {
 	clientSideAsyncResult: any,
@@ -63,7 +65,8 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 	}
 
 	const paths = {
-		ratings: pathAndParamsExtractor<{personId: number}>("/ratings/:personId")
+		ratings: pathAndParamsExtractor<{personId: number}>("/ratings/:personId"),
+		reg: pathAndParamsExtractor<{personId: number}>("/reg/:personId"),
 	}
 
 	const mustNotBeLoggedIn = [
@@ -81,6 +84,7 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 				welcomePackage={async}
 				{...paths.ratings.getParams(history.location.pathname)}
 			/>}
+			urlProps={{}}
 			shadowComponent={<span>hi!</span>}
 			getAsyncProps={() => {
 				return welcomeAPI.do().catch(err => Promise.resolve(null));  // TODO: handle failure
@@ -89,11 +93,23 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 		/>} />,
 		<Route key="class" path={selectClassTypePath} render={() => <SelectClassType />} />,
 		<Route key="classTime" path={selectClassTimePath} render={() => <SelectClassTime />} />,
-		<Route key="reg" exact path={registrationWizardPath} render={() => {
-			const Clazz = this.registrationWizard
-			return <Clazz />
-		}} />,
-		//...RegistrationTransparentFlow(this.props.dispatch).routes,
+		// <Route key="reg" exact path={registrationWizardPath} render={() => {
+		// 	const Clazz = this.registrationWizard
+		// 	return <Clazz />
+		// }} />,
+		<Route key="reg" path={paths.reg.path} render={() => <PageWrapper
+			component={(urlProps: {personId: number}, async: t.TypeOf<typeof requiredInfoValidator>) => <RequiredInfo
+				history={history}
+				initialFormData={async}
+				{...urlProps}
+			/>}
+			urlProps={paths.reg.getParams(history.location.pathname)}
+			shadowComponent={<span>hi!</span>}
+			getAsyncProps={(urlProps: {personId: number}) => {
+				return requiredInfoAPI(urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
+			}}
+			asyncResolver={asyncResolver}
+		/>} />,
 		<Route key="default" render={() => <HomePage />} />
 	]
 

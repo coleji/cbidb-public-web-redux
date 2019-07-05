@@ -42,7 +42,7 @@ class TermsConditions extends React.Component<Props, {radio: string}> {
 						key: "Yes",
 						display: "I accept."
 					}]}
-					reduxAction={(id: string, radio: string) => {
+					updateAction={(id: string, radio: string) => {
 						self.setState({
 							radio
 						})

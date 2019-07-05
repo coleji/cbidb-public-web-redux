@@ -11,7 +11,7 @@ import JoomlaBase from '../theme/joomla/JoomlaBase';
 import CreateAccount from './create-acct/CreateAccount';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
-import RegistrationWizard, {path as registrationWizardPath} from './registration/pageflow/RegistrationWizard';
+//import RegistrationWizard, {path as registrationWizardPath} from './registration/pageflow/RegistrationWizard';
 import SelectClassType, {path as selectClassTypePath} from "./class-signup/SelectClassType"
 import SelectClassTime, {path as selectClassTimePath} from "./class-signup/SelectClassTime"
 import router from "../routing"
@@ -47,14 +47,14 @@ class App extends React.Component<Props> {
 		console.log("asyncResult from server: ", this.props.clientSideAsyncResult)
 		this.clientSideAsyncResult = this.props.clientSideAsyncResult;
 		console.log(props.router.location)
-		this.registrationWizard = RegistrationWizard(this.props.state)
+	//	this.registrationWizard = RegistrationWizard(this.props.state)
 	}
 	shouldComponentUpdate(nextProps: Props) {
 		console.log("in SCU", nextProps)
 		if (this.props.router.location !== nextProps.router.location) {
 			console.log("location changed!")
 			console.log(nextProps.router.location)
-			this.registrationWizard = RegistrationWizard(nextProps.state)
+		//	this.registrationWizard = RegistrationWizard(nextProps.state)
 		}
 		return true
 	}
