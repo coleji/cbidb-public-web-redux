@@ -23,6 +23,7 @@ import SurveyInfo from './containers/registration/SurveyInfo';
 import TermsConditions from './containers/registration/TermsConditions';
 import ScholarshipPage from './containers/Scholarship';
 import Currency from './util/Currency';
+import RegistrationWizard from './containers/registration/pageflow/RegistrationWizard';
 
 export interface AutoResolver {
 	clientSideAsyncResult: any,
@@ -100,10 +101,15 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 		/>} />,
 		<Route key="class" path={selectClassTypePath} render={() => <SelectClassType />} />,
 		<Route key="classTime" path={selectClassTimePath} render={() => <SelectClassTime />} />,
-		// <Route key="reg" exact path={registrationWizardPath} render={() => {
-		// 	const Clazz = this.registrationWizard
-		// 	return <Clazz />
-		// }} />,
+		<Route key="reg" exact path={paths.reg.path} render={() => {
+			// const Clazz = RegistrationWizard(history, Number(paths.reg.getParams(history.location.pathname).personId), false)
+			// return <Clazz />
+			return <RegistrationWizard
+				history={history}
+				personId={Number(paths.reg.getParams(history.location.pathname).personId)}
+				hasEIIResponse={false}
+			/>
+		}} />,
 		// <Route key="reg" path={paths.reg.path} render={() => <PageWrapper
 		// 	component={(urlProps: {personId: number}, async: t.TypeOf<typeof requiredInfoValidator>) => <RequiredInfo
 		// 		history={history}
@@ -151,17 +157,17 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 		// 	shadowComponent={<span>hi!</span>}
 		// 	asyncResolver={asyncResolver}
 		// />} />,
-		<Route key="reg" path={paths.reg.path} render={() => <PageWrapper
-			component={() => <ScholarshipPage
-				history={history}
-				parentPersonId={188911} //TODO: replace with app state
-				currentSeason={2018}
-				jpPrice={Currency.dollars(300)}
-			/>}
-			urlProps={{}}
-			shadowComponent={<span>hi!</span>}
-			asyncResolver={asyncResolver}
-		/>} />,
+		// <Route key="reg" path={paths.reg.path} render={() => <PageWrapper
+		// 	component={() => <ScholarshipPage
+		// 		history={history}
+		// 		parentPersonId={188911} //TODO: replace with app state
+		// 		currentSeason={2018}
+		// 		jpPrice={Currency.dollars(300)}
+		// 	/>}
+		// 	urlProps={{}}
+		// 	shadowComponent={<span>hi!</span>}
+		// 	asyncResolver={asyncResolver}
+		// />} />,
 		<Route key="default" render={() => <HomePage />} />
 	]
 
