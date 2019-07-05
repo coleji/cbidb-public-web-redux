@@ -57,7 +57,7 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 			serverSideResolveOnAsyncComplete(null)
 		}
 	};
-	function pathAndParamsExtractor<T>(path: string) {
+	function pathAndParamsExtractor<T extends {[K: string]: string}>(path: string) {
 		return {
 			path,
 			getParams: extractURLParams<T>(path)
@@ -65,8 +65,8 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 	}
 
 	const paths = {
-		ratings: pathAndParamsExtractor<{personId: number}>("/ratings/:personId"),
-		reg: pathAndParamsExtractor<{personId: number}>("/reg/:personId"),
+		ratings: pathAndParamsExtractor<{personId: string}>("/ratings/:personId"),
+		reg: pathAndParamsExtractor<{personId: string}>("/reg/:personId"),
 	}
 
 	const mustNotBeLoggedIn = [
@@ -79,12 +79,12 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 	const mustBeLoggedIn = [
 		<Route key="login" path="/login" render={() => <Redirect to="/" />} />,
 		<Route key="ratings" path={paths.ratings.path} render={() => <PageWrapper
-			component={(async: HomePageForm) => <RatingsPage
+			component={(urlProps: {personId: number}, async: HomePageForm) => <RatingsPage
 				history={history}
 				welcomePackage={async}
-				{...paths.ratings.getParams(history.location.pathname)}
+				personId={urlProps.personId}
 			/>}
-			urlProps={{}}
+			urlProps={{personId: Number(paths.ratings.getParams(history.location.pathname).personId)}}
 			shadowComponent={<span>hi!</span>}
 			getAsyncProps={() => {
 				return welcomeAPI.do().catch(err => Promise.resolve(null));  // TODO: handle failure
@@ -103,7 +103,7 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 				initialFormData={async}
 				{...urlProps}
 			/>}
-			urlProps={paths.reg.getParams(history.location.pathname)}
+			urlProps={{personId: Number(paths.reg.getParams(history.location.pathname).personId)}}
 			shadowComponent={<span>hi!</span>}
 			getAsyncProps={(urlProps: {personId: number}) => {
 				return requiredInfoAPI(urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure

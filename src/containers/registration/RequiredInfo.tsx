@@ -103,7 +103,7 @@ export default class RequiredInfo extends React.PureComponent<Props, State> {
 	render() {
 		const formData = this.state.formData;
 		const self = this;
-		const updateState = formUpdateState(this.state, this.setState, "formData");
+		const updateState = formUpdateState(this.state, this.setState.bind(this), "formData");
 
 		const thisYear = Number(moment().format("YYYY"))
 		const years = range(thisYear-20, thisYear)
@@ -289,10 +289,10 @@ export default class RequiredInfo extends React.PureComponent<Props, State> {
 				<br />
 				{specNeedsFields}
 			</JoomlaArticleRegion>
-			{/* <Button text="< Back" onClick={this.props.goPrev}/>
+			<Button text="< Back" onClick={() => history.back()}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.props.personId))(formToAPI(this.props.form.data.getOrElse({} as any))).then(this.props.goNext)
-			}}/> */}
+				post(formName, postWrapper(this.props.personId))(formToAPI(this.state.formData)).then(() => history.back())
+			}}/>
 		</JoomlaMainPage>
 	}
 }
