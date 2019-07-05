@@ -16,6 +16,8 @@ import {Form as HomePageForm} from "./containers/HomePage"
 import RequiredInfo from "./containers/registration/RequiredInfo"
 import {apiw as welcomeAPI} from "./async/member-welcome"
 import {getWrapper as requiredInfoAPI, validator as requiredInfoValidator} from "./async/junior/required"
+import {getWrapper as emergContactAPI, validator as emergContactValidator} from "./async/junior/emerg-contact"
+import EmergencyContact from './containers/registration/EmergencyContact';
 
 export interface AutoResolver {
 	clientSideAsyncResult: any,
@@ -97,8 +99,21 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 		// 	const Clazz = this.registrationWizard
 		// 	return <Clazz />
 		// }} />,
+		// <Route key="reg" path={paths.reg.path} render={() => <PageWrapper
+		// 	component={(urlProps: {personId: number}, async: t.TypeOf<typeof requiredInfoValidator>) => <RequiredInfo
+		// 		history={history}
+		// 		initialFormData={async}
+		// 		{...urlProps}
+		// 	/>}
+		// 	urlProps={{personId: Number(paths.reg.getParams(history.location.pathname).personId)}}
+		// 	shadowComponent={<span>hi!</span>}
+		// 	getAsyncProps={(urlProps: {personId: number}) => {
+		// 		return requiredInfoAPI(urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
+		// 	}}
+		// 	asyncResolver={asyncResolver}
+		// />} />,
 		<Route key="reg" path={paths.reg.path} render={() => <PageWrapper
-			component={(urlProps: {personId: number}, async: t.TypeOf<typeof requiredInfoValidator>) => <RequiredInfo
+			component={(urlProps: {personId: number}, async: t.TypeOf<typeof emergContactValidator>) => <EmergencyContact
 				history={history}
 				initialFormData={async}
 				{...urlProps}
@@ -106,7 +121,7 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 			urlProps={{personId: Number(paths.reg.getParams(history.location.pathname).personId)}}
 			shadowComponent={<span>hi!</span>}
 			getAsyncProps={(urlProps: {personId: number}) => {
-				return requiredInfoAPI(urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
+				return emergContactAPI(urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
 			}}
 			asyncResolver={asyncResolver}
 		/>} />,

@@ -17,6 +17,8 @@ import {getWrapper, postWrapper, validator} from "../../async/junior/emerg-conta
 import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 import Breadcrumb from "../../core/Breadcrumb";
+import { History } from "history";
+import formUpdateState from '../../util/form-update-state'
 
 export const formName = "emergencyContact"
 
@@ -78,43 +80,32 @@ const formToAPI: (form: Form) => ApiType = form => ({
 	emerg2PhoneAlternate: combinePhone(form.emerg2PhoneAlternateFirst, form.emerg2PhoneAlternateSecond, form.emerg2PhoneAlternateThird, form.emerg2PhoneAlternateExt),
 })
 
-const mapStateToProps = (state: RootState) => ({
-	form: state.emergencyContactForm,
-	router: state.router
-})
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	updateField: (name: keyof Form, value: string) => {
-		console.log("updating field!")
-		dispatchFormUpdate(dispatch, formName)(name, value)
-	},
-	// goBack: () => dispatch(push('/')),	// TODO
-	// goNext: (personId: number) => dispatch(push(swimProofPath.replace(":personId", personId.toString())))	// TODO
-})
-
 class FormInput extends TextInput<Form> {}
 
-type StaticProps = {
+interface Props {
 	personId: number,
-	goNext: () => void,
-	goPrev: () => void,
-	breadcrumb: Breadcrumb
+	initialFormData: ApiType,
+	// goNext: () => void,
+	// goPrev: () => void,
+	// breadcrumb: Breadcrumb,
+	history: History<any>
 }
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
+interface State {
+	formData: Form
+}
 
-class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator> {
-	formName = formName
-	getApiWrapper = () => getWrapper(this.props.personId)
-	apiToForm = apiToForm
-	formToAPI = formToAPI
-	getData = () => this.props.form.data
-	renderPlaceholder() {
-		return <span>whatever</span>
+export default class EmergencyContact extends React.PureComponent<Props, State> {
+	constructor(props: Props) {
+		super(props);
+		this.state = {
+			formData: apiToForm(this.props.initialFormData)
+		};
 	}
-	renderComponent(data: Form) {
+	render() {
 		const self = this;
-		const reduxAction = self.props.updateField;
+		const data = this.state.formData;
+		const updateState = formUpdateState(this.state, this.setState.bind(this), "formData");
 
 		const emergFields = (
 			<table><tbody>
@@ -123,14 +114,14 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					label="Emergency Contact #1 Name"
 					isRequired={true}
 					value={data.emerg1Name}
-					updateAction={reduxAction}
+					updateAction={updateState}
 				/>
 				<FormInput
 					id="emerg1Relation"
 					label="Relation"
 					isRequired={true}
 					value={data.emerg1Relation}
-					updateAction={reduxAction}
+					updateAction={updateState}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Primary Phone"
@@ -145,7 +136,7 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					thirdValue={data.emerg1PhonePrimaryThird}
 					extValue={data.emerg1PhonePrimaryExt}
 					typeValue={data.emerg1PhonePrimaryType}
-					updateAction={reduxAction}
+					updateAction={updateState}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Alternate Phone"
@@ -159,19 +150,19 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					thirdValue={data.emerg1PhoneAlternateThird}
 					extValue={data.emerg1PhoneAlternateExt}
 					typeValue={data.emerg1PhoneAlternateType}
-					updateAction={reduxAction}
+					updateAction={updateState}
 				/>
 				<FormInput
 					id="emerg2Name"
 					label="Emergency Contact #2 Name"
 					value={data.emerg2Name}
-					updateAction={reduxAction}
+					updateAction={updateState}
 				/>
 				<FormInput
 					id="emerg2Relation"
 					label="Relation"
 					value={data.emerg2Relation}
-					updateAction={reduxAction}
+					updateAction={updateState}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Primary Phone"
@@ -185,7 +176,7 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					thirdValue={data.emerg2PhonePrimaryThird}
 					extValue={data.emerg2PhonePrimaryExt}
 					typeValue={data.emerg2PhonePrimaryType}
-					updateAction={reduxAction}
+					updateAction={updateState}
 				/>
 				<PhoneTriBox<Form,  PhoneTriBoxProps<Form>>
 					label="Alternate Phone"
@@ -199,7 +190,7 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 					thirdValue={data.emerg2PhoneAlternateThird}
 					extValue={data.emerg2PhoneAlternateExt}
 					typeValue={data.emerg2PhoneAlternateType}
-					updateAction={reduxAction}
+					updateAction={updateState}
 				/>
 
 			</tbody></table>
@@ -208,17 +199,15 @@ class EmergencyContact extends APIBlockedComponent<Props, Form, typeof validator
 		
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
-				{this.props.breadcrumb}
+				{/* {this.props.breadcrumb} */}
 			</JoomlaNotitleRegion>
 			<JoomlaArticleRegion title="Who should we contact in the event of an emergency?">
 				{emergFields}
 			</JoomlaArticleRegion>
-			<Button text="< Back" onClick={this.props.goPrev}/>
+			<Button text="< Back" onClick={() => history.back()}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.props.personId))(formToAPI(data)).then(this.props.goNext)
+				post(formName, postWrapper(this.props.personId))(formToAPI(this.state.formData)).then(() => history.back())
 			}}/>
 		</JoomlaMainPage>
 	}
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(EmergencyContact)
