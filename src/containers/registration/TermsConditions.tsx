@@ -7,19 +7,21 @@ import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import Breadcrumb from "../../core/Breadcrumb";
 import { RadioGroup } from "../../components/InputGroup";
 import { none, some } from "fp-ts/lib/Option";
+import { History } from "history";
 
 interface Props {
-	breadcrumb: Breadcrumb,
-	goNext: () => void,
-	goPrev: () => void
+	history: History<any>
+	// breadcrumb: Breadcrumb,
+	// goNext: () => void,
+	// goPrev: () => void
 }
 
-class TermsConditions extends React.Component<Props, {radio: string}> {
+export default class TermsConditions extends React.Component<Props, {radio: string}> {
 	render() {
 		const self = this;
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
-				{this.props.breadcrumb}
+				{/* {this.props.breadcrumb} */}
 			</JoomlaNotitleRegion>
 			<JoomlaArticleRegion title="Terms and Conditions">
 			I understand that participation in sailing and other boating activities, both on the water and on-shore, may pose risks to my child's health and safety. I have read and understand the rules and regulations established by Community Boating, Inc. and agree to be bound by them. My approval of my child's participation in the Community Boating, Inc. program is made in full recognition and assumption of those risks and is entirely voluntary. In consideration of your admission of my child into Junior Program membership, I hereby agree, for myself, executors, administrators and assigns, to release and hold harmless Community Boating, Inc., its directors, officers, members, employees, representatives, successors and assigns, from any and all claims, liability or loss arising from any injury or damage to my child's health, well-being or property during participation in this program.
@@ -48,13 +50,11 @@ class TermsConditions extends React.Component<Props, {radio: string}> {
 						})
 					}}
 					value={self.state ? some(self.state.radio) : none}
+					justElement={true}
 				/>
 			</JoomlaNotitleRegion>
-			<Button text="< Back" onClick={this.props.goPrev}/>
-			{(self.state || {} as any).radio == "Yes" ? <Button text="Next >" onClick={this.props.goNext}/> : ""}
-			
+			<Button text="< Back" onClick={() => history.back()}/>
+			{(self.state || {} as any).radio == "Yes" ? <Button text="Next >" onClick={() => history.back()}/> : ""}
 		</JoomlaMainPage>
 	}
 }
-
-export default connect(() => ({}), () => ({}))(TermsConditions)
