@@ -19,6 +19,8 @@ import referralSources from "../../lov/referralSources"
 import {getWrapper, postWrapper, validator} from "../../async/junior/survey"
 import Button from "../../components/Button";
 import Breadcrumb from "../../core/Breadcrumb";
+import { History } from "history";
+import formUpdateState from '../../util/form-update-state'
 
 export const formName = "surveyInfoForm"
  
@@ -29,45 +31,37 @@ class FormRadio extends RadioGroup<Form> {}
 class FormCheckbox extends CheckboxGroup<Form>{}
 class FormBoolean extends SingleCheckbox<Form>{}
 
-const mapStateToProps = (state: RootState) => ({
-	form: state.surveyInfoForm,
-	router: state.router
-})
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	updateField: function(name: keyof Form, value: any) {
-		console.log("updating field!")
-		dispatchFormUpdate(dispatch, formName)(name, value)
-	}
-})
-
-type StaticProps = {
+interface Props {
 	personId: number,
-	goNext: () => void,
-	goPrev: () => void,
-	breadcrumb: Breadcrumb
+	initialFormData: Form,
+	// goNext: () => void,
+	// goPrev: () => void,
+	// breadcrumb: Breadcrumb,
+	history: History<any>
 }
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
+interface State {
+	formData: Form
+}
 
-class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
-	formName = formName
-	getApiWrapper = () => getWrapper(this.props.personId)
-	apiToForm = (x: t.TypeOf<typeof validator>) => x
-	formToAPI = (x: Form) => x
-	getData = () => this.props.form.data
-	renderPlaceholder() {
-		return <span>whatever</span>
+export default class SurveyInfo extends React.Component<Props, State> {
+	constructor(props: Props) {
+		super(props);
+		this.state = {
+			formData: this.props.initialFormData
+		};
 	}
-	renderComponent(data: Form) {
+	render() {
 		const self = this;
-		const reduxAction = self.props.updateField;
+		const updateState = formUpdateState(this.state, this.setState.bind(this), "formData");
+		const data = this.state.formData;
+
 
 		// TODO: blank out the "other" fields in state when the toggling checkbox is unchecked
 
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
-				{this.props.breadcrumb}
+				{/* {this.props.breadcrumb} */}
 			</JoomlaNotitleRegion>
             <JoomlaArticleRegion title="This information is helpful but not required.">
                 <table><tbody>
@@ -76,7 +70,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
                         label="Gender"
                         columns={3}
                         values={genders}
-                        updateAction={reduxAction}
+                        updateAction={updateState}
                         value={data.genderID || none}
                     />
 					<FormCheckbox
@@ -88,7 +82,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 						}
                         columns={3}
                         values={referralSources}
-                        updateAction={reduxAction}
+                        updateAction={updateState}
 						value={(data.referral || none)}
                     />
 					{
@@ -97,7 +91,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 							id="referralOther"
 							label="Other"
 							value={data.referralOther || none}
-							updateAction={reduxAction}
+							updateAction={updateState}
 						/>
 						: null
 					}
@@ -109,14 +103,14 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 							</React.Fragment>
 						}
 						value={data.language || none}
-						updateAction={reduxAction}
+						updateAction={updateState}
 					/>
 					<FormCheckbox
                         id="ethnicity"
                         label="Ethnicity"
                         columns={3}
                         values={ethnicities}
-                        updateAction={reduxAction}
+                        updateAction={updateState}
 						value={(data.ethnicity || none)}
                     />
 					{
@@ -125,7 +119,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 							id="ethnicityOther"
 							label="Other"
 							value={data.ethnicityOther || none}
-							updateAction={reduxAction}
+							updateAction={updateState}
 						/>
 						: null
 					}
@@ -133,7 +127,7 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 						id="school"
 						label="School"
 						value={data.school || none}
-						updateAction={reduxAction}
+						updateAction={updateState}
 					/>
 					<FormBoolean
 						id="freeLunch"
@@ -143,16 +137,14 @@ class SurveyInfo extends APIBlockedComponent<Props, Form, typeof validator> {
 							</React.Fragment>
 						}
 						value={data.freeLunch}
-						updateAction={reduxAction}
+						updateAction={updateState}
 					/>
                 </tbody></table>
             </JoomlaArticleRegion>
-			<Button text="< Back" onClick={this.props.goPrev}/>
+			<Button text="< Back" onClick={() => history.back()}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.props.personId))(this.formToAPI(this.props.form.data.getOrElse({} as any))).then(this.props.goNext)
+				post(formName, postWrapper(this.props.personId))(this.state.formData).then(() => history.back())
 			}}/>
 		</JoomlaMainPage>
 	}
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(SurveyInfo)

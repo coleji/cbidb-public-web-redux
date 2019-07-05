@@ -93,7 +93,7 @@ interface State {
 	formData: Form
 }
 
-export default class RequiredInfo extends React.PureComponent<Props, State> {
+export default class RequiredInfo extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
