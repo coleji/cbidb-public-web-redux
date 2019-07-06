@@ -85,9 +85,9 @@ class FormInput extends TextInput<Form> {}
 interface Props {
 	personId: number,
 	initialFormData: ApiType,
-	// goNext: () => void,
-	// goPrev: () => void,
-	// breadcrumb: Breadcrumb,
+	goNext: () => void,
+	goPrev: () => void,
+	breadcrumb: JSX.Element,
 	history: History<any>
 }
 
@@ -204,9 +204,9 @@ export default class EmergencyContact extends React.PureComponent<Props, State> 
 			<JoomlaArticleRegion title="Who should we contact in the event of an emergency?">
 				{emergFields}
 			</JoomlaArticleRegion>
-			<Button text="< Back" onClick={() => history.back()}/>
+			<Button text="< Back" onClick={self.props.goPrev}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.props.personId))(formToAPI(this.state.formData)).then(() => history.back())
+				post(formName, postWrapper(this.props.personId))(formToAPI(this.state.formData)).then(self.props.goNext)
 			}}/>
 		</JoomlaMainPage>
 	}

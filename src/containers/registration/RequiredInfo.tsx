@@ -83,9 +83,9 @@ class FormTextArea extends TextArea<Form> {}
 interface Props {
 	personId: number,
 	initialFormData: ApiType,
-	// goNext: () => void,
-	// goPrev: () => void,
-	// breadcrumb: Breadcrumb,
+	goNext: () => void,
+	goPrev: () => void,
+	breadcrumb: JSX.Element,
 	history: History<any>
 }
 
@@ -278,7 +278,7 @@ export default class RequiredInfo extends React.Component<Props, State> {
 		);
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
-				{/* {this.props.breadcrumb} */}
+				{this.props.breadcrumb}
 			</JoomlaNotitleRegion>
 			<JoomlaArticleRegion title="All information on this page is required (if applicable).">
 				{reqFields}
@@ -289,9 +289,9 @@ export default class RequiredInfo extends React.Component<Props, State> {
 				<br />
 				{specNeedsFields}
 			</JoomlaArticleRegion>
-			<Button text="< Back" onClick={() => history.back()}/>
+			<Button text="< Back" onClick={self.props.goPrev}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.props.personId))(formToAPI(this.state.formData)).then(() => history.back())
+				post(formName, postWrapper(this.props.personId))(formToAPI(this.state.formData)).then(self.props.goNext)
 			}}/>
 		</JoomlaMainPage>
 	}

@@ -11,9 +11,9 @@ import { History } from "history";
 
 interface Props {
 	history: History<any>
-	// breadcrumb: Breadcrumb,
-	// goNext: () => void,
-	// goPrev: () => void
+	breadcrumb: JSX.Element,
+	goNext: () => void,
+	goPrev: () => void
 }
 
 export default class TermsConditions extends React.Component<Props, {radio: string}> {
@@ -53,8 +53,8 @@ export default class TermsConditions extends React.Component<Props, {radio: stri
 					justElement={true}
 				/>
 			</JoomlaNotitleRegion>
-			<Button text="< Back" onClick={() => history.back()}/>
-			{(self.state || {} as any).radio == "Yes" ? <Button text="Next >" onClick={() => history.back()}/> : ""}
+			<Button text="< Back" onClick={self.props.goPrev}/>
+			{(self.state || {} as any).radio == "Yes" ? <Button text="Next >" onClick={self.props.goNext}/> : ""}
 		</JoomlaMainPage>
 	}
 }

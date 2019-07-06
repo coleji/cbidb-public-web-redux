@@ -2,7 +2,7 @@ import * as React from "react";
 import * as t from 'io-ts'
 import { RootState } from "../../../rootReducer";
 import { Dispatch } from "redux";
-import WizardPageflow, { WizardNode, ElementDLL } from "../../../core/WizardPageflow";
+import WizardPageflow, { WizardNode, ElementDLL, ComponentPropsFromWizard } from "../../../core/WizardPageflow";
 import JoomlaMainPage from "../../../theme/joomla/JoomlaMainPage";
 import HomePage from "../../HomePage";
 import RequiredInfo from "../RequiredInfo";
@@ -34,90 +34,90 @@ const mapElementToBreadcrumbState: (element: WizardNode) => State = e => ({
 })
 
 export default (props: {history: History<any>, personId: number, hasEIIResponse: boolean, asyncResolver: AutoResolver}) => {
-	const getComponentProps = (personId: number) => (goNext: () => void, goPrev: () => void, prevNodes: WizardNode[], currNode: WizardNode, nextNodes: WizardNode[]) => {
-		return {
-			personId,
-			goPrev,
-			goNext,
-			breadcrumb: (<ProgressThermometer
-				prevStates={prevNodes.map(mapElementToBreadcrumbState)}
-				currState={mapElementToBreadcrumbState(currNode)}
-				nextStates={nextNodes.map(mapElementToBreadcrumbState)}
-			/>)
-		}
+	const staticComponentProps = {
+		history: props.history,
+		personId: props.personId,
+	}
+
+	const mapWizardProps = (fromWizard: ComponentPropsFromWizard) => ({
+		goPrev: fromWizard.goPrev,
+		goNext: fromWizard.goNext,
+		breadcrumb: (<ProgressThermometer
+			prevStates={fromWizard.prevNodes.map(mapElementToBreadcrumbState)}
+			currState={mapElementToBreadcrumbState(fromWizard.currNode)}
+			nextStates={fromWizard.nextNodes.map(mapElementToBreadcrumbState)}
+		/>)
+	})
+
+	const pageWrapperProps = {
+		urlProps: {},
+		shadowComponent: <span>hi!</span>,
+		asyncResolver: props.asyncResolver
 	}
 
 	const maybeScholarship = props.hasEIIResponse ? [] : [{
-		clazz: () => <PageWrapper
+		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
 			component={() => <ScholarshipPage
-				history={props.history}
 				parentPersonId={188911} //TODO: replace with app state
 				currentSeason={2018}
 				jpPrice={Currency.dollars(300)}
+				{...staticComponentProps}
+				{...mapWizardProps(fromWizard)}
 			/>}
-			urlProps={{}}
-			shadowComponent={<span>hi!</span>}
-			asyncResolver={props.asyncResolver}
+			{...pageWrapperProps}
 		/>,
 		breadcrumbHTML: <React.Fragment>Family<br />Information</React.Fragment>
 	}]
 
 	const otherNodes = [{
-		clazz: () => <PageWrapper
-			component={(urlProps: {personId: number}, async: t.TypeOf<typeof requiredInfoValidator>) => <RequiredInfo
-				history={props.history}
+		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
+			component={(urlProps: {}, async: t.TypeOf<typeof requiredInfoValidator>) => <RequiredInfo
 				initialFormData={async}
-				{...urlProps}
+				{...staticComponentProps}
+				{...mapWizardProps(fromWizard)}
 			/>}
-			urlProps={{personId: props.personId}}
-			shadowComponent={<span>hi!</span>}
-			getAsyncProps={(urlProps: {personId: number}) => {
-				return requiredInfoAPI(urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
+			getAsyncProps={(urlProps: {}) => {
+				return requiredInfoAPI(props.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
 			}}
-			asyncResolver={props.asyncResolver}
+			{...pageWrapperProps}
 		/>,
 		breadcrumbHTML: <React.Fragment>Required<br />Info</React.Fragment>
 	}, {
-		clazz: () => <PageWrapper
-			component={(urlProps: {personId: number}, async: t.TypeOf<typeof emergContactValidator>) => <EmergencyContact
-				history={props.history}
+		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
+			component={(urlProps: {}, async: t.TypeOf<typeof emergContactValidator>) => <EmergencyContact
 				initialFormData={async}
-				{...urlProps}
+				{...staticComponentProps}
+				{...mapWizardProps(fromWizard)}
 			/>}
-			urlProps={{personId: props.personId}}
-			shadowComponent={<span>hi!</span>}
-			getAsyncProps={(urlProps: {personId: number}) => {
-				return emergContactAPI(urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
+			getAsyncProps={(urlProps: {}) => {
+				return emergContactAPI(props.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
 			}}
-			asyncResolver={props.asyncResolver}
+			{...pageWrapperProps}
 		/>,
 		breadcrumbHTML: <React.Fragment>Emergency<br />Contact</React.Fragment>
 	}, /*{
 		clazz: SwimProof,
 		breadcrumbHTML: <React.Fragment>Swim<br />Proof</React.Fragment>
 	}, */{
-		clazz: () => <PageWrapper
-			component={(urlProps: {personId: number}, async: t.TypeOf<typeof surveyValidator>) => <SurveyInfo
-				history={props.history}
+		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
+			component={(urlProps: {}, async: t.TypeOf<typeof surveyValidator>) => <SurveyInfo
 				initialFormData={async}
-				{...urlProps}
+				{...staticComponentProps}
+				{...mapWizardProps(fromWizard)}
 			/>}
-			urlProps={{personId: props.personId}}
-			shadowComponent={<span>hi!</span>}
-			getAsyncProps={(urlProps: {personId: number}) => {
-				return surveyAPI(urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
+			getAsyncProps={(urlProps: {}) => {
+				return surveyAPI(props.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
 			}}
-			asyncResolver={props.asyncResolver}
+			{...pageWrapperProps}
 		/>,
 		breadcrumbHTML: <React.Fragment>Survey<br />Information</React.Fragment>
 	}, {
-		clazz: () => <PageWrapper
+		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
 			component={() => <TermsConditions
-				history={props.history}
+				{...staticComponentProps}
+				{...mapWizardProps(fromWizard)}
 			/>}
-			urlProps={{}}
-			shadowComponent={<span>hi!</span>}
-			asyncResolver={props.asyncResolver}
+			{...pageWrapperProps}
 		/>,
 		breadcrumbHTML: <React.Fragment>Terms and <br />Conditions</React.Fragment>
 	}]
@@ -127,13 +127,9 @@ export default (props: {history: History<any>, personId: number, hasEIIResponse:
 	console.log("returning class")
 	return <WizardPageflow 
 		history={props.history}
-		config={{
-			formName,
-			placeholder: <JoomlaMainPage />,
-			getComponentProps: getComponentProps(props.personId),
-			nodes,
-			start: "/",
-			end: "/"
-		}}
+		formName={formName}
+		start="/"
+		end="/"
+		nodes={nodes}
 	/>
 }

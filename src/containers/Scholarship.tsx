@@ -17,6 +17,7 @@ import { Dispatch } from "redux";
 import {formName as RegistrationWizardFormName} from "./registration/pageflow/RegistrationWizard"
 import formUpdateState from '../util/form-update-state'
 import { History } from "history";
+import Breadcrumb from "../core/Breadcrumb";
 
 export const formName = "scholarshipForm"
 
@@ -37,27 +38,14 @@ class FormRadio extends RadioGroup<Form> {}
 class FormSelect extends Select<Form> {}
 class FormBoolean extends SingleCheckbox<Form>{}
 
-// const mapStateToProps = (state: RootState) => ({
-// 	form: state.scholarshipForm.data,
-// 	jpPrice: Currency.cents(state.staticState.jpPriceCents),
-// 	currentSeason: state.staticState.currentSeason,
-// 	parentPersonId: state.homePageForm.data.getOrElse(null).parentPersonId,
-// 	registrationWizard: state.registrationWizard.data
-// })
-
-// const mapDispatchToProps = (dispatch: Dispatch) => ({
-// 	dispatch, 
-// 	updateField: function(name: keyof Form, value: any) {
-// 		console.log("updating field!")
-// 		dispatchFormUpdate(dispatch, formName)(name, value)
-// 	}
-// })
-
 interface Props {
 	currentSeason: number,
 	jpPrice: Currency,
 	parentPersonId: number,
-	history: History<any>
+	history: History<any>,
+	goNext: () => void,
+	goPrev: () => void,
+	breadcrumb: JSX.Element
 }
 
 interface State {
@@ -225,9 +213,9 @@ export default class ScholarshipPage extends React.Component<Props, State> {
 					schoolagerCount:  Number(form.numberSchoolagers.getOrElse("0")),
 					teenagerCount:  Number(form.numberTeenagers.getOrElse("0")),
 					income:  Number(form.income.getOrElse("0"))
-				}).then(() => history.back())
+				}).then(self.props.goNext)
 			} else {
-				post(formName, postNo(this.props.parentPersonId))({}).then(() => history.back())
+				post(formName, postNo(this.props.parentPersonId))({}).then(self.props.goNext)
 			}
 			
 		}}/>
@@ -250,7 +238,7 @@ export default class ScholarshipPage extends React.Component<Props, State> {
 				</div>
 			</JoomlaArticleRegion>
 			{self.state.formData.isApplying.getOrElse(null) == "Yes" ? familyInfo : ""}
-			<Button text="< Back" onClick={() => history.back()}/>
+			<Button text="< Back" onClick={self.props.goPrev}/>
 
 			{(function() {
 				const form = self.state.formData

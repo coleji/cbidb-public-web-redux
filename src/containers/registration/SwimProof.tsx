@@ -48,7 +48,7 @@ type StaticProps = {
 	personId: number,
 	goNext: () => void,
 	goPrev: () => void,
-	breadcrumb: Breadcrumb
+	breadcrumb: JSX.Element
 }
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps

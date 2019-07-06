@@ -9,81 +9,44 @@ import { push } from "connected-react-router";
 import { History } from "history";
 import Breadcrumb from "./Breadcrumb";
 
+export interface ComponentPropsFromWizard {
+	goNext: () => void,
+	goPrev: () => void,
+	prevNodes: WizardNode[],
+	currNode: WizardNode,
+	nextNodes: WizardNode[]
+}
+
 export interface WizardNode {
-	clazz: () => JSX.Element,
+	clazz: (fromWizard: ComponentPropsFromWizard) => JSX.Element,
 	breadcrumbHTML: JSX.Element
 }
 
-export type ElementDLL = DoublyLinkedList<JSX.Element>
+export type ElementDLL = DoublyLinkedList<() => JSX.Element>
 
-interface Config<T_CompProps> {
+
+interface Props {
+	history: History<any>,
 	formName: string,
-	placeholder: JSX.Element,
-	// getDLL: (state: RootState) =>  Option<ElementDLL>,
-	getComponentProps: (goNext: () => void, goPrev: () => void, prevNodes: WizardNode[], currNode: WizardNode, nextNodes: WizardNode[]) => T_CompProps,
 	nodes: WizardNode[],
 	start: string,
 	end: string,
-	// getNextDLL: Option<(dll: ElementDLL) => ElementDLL>,
-	// getPrevDLL: Option<(dll: ElementDLL) => ElementDLL>
-}
-
-// const mapStateToProps = (state: RootState) => ({
-// 	state
-// })
-
-// const mapDispatchToProps = (dispatch: Dispatch) => ({
-// 	dispatch
-// })
-
-interface Props<T_CompProps> {
-	history: History<any>,
-	config: Config<T_CompProps>
 }
 
 interface State {
 	dll: ElementDLL
 }
 
-export default class WizardPageflow<T_CompProps> extends React.Component<Props<T_CompProps>, State> {
+export default class WizardPageflow extends React.Component<Props, State> {
 	// personId: number
-	placeholder: JSX.Element
 	goNext: () => void
 	goPrev: () => void
 	static getNextDLL: (dll: ElementDLL) => ElementDLL = dll => dll.next()
 	static getPrevDLL: (dll: ElementDLL) => ElementDLL = dll => dll.prev()
-	constructor(props: Props<T_CompProps>) {
-		console.log("in wizard pageflow constructor")
+	constructor(props: Props) {
 		super(props)
 		const self = this
-		const config = this.props.config;
-		class Placeholder extends React.Component {
-			render() {
-				return config.placeholder
-			}
-		}
-
-		this.placeholder = <Placeholder />
-		// this.state = {
-		// 	dll: DoublyLinkedList.from([this.placeholder])
-		// };
-
-
-
-		const nodes = config.nodes.map((node, i, arr) => {
-			const prevNodes = arr.filter((ee, ii) => ii < i)
-			const nextNodes = arr.filter((ee, ii) => ii > i)
-			const Clazz = node.clazz
-			return <Clazz 
-				{...config.getComponentProps(self.goNext, self.goPrev, prevNodes, node, nextNodes)}
-			/>
-		})
-
-		this.state = {
-			dll: DoublyLinkedList.from(nodes)
-		}
-
-		console.log("wizard constructor: setting this.dll ", this.state.dll)
+		
 		this.goNext = () => {
 			console.log("pushed goNext!")
 			if (self.state.dll.hasNext()) {
@@ -92,12 +55,12 @@ export default class WizardPageflow<T_CompProps> extends React.Component<Props<T
 					dll: self.state.dll.next()
 				})
 			} else {
-				console.log("going to end: ", config.end)
-				history.back()
-				//self.props.dispatch(push(config.end))
+				console.log("going to end: ", self.props.end)
+				self.props.history.push(self.props.end);
 			}
 			
 		}
+
 		this.goPrev = () => {
 			console.log("pushed goPrev!")
 			if (self.state.dll.hasPrev()) {
@@ -106,12 +69,30 @@ export default class WizardPageflow<T_CompProps> extends React.Component<Props<T
 					dll: self.state.dll.prev()
 				})
 			} else {
-				console.log("going back to start: ", config.start)
-				history.back()
-				//self.props.dispatch(push(config.start))
+				console.log("going back to start: ", self.props.start)
+				self.props.history.push(self.props.start);
 			}
 			
 		}
+
+		const nodes = self.props.nodes.map((node, i, arr) => {
+			const prevNodes = arr.filter((ee, ii) => ii < i)
+			const nextNodes = arr.filter((ee, ii) => ii > i)
+			return () => node.clazz({
+				goNext: self.goNext.bind(self),
+				goPrev: self.goPrev.bind(self),
+				prevNodes,
+				nextNodes,
+				currNode: node
+			})
+		})
+
+		this.state = {
+			dll: DoublyLinkedList.from(nodes)
+		}
+
+		console.log("wizard constructor: setting this.dll ", this.state.dll)
+		
 
 		// console.log("about to set DLL in redux:  ", dll)
 		// this.dll = dll
@@ -124,6 +105,6 @@ export default class WizardPageflow<T_CompProps> extends React.Component<Props<T
 	render() {
 		console.log("rendering.....")
 		console.log(this.state.dll)
-		return this.state.dll.curr
+		return this.state.dll.curr()
 	}
 }
