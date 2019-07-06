@@ -7,9 +7,10 @@ import { Option } from "fp-ts/lib/Option";
 import { connect, ConnectedComponentClass } from "react-redux";
 import { push } from "connected-react-router";
 import { History } from "history";
+import Breadcrumb from "./Breadcrumb";
 
 export interface WizardNode {
-	clazz: React.ComponentType,
+	clazz: () => JSX.Element,
 	breadcrumbHTML: JSX.Element
 }
 
