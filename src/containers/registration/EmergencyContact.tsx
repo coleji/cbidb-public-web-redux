@@ -199,7 +199,7 @@ export default class EmergencyContact extends React.PureComponent<Props, State> 
 		
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
-				{/* {this.props.breadcrumb} */}
+				{this.props.breadcrumb}
 			</JoomlaNotitleRegion>
 			<JoomlaArticleRegion title="Who should we contact in the event of an emergency?">
 				{emergFields}

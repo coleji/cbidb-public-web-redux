@@ -2,6 +2,7 @@ import * as React from "react";
 import { AutoResolver } from "../../routing";
 
 interface Props<T_URL, T_Async> {
+    key: string,
 	urlProps: T_URL
     component: (urlProps: T_URL, asyncProps: T_Async) => JSX.Element
     getAsyncProps?: (urlProps: T_URL) => Promise<T_Async>,

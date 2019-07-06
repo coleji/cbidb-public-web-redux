@@ -61,7 +61,7 @@ export default class SurveyInfo extends React.Component<Props, State> {
 
 		return <JoomlaMainPage>
 			<JoomlaNotitleRegion>
-				{/* {this.props.breadcrumb} */}
+				{this.props.breadcrumb}
 			</JoomlaNotitleRegion>
             <JoomlaArticleRegion title="This information is helpful but not required.">
                 <table><tbody>

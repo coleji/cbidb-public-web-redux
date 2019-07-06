@@ -57,6 +57,7 @@ export default (props: {history: History<any>, personId: number, hasEIIResponse:
 
 	const maybeScholarship = props.hasEIIResponse ? [] : [{
 		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
+			key="ScholarshipPage"
 			component={() => <ScholarshipPage
 				parentPersonId={188911} //TODO: replace with app state
 				currentSeason={2018}
@@ -71,12 +72,14 @@ export default (props: {history: History<any>, personId: number, hasEIIResponse:
 
 	const otherNodes = [{
 		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
+			key="RequiredInfo"
 			component={(urlProps: {}, async: t.TypeOf<typeof requiredInfoValidator>) => <RequiredInfo
 				initialFormData={async}
 				{...staticComponentProps}
 				{...mapWizardProps(fromWizard)}
 			/>}
 			getAsyncProps={(urlProps: {}) => {
+				console.log("in getAsyncProps for requiredInfo")
 				return requiredInfoAPI(props.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
 			}}
 			{...pageWrapperProps}
@@ -84,6 +87,7 @@ export default (props: {history: History<any>, personId: number, hasEIIResponse:
 		breadcrumbHTML: <React.Fragment>Required<br />Info</React.Fragment>
 	}, {
 		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
+			key="EmergencyContact"
 			component={(urlProps: {}, async: t.TypeOf<typeof emergContactValidator>) => <EmergencyContact
 				initialFormData={async}
 				{...staticComponentProps}
@@ -100,6 +104,7 @@ export default (props: {history: History<any>, personId: number, hasEIIResponse:
 		breadcrumbHTML: <React.Fragment>Swim<br />Proof</React.Fragment>
 	}, */{
 		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
+			key="SurveyInfo"
 			component={(urlProps: {}, async: t.TypeOf<typeof surveyValidator>) => <SurveyInfo
 				initialFormData={async}
 				{...staticComponentProps}
@@ -113,6 +118,7 @@ export default (props: {history: History<any>, personId: number, hasEIIResponse:
 		breadcrumbHTML: <React.Fragment>Survey<br />Information</React.Fragment>
 	}, {
 		clazz: (fromWizard: ComponentPropsFromWizard) => <PageWrapper
+			key="TermsConditions"
 			component={() => <TermsConditions
 				{...staticComponentProps}
 				{...mapWizardProps(fromWizard)}

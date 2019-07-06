@@ -86,6 +86,7 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 	const mustBeLoggedIn = [
 		<Route key="login" path="/login" render={() => <Redirect to="/" />} />,
 		<Route key="ratings" path={paths.ratings.path} render={() => <PageWrapper
+			key="RatingsPage"
 			component={(urlProps: {personId: number}, async: HomePageForm) => <RatingsPage
 				history={history}
 				welcomePackage={async}

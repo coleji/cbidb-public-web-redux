@@ -18,6 +18,7 @@ import {formName as RegistrationWizardFormName} from "./registration/pageflow/Re
 import formUpdateState from '../util/form-update-state'
 import { History } from "history";
 import Breadcrumb from "../core/Breadcrumb";
+import JoomlaNotitleRegion from "../theme/joomla/JoomlaNotitleRegion";
 
 export const formName = "scholarshipForm"
 
@@ -221,6 +222,9 @@ export default class ScholarshipPage extends React.Component<Props, State> {
 		}}/>
 
 		return <JoomlaMainPage>
+			<JoomlaNotitleRegion>
+				{this.props.breadcrumb}
+			</JoomlaNotitleRegion>
 			<JoomlaArticleRegion title="Scholarships are available to provide sailing for all.">
 				We strive to make Junior Memberships affordable for all.<br />
 				{
