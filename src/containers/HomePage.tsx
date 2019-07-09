@@ -1,12 +1,12 @@
+import * as t from 'io-ts';
 import * as React from "react";
-import * as t from 'io-ts'
-import { connect } from "react-redux";
+
+import { validator } from "../async/member-welcome";
+import NavBarLogoutOnly from "../components/NavBarLogoutOnly";
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
 import JoomlaReport from "../theme/joomla/JoomlaReport";
 import homePageActions from "./HomePageActions";
-import NavBarLogoutOnly from "../components/NavBarLogoutOnly"
-import {apiw, validator} from "../async/member-welcome"
 
 export type Form = t.TypeOf<typeof validator>;
 

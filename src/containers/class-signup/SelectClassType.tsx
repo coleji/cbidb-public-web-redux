@@ -1,20 +1,15 @@
+import * as t from 'io-ts';
 import * as React from "react";
-import * as t from 'io-ts'
-import { connect } from "react-redux";
-import { RadioGroup } from "../../components/InputGroup";
-import { Dispatch } from "redux";
+
+import { validator } from "../../async/junior/see-types";
 import Joomla8_4 from "../../theme/joomla/Joomla8_4";
+import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
-import { asDiv, asFragment } from "./class-description"
+import { asDiv, asFragment, ClassType } from "./class-description";
+import advanced from "./types/advanced";
 import beginner from "./types/beginner";
 import intermediate from "./types/intermediate";
-import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
-import advanced from "./types/advanced"
-import other from './types/other'
-import {getWrapper,  validator} from "../../async/junior/see-types"
-import { matchPath } from "react-router";
-import {ClassType} from "./class-description"
-import JpClassesAvailTable from "../../components/JpClassesAvailTable";
+import other from './types/other';
 
 export const formName = "selectClassType"
 

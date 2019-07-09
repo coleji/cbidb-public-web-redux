@@ -1,27 +1,21 @@
+import { History } from "history";
+import * as t from 'io-ts';
 import * as React from "react";
-import * as t from 'io-ts'
-import { Dispatch } from "redux";
-import WizardPageflow, { WizardNode, ElementDLL, ComponentPropsFromWizard } from "../../../core/WizardPageflow";
-import JoomlaMainPage from "../../../theme/joomla/JoomlaMainPage";
-import HomePage from "../../HomePage";
-import RequiredInfo from "../RequiredInfo";
-import EmergencyContact from "../EmergencyContact";
-import SwimProof from "../SwimProof";
-import SurveyInfo from "../SurveyInfo";
-import getPersonIdFromPath from "../../../util/getPersonIdFromPath";
+
+import { AutoResolver } from "../../../app/routing";
+import { getWrapper as emergContactAPI, validator as emergContactValidator } from "../../../async/junior/emerg-contact";
+import { getWrapper as requiredInfoAPI, validator as requiredInfoValidator } from "../../../async/junior/required";
+import { getWrapper as surveyAPI, validator as surveyValidator } from "../../../async/junior/survey";
+import PageWrapper from "../../../components/Page/PageWrapper";
 import ProgressThermometer from "../../../components/ProgressThermometer";
 import { State } from "../../../core/Breadcrumb";
-import Scholarship from "../../Scholarship";
-import { none, some } from "fp-ts/lib/Option";
-import TermsConditions from "../TermsConditions";
-import { History } from "history";
-import PageWrapper from "../../../components/Page/PageWrapper";
-import ScholarshipPage from "../../Scholarship";
+import WizardPageflow, { ComponentPropsFromWizard, WizardNode } from "../../../core/WizardPageflow";
 import Currency from "../../../util/Currency";
-import { AutoResolver } from "../../../app/routing";
-import {getWrapper as requiredInfoAPI, validator as requiredInfoValidator} from  "../../../async/junior/required"
-import {getWrapper as emergContactAPI, validator as emergContactValidator} from "../../../async/junior/emerg-contact"
-import {getWrapper as surveyAPI, validator as surveyValidator} from "../../../async/junior/survey"
+import ScholarshipPage from "../../Scholarship";
+import EmergencyContact from "../EmergencyContact";
+import RequiredInfo from "../RequiredInfo";
+import SurveyInfo from "../SurveyInfo";
+import TermsConditions from "../TermsConditions";
 
 export const path = "/reg/:personId"
 

@@ -1,13 +1,12 @@
-import * as React from "react";
-import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
-import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import Button from "../../components/Button";
-import { connect } from "react-redux";
-import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
-import Breadcrumb from "../../core/Breadcrumb";
-import { RadioGroup } from "../../components/InputGroup";
 import { none, some } from "fp-ts/lib/Option";
 import { History } from "history";
+import * as React from "react";
+
+import Button from "../../components/Button";
+import { RadioGroup } from "../../components/InputGroup";
+import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
+import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
+import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 
 interface Props {
 	history: History<any>

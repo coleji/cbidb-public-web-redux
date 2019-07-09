@@ -1,23 +1,18 @@
+import { Option } from "fp-ts/lib/Option";
+import { History } from "history";
+import * as t from 'io-ts';
 import * as React from "react";
-import * as t from 'io-ts'
-import { connect } from "react-redux";
-import PhoneTriBox, { PhoneTriBoxProps, splitPhone, combinePhone } from "../../components/PhoneTriBox";
-import ProgressThermometer from "../../components/ProgressThermometer";
+
+import asc from "../../app/AppStateContainer";
+import { postWrapper, validator } from "../../async/junior/emerg-contact";
+import Button from "../../components/Button";
+import PhoneTriBox, { combinePhone, PhoneTriBoxProps, splitPhone } from "../../components/PhoneTriBox";
 import TextInput from "../../components/TextInput";
+import { PostJSON } from "../../core/APIWrapper";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import { Option } from "fp-ts/lib/Option";
-import {Dispatch} from "redux";
-import { push } from 'connected-react-router';
-import Button from "../../components/Button";
-import {getWrapper, postWrapper, validator} from "../../async/junior/emerg-contact"
-import getPersonIdFromPath from "../../util/getPersonIdFromPath";
-import Breadcrumb from "../../core/Breadcrumb";
-import { History } from "history";
-import formUpdateState from '../../util/form-update-state'
-import { PostJSON } from "../../core/APIWrapper";
-import asc from "../../app/AppStateContainer";
+import formUpdateState from '../../util/form-update-state';
 
 export const formName = "emergencyContact"
 

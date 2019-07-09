@@ -1,13 +1,10 @@
-import { push } from 'connected-react-router';
+import { History } from 'history';
 import * as React from "react";
-import { connect } from "react-redux";
-import { matchPath } from 'react-router-dom';
+
 import Button from "../components/Button";
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
-import { Dispatch } from 'redux';
-import {Form as HomePageForm} from "./HomePage"
-import { History } from 'history';
+import { Form as HomePageForm } from "./HomePage";
 
 // const mapStateToProps = (state: RootState) => ({
 // 	welcomePackage: state.homePageForm.data,

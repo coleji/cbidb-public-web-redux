@@ -1,27 +1,25 @@
-import * as t from 'io-ts'
-import {Option, some, none} from 'fp-ts/lib/Option'
+import { none, Option, some } from 'fp-ts/lib/Option';
+import { History } from 'history';
+import * as t from 'io-ts';
 import * as React from "react";
-import DateTriPicker, { DateTriPickerProps, componentsToDate, dateStringToComponents } from "../../components/DateTriPicker";
-import PhoneTriBox, { PhoneTriBoxProps, splitPhone, combinePhone } from "../../components/PhoneTriBox";
-import ProgressThermometer from "../../components/ProgressThermometer";
+
+import asc from '../../app/AppStateContainer';
+import { postWrapper, validator } from "../../async/junior/required";
+import Button from "../../components/Button";
+import DateTriPicker, { componentsToDate, dateStringToComponents, DateTriPickerProps } from "../../components/DateTriPicker";
+import PhoneTriBox, { combinePhone, PhoneTriBoxProps, splitPhone } from "../../components/PhoneTriBox";
 import { Select } from "../../components/Select";
 import TextArea from "../../components/TextArea";
 import TextInput from "../../components/TextInput";
-import states from "../../lov/states"
-import countries from "../../lov/countries"
+import { PostJSON } from '../../core/APIWrapper';
+import countries from "../../lov/countries";
+import states from "../../lov/states";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
+import formUpdateState from '../../util/form-update-state';
 import range from "../../util/range";
-import Button from "../../components/Button";
-import {getWrapper, postWrapper, validator} from "../../async/junior/required"
-import getPersonIdFromPath from '../../util/getPersonIdFromPath';
-import Breadcrumb from '../../core/Breadcrumb';
-import { History } from 'history';
 import moment = require('moment');
-import formUpdateState from '../../util/form-update-state'
-import { PostJSON } from '../../core/APIWrapper';
-import asc from '../../app/AppStateContainer';
 
 export const formName = "registrationRequiredInfo"
 

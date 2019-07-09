@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { connect } from "react-redux";
-import { Dispatch } from 'redux';
-import JoomlaBase from '../theme/joomla/JoomlaBase';
-import router from "../app/routing"
+
 import asc from '../app/AppStateContainer';
+import router from "../app/routing";
+import JoomlaBase from '../theme/joomla/JoomlaBase';
 //import RegistrationTransparentFlow from "./registration/pageflow/RegistrationTransparentFlow"
 
 // const mapStateToProps = (state: RootState) => ({

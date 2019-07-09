@@ -1,24 +1,23 @@
+import { History } from 'history';
+import * as t from 'io-ts';
 import * as React from 'react';
-import { Router, Route, Switch, Redirect } from 'react-router';
-import * as t from 'io-ts'
-import Gatekeeper from "../containers/create-acct/Gatekeeper";
+import { Redirect, Route, Router, Switch } from 'react-router';
+
+import { getWrapper as classTimesWrapper, validator as classTimesValidator } from "../async/junior/get-class-instances";
+import { getWrapper as seeTypesWrapper, validator as seeTypesValidator } from "../async/junior/see-types";
+import { apiw as welcomeAPI } from "../async/member-welcome";
+import PageWrapper from '../components/Page/PageWrapper';
+import SelectClassTime from "../containers/class-signup/SelectClassTime";
+import SelectClassType from "../containers/class-signup/SelectClassType";
 import CreateAccount from '../containers/create-acct/CreateAccount';
-import HomePage from '../containers/HomePage';
+import Gatekeeper from "../containers/create-acct/Gatekeeper";
+import HomePage, { Form as HomePageForm } from '../containers/HomePage';
 import LoginPage from '../containers/LoginPage';
 import RatingsPage from '../containers/RatingsPage';
-//import RegistrationWizard, { path as registrationWizardPath } from './containers/registration/pageflow/RegistrationWizard';
-import SelectClassType, { path as selectClassTypePath } from "../containers/class-signup/SelectClassType"
-import { History } from 'history';
-import PageWrapper from '../components/Page/PageWrapper';
-import extractURLParams from '../util/extractURLParams';
-import {Form as HomePageForm} from "../containers/HomePage"
-import {apiw as welcomeAPI} from "../async/member-welcome"
-import {getWrapper as seeTypesWrapper, validator as seeTypesValidator} from "../async/junior/see-types"
-import {getWrapper as classTimesWrapper, validator as classTimesValidator} from "../async/junior/get-class-instances"
 import RegistrationWizard from '../containers/registration/pageflow/RegistrationWizard';
-import SelectClassTime from "../containers/class-signup/SelectClassTime"
-import asc from './AppStateContainer';
 import Currency from '../util/Currency';
+import extractURLParams from '../util/extractURLParams';
+import asc from './AppStateContainer';
 
 export interface AutoResolver {
 	clientSideAsyncResult: any,

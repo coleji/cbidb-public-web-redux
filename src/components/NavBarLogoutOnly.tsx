@@ -1,8 +1,9 @@
 import * as React from "react";
 
-import PlaceholderLink from "./PlaceholderLink";
-import {logout} from "../async/logout"
 import asc from "../app/AppStateContainer";
+import { logout } from "../async/logout";
+import PlaceholderLink from "./PlaceholderLink";
+
 
 export default () => (<React.Fragment>
 	System Time:  <span id="systime">12:12:35 PM</span> (refresh your browser to update!)

@@ -1,10 +1,8 @@
-import * as React from 'react';
-import { Option, none, some } from 'fp-ts/lib/Option';
+import { none, Option, some } from 'fp-ts/lib/Option';
+
+import { apiw } from "../async/authenticate-member";
 import { PostString, ServerParams } from '../core/APIWrapper';
-import {apiw} from "../async/authenticate-member"
 import { ServerConfig } from '../core/server/config';
-import App from '../containers/App';
-import states from '../lov/states';
 
 export interface AppProps {
 	isServer: boolean,

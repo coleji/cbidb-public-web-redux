@@ -1,8 +1,9 @@
+import { none, Option, some } from "fp-ts/lib/Option";
 import * as React from "react";
 
-import {Select} from "./Select"
+import { Select } from "./Select";
 import TextInput from "./TextInput";
-import { Option, some, none } from "fp-ts/lib/Option";
+
 
 export interface PhoneTriBoxProps<U> {
     label: string,

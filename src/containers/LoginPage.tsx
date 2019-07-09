@@ -1,17 +1,15 @@
+import { none, Option } from "fp-ts/lib/Option";
 import * as React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
-import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
-import PlaceholderLink from "../components/PlaceholderLink"
-import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
-import Currency from "../util/Currency"
-import TextInput from "../components/TextInput";
 import Button from "../components/Button";
-import { ServerParams } from "../core/APIWrapper";
-import { none, Option, some, Some } from "fp-ts/lib/Option";
-import { Dispatch } from "redux";
+import PlaceholderLink from "../components/PlaceholderLink";
+import TextInput from "../components/TextInput";
+import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
+import JoomlaTwoColumns from "../theme/joomla/JoomlaTwoColumns";
+import Currency from "../util/Currency";
 import formUpdateState from "../util/form-update-state";
+
 
 // export const formName = "login"
 

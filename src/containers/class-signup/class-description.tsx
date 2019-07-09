@@ -1,8 +1,7 @@
 import * as React from "react";
-import PlaceholderLink from "../../components/PlaceholderLink";
-import { Option } from "fp-ts/lib/Option";
 import { Link } from "react-router-dom";
-import {paths} from "../../app/routing"
+
+import { paths } from "../../app/routing";
 
 export interface ClassType {
 	typeId: number,

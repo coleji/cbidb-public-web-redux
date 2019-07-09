@@ -1,22 +1,16 @@
+import { Option } from "fp-ts/lib/Option";
 import * as React from "react";
-import { connect } from "react-redux";
-import * as t from 'io-ts'
+
+import asc from "../../app/AppStateContainer";
+import { postWrapper } from "../../async/junior/swim-proof";
+import Button from "../../components/Button";
 import { RadioGroup } from "../../components/InputGroup";
-import ProgressThermometer from "../../components/ProgressThermometer";
+import { PostJSON } from "../../core/APIWrapper";
+import swimProofValues from "../../lov/swimProof";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import { Option, none } from "fp-ts/lib/Option";
-import { Dispatch } from "redux";
-import { push } from "connected-react-router";
-import {getWrapper, postWrapper, validator} from "../../async/junior/swim-proof"
-import Button from "../../components/Button";
-import getPersonIdFromPath from "../../util/getPersonIdFromPath";
-import swimProofValues from "../../lov/swimProof"
-import Breadcrumb from "../../core/Breadcrumb";
 import formUpdateState from "../../util/form-update-state";
-import asc from "../../app/AppStateContainer";
-import { PostJSON } from "../../core/APIWrapper";
 
 export interface Form {
 	swimProofId: Option<string>

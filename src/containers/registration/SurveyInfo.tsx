@@ -1,25 +1,21 @@
+import { none, some } from "fp-ts/lib/Option";
+import { History } from "history";
+import * as t from 'io-ts';
 import * as React from "react";
-import * as t from 'io-ts'
-import { connect } from "react-redux";
+
+import asc from "../../app/AppStateContainer";
+import { postWrapper, validator } from "../../async/junior/survey";
+import Button from "../../components/Button";
 import { CheckboxGroup, RadioGroup, SingleCheckbox } from "../../components/InputGroup";
-import ProgressThermometer from "../../components/ProgressThermometer";
 import TextInput from "../../components/TextInput";
+import { PostJSON } from "../../core/APIWrapper";
+import ethnicities from "../../lov/ethnicities";
+import genders from "../../lov/genders";
+import referralSources from "../../lov/referralSources";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
-import { Option, none, some } from "fp-ts/lib/Option";
-import { Dispatch } from "redux";
-import getPersonIdFromPath from "../../util/getPersonIdFromPath";
-import ethnicities from "../../lov/ethnicities"
-import genders from "../../lov/genders"
-import referralSources from "../../lov/referralSources"
-import {getWrapper, postWrapper, validator} from "../../async/junior/survey"
-import Button from "../../components/Button";
-import Breadcrumb from "../../core/Breadcrumb";
-import { History } from "history";
-import formUpdateState from '../../util/form-update-state'
-import asc from "../../app/AppStateContainer";
-import { PostJSON } from "../../core/APIWrapper";
+import formUpdateState from '../../util/form-update-state';
 
 export const formName = "surveyInfoForm"
  

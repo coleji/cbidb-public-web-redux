@@ -1,24 +1,21 @@
+import { none, Option } from 'fp-ts/lib/Option';
+import { History } from "history";
 import * as React from "react";
-import { connect } from "react-redux";
-import {Option, none} from 'fp-ts/lib/Option'
 
-import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
-import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
-import Currency from "../util/Currency";
+import asc from "../app/AppStateContainer";
+import { postWrapper as postNo } from "../async/junior/scholarship-no";
+import { postWrapper as postYes } from "../async/junior/scholarship-yes";
+import Button from "../components/Button";
 import { RadioGroup, SingleCheckbox } from "../components/InputGroup";
 import { Select } from "../components/Select";
 import TextInput from "../components/TextInput";
-import Button from "../components/Button";
-import { postWrapper as postNo} from "../async/junior/scholarship-no"
-import { postWrapper as postYes} from "../async/junior/scholarship-yes"
-import { Dispatch } from "redux";
-import {formName as RegistrationWizardFormName} from "./registration/pageflow/RegistrationWizard"
-import formUpdateState from '../util/form-update-state'
-import { History } from "history";
-import Breadcrumb from "../core/Breadcrumb";
-import JoomlaNotitleRegion from "../theme/joomla/JoomlaNotitleRegion";
 import { PostJSON } from "../core/APIWrapper";
-import asc from "../app/AppStateContainer";
+import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
+import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
+import JoomlaNotitleRegion from "../theme/joomla/JoomlaNotitleRegion";
+import Currency from "../util/Currency";
+import formUpdateState from '../util/form-update-state';
+
 
 export const formName = "scholarshipForm"
 

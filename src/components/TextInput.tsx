@@ -1,6 +1,7 @@
-import * as React from "react";
-import {ApexItemProps, ApexItem} from "./ApexItem"
 import { none } from "fp-ts/lib/Option";
+import * as React from "react";
+
+import { ApexItem, ApexItemProps } from "./ApexItem";
 
 interface Props {
 	isPassword?: boolean

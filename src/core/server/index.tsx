@@ -1,20 +1,18 @@
-import * as express from "express"
-import * as React from "react"
-import { renderToString } from "react-dom/server"
-import { Provider } from 'react-redux';
-import { Helmet } from "react-helmet";
-import * as httpProxy from 'http-proxy';
 import * as cookieParser from 'cookie-parser';
-import * as moment from "moment";
-import { routerMiddleware } from 'connected-react-router'
-import { createMemoryHistory } from 'history'
+import * as express from "express";
+import { some } from "fp-ts/lib/Option";
+import { createMemoryHistory } from 'history';
+import * as httpProxy from 'http-proxy';
+import * as React from "react";
+import { renderToString } from "react-dom/server";
+import { Helmet } from "react-helmet";
 
-import App from '../../containers/App'
-import getConfig from './config'
-import memberWelcome from "../../async/member-welcome"
-import { ServerParams } from "../APIWrapper";
-import { some, none } from "fp-ts/lib/Option";
 import asc, { AppProps } from "../../app/AppStateContainer";
+import memberWelcome from "../../async/member-welcome";
+import App from '../../containers/App';
+import { ServerParams } from "../APIWrapper";
+import getConfig from './config';
+
 
 require("../../../lib/array-polyfill")
 

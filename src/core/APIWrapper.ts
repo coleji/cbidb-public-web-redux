@@ -1,13 +1,14 @@
-import * as t from 'io-ts'
-import { PathReporter } from 'io-ts/lib/PathReporter'
-import * as http from 'http';
-import {FailureType} from "./FailureType";
 import { Either } from 'fp-ts/lib/Either';
-import * as https from "https"
-import { Option, some, none } from 'fp-ts/lib/Option';
+import { none, Option, some } from 'fp-ts/lib/Option';
+import * as http from 'http';
+import * as https from "https";
+import * as t from 'io-ts';
+import { PathReporter } from 'io-ts/lib/PathReporter';
+
+import asc from "../app/AppStateContainer";
 import { removeOptions } from '../util/deserializeOption';
-import asc from "../app/AppStateContainer"
-import {HttpMethod} from "./HttpMethod"
+import { FailureType } from "./FailureType";
+import { HttpMethod } from "./HttpMethod";
 
 
 interface Success<T_Result> {

@@ -1,7 +1,8 @@
+import * as t from 'io-ts';
 import * as React from "react";
-import * as t from 'io-ts'
+
+import { validator } from "../async/junior/get-class-instances";
 import JoomlaReport from "../theme/joomla/JoomlaReport";
-import {validator} from "../async/junior/get-class-instances"
 
 interface Props {
 	classes: t.TypeOf<typeof validator>

@@ -1,5 +1,6 @@
 import * as React from "react";
-import Breadcrumb, {Props as BreadcrumbProps} from "../core/Breadcrumb";
+
+import Breadcrumb from "../core/Breadcrumb";
 
 // TODO
 export default class ProgressThermometer extends Breadcrumb {

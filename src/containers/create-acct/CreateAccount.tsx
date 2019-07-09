@@ -1,13 +1,6 @@
-import { push } from 'connected-react-router';
-import * as React from "react";
-import { connect } from "react-redux";
-import Button from "../../components/Button";
-import { placeholderAction } from "../../components/PlaceholderLink";
-import TextInput from "../../components/TextInput";
-import Joomla8_4 from "../../theme/joomla/Joomla8_4";
-import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
-import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
 import { Option } from 'fp-ts/lib/Option';
+import * as React from "react";
+import TextInput from "../../components/TextInput";
 import JoomlaMainPage from '../../theme/joomla/JoomlaMainPage';
 
 
@@ -26,8 +19,8 @@ interface StateProps {
 }
 
 interface DispatchProps {
-	updateField: (name: string, value: string) => void,
-	cancel: () => void
+	// updateField: (name: string, value: string) => void,
+	// cancel: () => void
 }
 
 interface StaticProps {
@@ -39,7 +32,7 @@ type Props = StateProps & DispatchProps & StaticProps
 
 class FormInput extends TextInput<Form> {}
 
-class CreateAccount extends React.PureComponent<Props> {
+export default class CreateAccount extends React.PureComponent<Props> {
 	constructor(props: Props) {
 		super(props);
 	}
@@ -101,7 +94,7 @@ class CreateAccount extends React.PureComponent<Props> {
 		return <JoomlaMainPage></JoomlaMainPage>
 	}
 }
-
+/*
 export default connect<StateProps, DispatchProps, StaticProps>(
 	state => ({
 		//form: state.createAcctForm.data
@@ -110,4 +103,4 @@ export default connect<StateProps, DispatchProps, StaticProps>(
 		updateField: (name: keyof Form, value: string) => {},
 		cancel: () => dispatch(push('/'))
 	})
-)(CreateAccount)
+)(CreateAccount)*/

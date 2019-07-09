@@ -1,6 +1,7 @@
-import * as React from "react";
-import { DoublyLinkedList } from "../util/DoublyLinkedList";
 import { History } from "history";
+import * as React from "react";
+
+import { DoublyLinkedList } from "../util/DoublyLinkedList";
 
 export interface ComponentPropsFromWizard {
 	goNext: () => void,

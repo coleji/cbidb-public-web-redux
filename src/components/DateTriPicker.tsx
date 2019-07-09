@@ -1,9 +1,10 @@
+import { none, Option, some } from 'fp-ts/lib/Option';
+import * as moment from 'moment';
 import * as React from "react";
-import {Option, some, none} from 'fp-ts/lib/Option'
 
-import {Select, KeyAndDisplay} from "./Select"
-import range from "../util/range"
-import * as moment from 'moment'
+import range from "../util/range";
+import { KeyAndDisplay, Select } from "./Select";
+
 
 export interface DateTriPickerProps<U> {
 	years: number[]

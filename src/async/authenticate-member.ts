@@ -1,8 +1,6 @@
-import * as t from 'io-ts'
-import APIWrapper, { ServerParams, PostString } from '../core/APIWrapper';
-import memberWelcome from "./member-welcome"
-import { some } from 'fp-ts/lib/Option';
-import {HttpMethod} from "../core/HttpMethod"
+import * as t from 'io-ts';
+import APIWrapper, { PostString } from '../core/APIWrapper';
+import { HttpMethod } from "../core/HttpMethod";
 
 const path = "/authenticate-member"
 

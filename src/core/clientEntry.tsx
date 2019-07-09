@@ -1,15 +1,13 @@
-import * as React from 'react'
-import { hydrate } from 'react-dom'
-import { Provider } from 'react-redux';
-import * as moment from "moment"
-import { routerMiddleware } from 'connected-react-router'
-import { createBrowserHistory } from 'history'
-import * as http from "http"
-import * as https from "https"
-import App from '../containers/App'
-import { some, none } from 'fp-ts/lib/Option';
-import {replaceWithOption} from '../util/deserializeOption';
+import { none, some } from 'fp-ts/lib/Option';
+import { createBrowserHistory } from 'history';
+import * as http from "http";
+import * as https from "https";
+import * as React from 'react';
+import { hydrate } from 'react-dom';
+
 import asc, { AppProps } from '../app/AppStateContainer';
+import App from '../containers/App';
+import { replaceWithOption } from '../util/deserializeOption';
 
 require("../../lib/array-polyfill")
 

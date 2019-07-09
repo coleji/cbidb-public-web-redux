@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom';
+
 import PlaceholderLink from "../components/PlaceholderLink";
 import {path as registrationPath} from "../containers/registration/pageflow/RegistrationWizard"
 
