@@ -1,22 +1,24 @@
 import * as React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router';
 import * as t from 'io-ts'
-import Gatekeeper from "./containers/create-acct/Gatekeeper";
-import CreateAccount from './containers/create-acct/CreateAccount';
-import HomePage from './containers/HomePage';
-import LoginPage from './containers/LoginPage';
-import RatingsPage from './containers/RatingsPage';
+import Gatekeeper from "../containers/create-acct/Gatekeeper";
+import CreateAccount from '../containers/create-acct/CreateAccount';
+import HomePage from '../containers/HomePage';
+import LoginPage from '../containers/LoginPage';
+import RatingsPage from '../containers/RatingsPage';
 //import RegistrationWizard, { path as registrationWizardPath } from './containers/registration/pageflow/RegistrationWizard';
-import SelectClassType, { path as selectClassTypePath } from "./containers/class-signup/SelectClassType"
+import SelectClassType, { path as selectClassTypePath } from "../containers/class-signup/SelectClassType"
 import { History } from 'history';
-import PageWrapper from './components/Page/PageWrapper';
-import extractURLParams from './util/extractURLParams';
-import {Form as HomePageForm} from "./containers/HomePage"
-import {apiw as welcomeAPI} from "./async/member-welcome"
-import {getWrapper as seeTypesWrapper, validator as seeTypesValidator} from "./async/junior/see-types"
-import {getWrapper as classTimesWrapper, validator as classTimesValidator} from "./async/junior/get-class-instances"
-import RegistrationWizard from './containers/registration/pageflow/RegistrationWizard';
-import SelectClassTime from "./containers/class-signup/SelectClassTime"
+import PageWrapper from '../components/Page/PageWrapper';
+import extractURLParams from '../util/extractURLParams';
+import {Form as HomePageForm} from "../containers/HomePage"
+import {apiw as welcomeAPI} from "../async/member-welcome"
+import {getWrapper as seeTypesWrapper, validator as seeTypesValidator} from "../async/junior/see-types"
+import {getWrapper as classTimesWrapper, validator as classTimesValidator} from "../async/junior/get-class-instances"
+import RegistrationWizard from '../containers/registration/pageflow/RegistrationWizard';
+import SelectClassTime from "../containers/class-signup/SelectClassTime"
+import AppStateContainer from './AppStateContainer';
+import Currency from '../util/Currency';
 
 export interface AutoResolver {
 	clientSideAsyncResult: any,
@@ -56,7 +58,7 @@ export const paths = {
 // of the page we want to render.  So stick that stuff in the AsyncResolver we hand to the PageWrapper, and when it goes to render and sees stuff in there,
 // it will blindly use it and not call API.
 // Client-side we still have `serverSideResolveOnAsyncComplete` being passed around all over the place but it is a () => {} function that nobody cares about
-export default function (history: History<any>, isLoggedIn: boolean, serverSideResolveOnAsyncComplete: (clientSideAsyncResult: any) => void, clientSideAsyncResult: any) {
+export default function (asc: AppStateContainer, history: History<any>, serverSideResolveOnAsyncComplete: (clientSideAsyncResult: any) => void, clientSideAsyncResult: any) {
 	console.log("inside routing function")
 	var asyncResolver: AutoResolver = {
 		clientSideAsyncResult,
@@ -76,7 +78,12 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 	const mustNotBeLoggedIn = [
 		<Route key="/precreate" path="/precreate" render={() => <Gatekeeper />} />,
 		<Route key="/create-acct" path="/create-acct" render={() => <CreateAccount />} />,
-		<Route key="login" path="/login" render={() => <LoginPage />} />,
+		<Route key="login" path="/login" render={() => <LoginPage 
+			jpPrice={Currency.dollars(300)}
+			lastSeason={2018}
+			doLogin={asc.updateState.login.attemptLogin}
+
+		/>} />,
 		<Route key="default" render={() => <Redirect to="/login" />} />,
 	]
 
@@ -143,7 +150,7 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 		<Route key="default" render={() => <HomePage />} />
 	]
 
-//	const isLoggedIn = false; // self.props.login && self.props.login.authenticatedUserName;
+	const isLoggedIn = asc.state.login.authenticatedUserName.isSome();
 
 	const authedDependedRoutes = isLoggedIn ? mustBeLoggedIn : mustNotBeLoggedIn
 

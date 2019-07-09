@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AutoResolver } from "../../routing";
+import { AutoResolver } from "../../app/routing";
 
 interface Props<T_URL, T_Async> {
     key: string,

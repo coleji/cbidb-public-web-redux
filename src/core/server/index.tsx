@@ -13,7 +13,6 @@ import App from '../../containers/App'
 import createStore from '../createStore'
 import { makeRootReducer, StaticState } from '../../rootReducer'
 import getConfig from './config'
-import {setStore} from "../reducer/store"
 import memberWelcome from "../../async/member-welcome"
 import { ServerParams } from "../APIWrapper";
 import { some, none } from "fp-ts/lib/Option";
@@ -138,14 +137,17 @@ getConfig.then(serverConfig => {
 
 			Global["initialState"] = initialState;
 
-			setStore(store);
-
 			Global["store"] = store;
 			Global["history"] = history;
 			Global["clientSideAsyncResult"] = null;
 			Global["makeProvider"] = () => (
 				<Provider store={Global["store"]}>
-					<App history={Global["history"]} serverSideResolveOnAsyncComplete={resolve as any} clientSideAsyncResult={Global["clientSideAsyncResult"]}/>
+					<App
+						history={Global["history"]}
+						serverSideResolveOnAsyncComplete={resolve as any}
+						clientSideAsyncResult={Global["clientSideAsyncResult"]}
+						isServer={true}
+					/>
 				</Provider>
 			);
 

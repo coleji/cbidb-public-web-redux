@@ -9,50 +9,61 @@ import Currency from "../util/Currency"
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { RootState } from '../rootReducer'
-import {formReducer, dispatchFormUpdate, FormState} from "../core/form/form"
-import {login} from "../async/authenticate-member"
 import { ServerParams } from "../core/APIWrapper";
-import { none, Option, some } from "fp-ts/lib/Option";
+import { none, Option, some, Some } from "fp-ts/lib/Option";
 import { Dispatch } from "redux";
+import formUpdateState from "../util/form-update-state";
 
-export const formName = "login"
+// export const formName = "login"
 
 export const formDefault = {
 	username: none as Option<string>,
 	password: none as Option<string>
 }
 
-export type Form = typeof formDefault
 
-const mapStateToProps = (rootState: RootState) => ({
-	jpPrice: Currency.cents(rootState.staticState.jpPriceCents),
-	lastSeason: rootState.staticState.currentSeason-1,
-	form: {
-		username: rootState.loginForm.data.map(d => d.username).getOrElse(null),
-		password: rootState.loginForm.data.map(d => d.password).getOrElse(null)
-	},
-	selfServerParams: rootState.staticState.selfServerParams
-})
+// const mapStateToProps = (rootState: RootState) => ({
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	login: (selfServerParams: ServerParams, form: Form) => login(selfServerParams)(dispatch, form.username.getOrElse(""), form.password.getOrElse("")),
-	updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, formName)(name, value)
-})
+// 	form: {
+// 		username: rootState.loginForm.data.map(d => d.username).getOrElse(null),
+// 		password: rootState.loginForm.data.map(d => d.password).getOrElse(null)
+// 	},
+// 	selfServerParams: rootState.staticState.selfServerParams
+// })
 
-export type StateProps = ReturnType<typeof mapStateToProps>
+// const mapDispatchToProps = (dispatch: Dispatch) => ({
+// 	login: (selfServerParams: ServerParams, form: Form) => login(selfServerParams)(dispatch, form.username.getOrElse(""), form.password.getOrElse("")),
+// 	updateField: (name: keyof Form, value: string) => dispatchFormUpdate(dispatch, formName)(name, value)
+// })
 
-type Props = StateProps & ReturnType<typeof mapDispatchToProps >
+interface Props {
+	jpPrice: Currency,
+	lastSeason: number,
+	doLogin: (userName: string, password: string) => Promise<boolean>
+}
 
-class FormInput extends TextInput<Form> {}
+type State = {
+	formData: typeof formDefault
+};
 
-class LoginPage extends React.PureComponent<Props> {	
+class FormInput extends TextInput<typeof formDefault> {}
+
+export default class LoginPage extends React.PureComponent<Props, State> {	
 	render() {
 		console.log("login page props: ", this.props)
 		const self = this;
+		const updateState = formUpdateState(this.state, this.setState.bind(this), "formData");
 		const loginFunction = () => {
-			self.props.login(self.props.selfServerParams, self.props.form)
-			.then(() => self.props.updateField("password", ""))
-			
+			self.props.doLogin(self.state.formData.username.getOrElse(""), self.state.formData.password.getOrElse(""))
+			.then(() => {
+				self.setState({
+					...self.state,
+					formData: {
+						...self.state.formData,
+						password: none
+					}
+				})
+			})
 		};
 		
 		// left column 
@@ -112,16 +123,16 @@ class LoginPage extends React.PureComponent<Props> {
 							id="username"
 							label="Email"
 							isPassword={false}
-							value={self.props.form.username}
-							onChange={(ev: React.ChangeEvent<HTMLInputElement>) => self.props.updateField("username", ev.target.value)}
+							value={self.state.formData.username}
+							updateAction={updateState}
 						/>
 						<FormInput
 							id="password"
 							label="Password"
 							isPassword={true}
 							extraCells={ <Button text="LOGIN" onClick={loginFunction} /> }
-							value={self.props.form.password}
-							onChange={(ev: React.ChangeEvent<HTMLInputElement>) => self.props.updateField("password", ev.target.value)}
+							value={self.state.formData.password}
+							updateAction={updateState}
 							onEnter={loginFunction}
 						/>
 						<tr><td></td><td><span>
@@ -158,15 +169,3 @@ class LoginPage extends React.PureComponent<Props> {
 		return <JoomlaTwoColumns left={leftColumn} right={rightColumn}></JoomlaTwoColumns>
 	}
 }
-
-const standardFormReducer = formReducer<Form>(formName);
-
-export const loginFormReducer: (typeof standardFormReducer) = (state: FormState<Form>, action: any) => {
-	const modifiedState = 
-		action.type == "LOGIN_FAILURE"
-		? {...state, data: some({...state.data.getOrElse({username: none, password: none}), password: none})}
-		: state;
-	return standardFormReducer(modifiedState, action);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)

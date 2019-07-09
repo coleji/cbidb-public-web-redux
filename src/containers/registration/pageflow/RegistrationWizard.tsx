@@ -19,7 +19,7 @@ import { History } from "history";
 import PageWrapper from "../../../components/Page/PageWrapper";
 import ScholarshipPage from "../../Scholarship";
 import Currency from "../../../util/Currency";
-import { AutoResolver } from "../../../routing";
+import { AutoResolver } from "../../../app/routing";
 import {getWrapper as requiredInfoAPI, validator as requiredInfoValidator} from  "../../../async/junior/required"
 import {getWrapper as emergContactAPI, validator as emergContactValidator} from "../../../async/junior/emerg-contact"
 import {getWrapper as surveyAPI, validator as surveyValidator} from "../../../async/junior/survey"

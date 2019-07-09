@@ -9,7 +9,6 @@ import * as https from "https"
 
 import createStore from './createStore'
 import App from '../containers/App'
-import { setStore } from "./reducer/store"
 
 import { makeRootReducer, StaticState } from '../rootReducer'
 import { some, none } from 'fp-ts/lib/Option';
@@ -57,11 +56,14 @@ export const { store, initialState } = createStore({
 	seedState
 });
 
-setStore(store)
-
 hydrate(
 	<Provider store={store}>
-		<App history={history} serverSideResolveOnAsyncComplete={() => ({})} clientSideAsyncResult={seedState.clientSideAsyncResult} />
+		<App
+			history={history}
+			serverSideResolveOnAsyncComplete={() => ({})}
+			clientSideAsyncResult={seedState.clientSideAsyncResult}
+			isServer={false}
+		/>
 	</Provider>,
 	document.getElementById('app')
 );
