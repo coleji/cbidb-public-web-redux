@@ -97,7 +97,7 @@ getConfig.then(serverConfig => {
 			console.log("json from member welcome:  ", json)
 			if (json && json.userName) {
 				return Promise.resolve({
-					login: {authenticatedUserName: json.userName},	// TODO: should be option?
+					login: {authenticatedUserName: some(json.userName)},
 					homePageForm: { data: some(json) }
 				});
 			} else return Promise.resolve({})
@@ -105,7 +105,7 @@ getConfig.then(serverConfig => {
 			console.log("server side get welcome pkg failed", e)
 			return Promise.resolve({})
 		})
-		.then(seedState => new Promise<{}>((resolve, reject) => {
+		.then((seedState: any) => new Promise<{}>((resolve, reject) => {
 			console.log("about to create store server side", seedState)
 			const history = createMemoryHistory({
 				initialEntries: [req.path]
@@ -124,6 +124,10 @@ getConfig.then(serverConfig => {
 			}
 
 			asc.updateState.appProps(appProps);
+
+			if (seedState && seedState.login && seedState.login.authenticatedUserName.isSome()) {
+				asc.updateState.login.setLoggedIn(seedState.login.authenticatedUserName.getOrElse(null))
+			}
 
 			const initialState = {
 				...seedState,

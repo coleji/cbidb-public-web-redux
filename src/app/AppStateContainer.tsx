@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Option, none } from 'fp-ts/lib/Option';
+import { Option, none, some } from 'fp-ts/lib/Option';
 import { PostString, ServerParams } from '../core/APIWrapper';
 import {apiw} from "../async/authenticate-member"
 import { ServerConfig } from '../core/server/config';
@@ -28,16 +28,36 @@ type State = {
 
 class AppStateContainer {
 	state: State
-	setState = (state: State) => this.state = state;
+	setState = (state: State) => {
+		this.state = state;
+		if (this.listener) this.listener();
+	}
+	listener: () => void
+	setListener=(listener: () => void) => {
+		this.listener = listener
+	}
 	updateState = {
 		login: {
-			attemptLogin: function(userName: string, password: string): Promise<boolean> {
-				const payload = PostString("username=" + encodeURIComponent(userName) + "&password=" + encodeURIComponent(password))
-				return apiw().send(this.state.appProps.serverToUseForAPI)(payload).then(x => {
-					console.log("CALLED LOGIN: ", x);
-					return true;
+			setLoggedIn: (function(userName: string) {
+				const self: AppStateContainer = this
+				self.setState({
+					...self.state,
+					login: {
+						...self.state.login,
+						authenticatedUserName: some(userName)
+					}
 				})
-			},
+			}).bind(this),
+			attemptLogin: (function(userName: string, password: string): Promise<boolean> {
+				const self: AppStateContainer = this
+				const payload = PostString("username=" + encodeURIComponent(userName) + "&password=" + encodeURIComponent(password))
+				return apiw().send(self.state.appProps.serverToUseForAPI)(payload).then(isAuthenticated => {
+					if (isAuthenticated == "true") {
+						self.updateState.login.setLoggedIn(userName);
+						return true;
+					} else return false;
+				})
+			}).bind(this),
 			logout: () => {
 				this.setState({
 					...this.state,

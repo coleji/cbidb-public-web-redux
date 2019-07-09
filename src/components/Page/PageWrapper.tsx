@@ -48,7 +48,8 @@ export default class PageWrapper<T_URL, T_Async> extends React.Component<Props<T
                 this.state = {
                     readyToRender: true,
                     componentAsyncProps: this.props.asyncResolver.clientSideAsyncResult
-                }
+				}
+				this.props.asyncResolver.clientSideAsyncResult = null;
             }
             
         } else {

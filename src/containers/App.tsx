@@ -31,10 +31,15 @@ export default class App extends React.Component<Props> {
 		console.log("in app constructor")
 		console.log("asyncResult from server: ", this.props.clientSideAsyncResult)
 		this.clientSideAsyncResult = this.props.clientSideAsyncResult;
+		const self = this;
+		asc.setListener(() => {
+			self.forceUpdate()
+		})
 	//	this.registrationWizard = RegistrationWizard(this.props.state)
 	}
 	render() {
 		console.log("=========================================== in app render")
+		console.log(asc.state)
 //		console.log(this.props.state.router.location)
 		const self = this;
 //		console.log(this.props)

@@ -5,8 +5,6 @@ import { some } from 'fp-ts/lib/Option';
 import {HttpMethod} from "../core/HttpMethod"
 
 const path = "/authenticate-member"
-console.trace()
-console.log("#### ", HttpMethod)
 
 export const apiw = () => new APIWrapper<typeof t.boolean, PostString, {}>({
 	path,

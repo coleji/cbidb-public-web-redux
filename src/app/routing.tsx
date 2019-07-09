@@ -120,7 +120,7 @@ export default function (history: History<any>, serverSideResolveOnAsyncComplete
 		/>} />,
 
 		<Route key="classTime" path={paths.classTime.path} render={() => <PageWrapper
-			key="SelectClassType"
+			key="SelectClassTime"
 			component={(urlProps: {personId: number, typeId: number}, async: t.TypeOf<typeof classTimesValidator>) => <SelectClassTime
 				personId={urlProps.personId}
 				apiResult={async}
@@ -148,7 +148,7 @@ export default function (history: History<any>, serverSideResolveOnAsyncComplete
 		}} />,
 
 		<Route key="default" render={() => <PageWrapper
-			key="SelectClassType"
+			key="HomePage"
 			component={(urlProps: {}, async: HomePageForm) => <HomePage
 				data={async}
 			/>}

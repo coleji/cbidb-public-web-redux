@@ -10,6 +10,8 @@ export default () => (<React.Fragment>
 	<a href="#" onClick={() => {
 		console.log("clicked logout!")
 		const selfServerParams = asc.state.appProps.selfServerParams;
-		logout.send(selfServerParams)({type: "json", jsonData: {}}).then(() => {})
+		logout.send(selfServerParams)({type: "json", jsonData: {}}).then(() => {
+			asc.updateState.login.logout()
+		})
 	}}>&nbsp;&nbsp;&nbsp;Logout</a>
 </React.Fragment>);

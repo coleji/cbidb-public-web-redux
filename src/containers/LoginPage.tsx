@@ -60,14 +60,17 @@ export default class LoginPage extends React.PureComponent<Props, State> {
 		const updateState = formUpdateState(this.state, this.setState.bind(this), "formData");
 		const loginFunction = () => {
 			self.props.doLogin(self.state.formData.username.getOrElse(""), self.state.formData.password.getOrElse(""))
-			.then(() => {
-				self.setState({
-					...self.state,
-					formData: {
-						...self.state.formData,
-						password: none
-					}
-				})
+			.then(x => {
+				console.log("about to update login page ", x)
+				if (!x) {
+					self.setState({
+						...self.state,
+						formData: {
+							...self.state.formData,
+							password: none
+						}
+					})
+				}
 			})
 		};
 		

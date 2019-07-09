@@ -15,7 +15,7 @@ export interface ClassType {
 }
 
 export const asFragment = (juniorId: number) => (ct: ClassType) => (
-	<React.Fragment>
+	<React.Fragment key={ct.typeId}>
 		<i>Prerequisite: {ct.prereq}.  Duration: {ct.sessionCt} days; {ct.sessionLength} hours/day.  Class Size: {ct.classSize == 0 ? "No Limit" : String(ct.classSize)}.</i>
 		<br />
 		{ct.description}
@@ -27,7 +27,7 @@ export const asFragment = (juniorId: number) => (ct: ClassType) => (
 
 
 export const asDiv = (juniorId: number) => (ct: ClassType) => (
-	<div style={{ paddingLeft: "40px"}}>
+	<div style={{ paddingLeft: "40px"}} key={ct.typeId}>
 		<h3 style={{ textTransform: "none", fontSize: "1.4em" }}><span style={{ fontStyle: "italic" }}>{ct.typeName}</span></h3>
 		{asFragment(juniorId)(ct)}
 	</div>

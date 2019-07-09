@@ -44,6 +44,10 @@ console.log("api https? ", seedState.appProps.serverConfig.SELF.https)
 
 asc.updateState.appProps(appProps);
 
+if (seedState && seedState.login && seedState.login.authenticatedUserName.isSome()) {
+	asc.updateState.login.setLoggedIn(seedState.login.authenticatedUserName.getOrElse(null))
+}
+
 hydrate(
 	<App
 		history={history}
