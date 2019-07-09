@@ -6,7 +6,7 @@ import { Redirect, Route, Router, Switch } from 'react-router';
 import { getWrapper as classTimesWrapper, validator as classTimesValidator } from "../async/junior/get-class-instances";
 import { getWrapper as seeTypesWrapper, validator as seeTypesValidator } from "../async/junior/see-types";
 import { apiw as welcomeAPI } from "../async/member-welcome";
-import PageWrapper from '../components/Page/PageWrapper';
+import PageWrapper from '../core/PageWrapper';
 import SelectClassTime from "../containers/class-signup/SelectClassTime";
 import SelectClassType from "../containers/class-signup/SelectClassType";
 import CreateAccount from '../containers/create-acct/CreateAccount';

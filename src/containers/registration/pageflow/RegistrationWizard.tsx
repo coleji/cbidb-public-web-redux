@@ -6,7 +6,7 @@ import { AutoResolver } from "../../../app/routing";
 import { getWrapper as emergContactAPI, validator as emergContactValidator } from "../../../async/junior/emerg-contact";
 import { getWrapper as requiredInfoAPI, validator as requiredInfoValidator } from "../../../async/junior/required";
 import { getWrapper as surveyAPI, validator as surveyValidator } from "../../../async/junior/survey";
-import PageWrapper from "../../../components/Page/PageWrapper";
+import PageWrapper from "../../../core/PageWrapper";
 import ProgressThermometer from "../../../components/ProgressThermometer";
 import { State } from "../../../core/Breadcrumb";
 import WizardPageflow, { ComponentPropsFromWizard, WizardNode } from "../../../core/WizardPageflow";
