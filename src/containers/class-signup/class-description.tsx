@@ -2,7 +2,7 @@ import * as React from "react";
 import PlaceholderLink from "../../components/PlaceholderLink";
 import { Option } from "fp-ts/lib/Option";
 import { Link } from "react-router-dom";
-import {path as timePath} from "./SelectClassTime"
+import {paths} from "../../routing"
 
 export interface ClassType {
 	typeId: number,
@@ -20,7 +20,7 @@ export const asFragment = (juniorId: number) => (ct: ClassType) => (
 		<br />
 		{ct.description}
 		<br /><br />
-		<Link to={timePath.replace(":personId", String(juniorId)).replace(":typeId", String(ct.typeId))}>Click here to sign up!</Link>
+		<Link to={paths.classTime.path.replace(":personId", String(juniorId)).replace(":typeId", String(ct.typeId))}>Click here to sign up!</Link>
 		<br /><br />
 	</React.Fragment>
 )

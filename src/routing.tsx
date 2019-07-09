@@ -8,26 +8,34 @@ import LoginPage from './containers/LoginPage';
 import RatingsPage from './containers/RatingsPage';
 //import RegistrationWizard, { path as registrationWizardPath } from './containers/registration/pageflow/RegistrationWizard';
 import SelectClassType, { path as selectClassTypePath } from "./containers/class-signup/SelectClassType"
-import SelectClassTime, { path as selectClassTimePath, path } from "./containers/class-signup/SelectClassTime"
 import { History } from 'history';
 import PageWrapper from './components/Page/PageWrapper';
 import extractURLParams from './util/extractURLParams';
 import {Form as HomePageForm} from "./containers/HomePage"
-import RequiredInfo from "./containers/registration/RequiredInfo"
 import {apiw as welcomeAPI} from "./async/member-welcome"
-import {getWrapper as requiredInfoAPI, validator as requiredInfoValidator} from "./async/junior/required"
-import {getWrapper as surveyAPI, validator as surveyValidator} from "./async/junior/survey"
-import EmergencyContact from './containers/registration/EmergencyContact';
-import SurveyInfo from './containers/registration/SurveyInfo';
-import TermsConditions from './containers/registration/TermsConditions';
-import ScholarshipPage from './containers/Scholarship';
-import Currency from './util/Currency';
+import {getWrapper as seeTypesWrapper, validator as seeTypesValidator} from "./async/junior/see-types"
+import {getWrapper as classTimesWrapper, validator as classTimesValidator} from "./async/junior/get-class-instances"
 import RegistrationWizard from './containers/registration/pageflow/RegistrationWizard';
+import SelectClassTime from "./containers/class-signup/SelectClassTime"
 
 export interface AutoResolver {
 	clientSideAsyncResult: any,
 	serverSideResolveOnAsyncComplete: (clientSideAsyncResult: any) => void,
 	autoResolve: () => void
+}
+
+function pathAndParamsExtractor<T extends {[K: string]: string}>(path: string) {
+	return {
+		path,
+		getParams: extractURLParams<T>(path)
+	}
+}
+
+export const paths = {
+	ratings: pathAndParamsExtractor<{personId: string}>("/ratings/:personId"),
+	reg: pathAndParamsExtractor<{personId: string}>("/reg/:personId"),
+	class: pathAndParamsExtractor<{personId: string}>("/class/:personId"),
+	classTime: pathAndParamsExtractor<{personId: string, typeId: string}>("/class-time/:personId/:typeId")
 }
 
 // Some pages have a "shadowComponent" which is the thing to render while we are waiting async for API to come back, 
@@ -64,17 +72,6 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 			serverSideResolveOnAsyncComplete(null)
 		}
 	};
-	function pathAndParamsExtractor<T extends {[K: string]: string}>(path: string) {
-		return {
-			path,
-			getParams: extractURLParams<T>(path)
-		}
-	}
-
-	const paths = {
-		ratings: pathAndParamsExtractor<{personId: string}>("/ratings/:personId"),
-		reg: pathAndParamsExtractor<{personId: string}>("/reg/:personId"),
-	}
 
 	const mustNotBeLoggedIn = [
 		<Route key="/precreate" path="/precreate" render={() => <Gatekeeper />} />,
@@ -85,6 +82,7 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 
 	const mustBeLoggedIn = [
 		<Route key="login" path="/login" render={() => <Redirect to="/" />} />,
+
 		<Route key="ratings" path={paths.ratings.path} render={() => <PageWrapper
 			key="RatingsPage"
 			component={(urlProps: {personId: number}, async: HomePageForm) => <RatingsPage
@@ -99,8 +97,38 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 			}}
 			asyncResolver={asyncResolver}
 		/>} />,
-		<Route key="class" path={selectClassTypePath} render={() => <SelectClassType />} />,
-		<Route key="classTime" path={selectClassTimePath} render={() => <SelectClassTime />} />,
+
+		<Route key="class" path={paths.class.path} render={() => <PageWrapper
+			key="SelectClassType"
+			component={(urlProps: {personId: number}, async: t.TypeOf<typeof seeTypesValidator>) => <SelectClassType
+				personId={urlProps.personId}
+				apiResultArray={async}
+			/>}
+			urlProps={{personId: Number(paths.class.getParams(history.location.pathname).personId)}}
+			shadowComponent={<span>hi!</span>}
+			getAsyncProps={(urlProps: {personId: number}) => {
+				return seeTypesWrapper(urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
+			}}
+			asyncResolver={asyncResolver}
+		/>} />,
+
+		<Route key="classTime" path={paths.classTime.path} render={() => <PageWrapper
+			key="SelectClassType"
+			component={(urlProps: {personId: number, typeId: number}, async: t.TypeOf<typeof classTimesValidator>) => <SelectClassTime
+				personId={urlProps.personId}
+				apiResult={async}
+			/>}
+			urlProps={{
+				personId: Number(paths.classTime.getParams(history.location.pathname).personId),
+				typeId: Number(paths.classTime.getParams(history.location.pathname).typeId)
+			}}
+			shadowComponent={<span>hi!</span>}
+			getAsyncProps={(urlProps: {personId: number, typeId: number}) => {
+				return classTimesWrapper(urlProps.typeId, urlProps.personId).do().catch(err => Promise.resolve(null));  // TODO: handle failure
+			}}
+			asyncResolver={asyncResolver}
+		/>} />,
+
 		<Route key="reg" exact path={paths.reg.path} render={() => {
 			// const Clazz = RegistrationWizard(history, Number(paths.reg.getParams(history.location.pathname).personId), false)
 			// return <Clazz />
@@ -111,7 +139,7 @@ export default function (history: History<any>, isLoggedIn: boolean, serverSideR
 				asyncResolver={asyncResolver}
 			/>
 		}} />,
-		
+
 		<Route key="default" render={() => <HomePage />} />
 	]
 

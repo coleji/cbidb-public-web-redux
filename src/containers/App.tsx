@@ -1,19 +1,8 @@
-import { ConnectedRouter, routerActions } from 'connected-react-router';
 import * as React from 'react';
 import { connect } from "react-redux";
-import { Route, Switch, Redirect } from 'react-router';
 import { Dispatch } from 'redux';
-
-import Gatekeeper from "../containers/create-acct/Gatekeeper";
-import { LoginState } from "../core/reducer/loginStateReducer";
 import { RootState } from '../rootReducer';
 import JoomlaBase from '../theme/joomla/JoomlaBase';
-import CreateAccount from './create-acct/CreateAccount';
-import HomePage from './HomePage';
-import LoginPage from './LoginPage';
-//import RegistrationWizard, {path as registrationWizardPath} from './registration/pageflow/RegistrationWizard';
-import SelectClassType, {path as selectClassTypePath} from "./class-signup/SelectClassType"
-import SelectClassTime, {path as selectClassTimePath} from "./class-signup/SelectClassTime"
 import router from "../routing"
 //import RegistrationTransparentFlow from "./registration/pageflow/RegistrationTransparentFlow"
 

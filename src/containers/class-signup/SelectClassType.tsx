@@ -24,62 +24,39 @@ export const path = "/class/:personId"
 
 type ClassIDHash = {[K: string]: boolean};
 
+type APIResult = t.TypeOf<typeof validator>;
+
 export type Form = {
-	classTypes: t.TypeOf<typeof validator>,
+	apiResultArray: APIResult,
 	classTypesHash: ClassIDHash
 }
 
-const mapStateToProps = (state: RootState) => ({
-	form: state.selectClassTypeForm,
-	router: state.router
-})
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-
-})
-
-type StaticProps = {
-}
-
-const classTypesArrayToHash: (arr: t.TypeOf<typeof validator>) => ClassIDHash = arr => arr.filter(e => e.canSee).reduce((hash, e) => {
+const classTypesArrayToHash: (arr: APIResult) => ClassIDHash = arr => arr.filter(e => e.canSee).reduce((hash, e) => {
 	hash[String(e.typeId)] = e.canSee;
 	return hash;
 }, {} as ClassIDHash);
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & StaticProps
+const apiToForm = (apiResultArray: APIResult) => ({
+	apiResultArray: apiResultArray,
+	classTypesHash: classTypesArrayToHash(apiResultArray)
+})
 
+interface Props {
+	personId: number,
+	apiResultArray: APIResult
+}
 
-class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator> {
-	personId: number
-	formName = formName
-	getApiWrapper = () => getWrapper(this.personId)
-	apiToForm = (apiResultArray: t.TypeOf<typeof validator>) => ({
-		classTypes: apiResultArray,
-		classTypesHash: classTypesArrayToHash(apiResultArray)
-	})
-	formToAPI = (x: Form) => x.classTypes
-	getData = () => this.props.form.data
+export default class SelectClassType extends React.Component<Props> {
+	formData: Form
 	constructor(props: Props) {
 		super(props);
-		// TODO: typesafe? 
-		const match = matchPath(
-			this.props.router.location.pathname,
-			{ path }
-			) || {params: {}};
-		this.personId = (match.params as any).personId;
-
-		console.log("scraped from the url: " + this.personId)
+		this.formData = apiToForm(this.props.apiResultArray);
 	}
-	renderPlaceholder() {
-		return <span>whatever</span>
-	}
-	renderComponent(data: Form) {
+	render() {
 		const self = this;
-		const asFragmentCurried = asFragment(this.personId)
-		const asDivCurried = asDiv(this.personId)
-		console.log(data)
-
-		const canSeeClass = (c: ClassType) => !!data.classTypesHash[String(c.typeId)];
+		const asFragmentCurried = asFragment(self.props.personId)
+		const asDivCurried = asDiv(self.props.personId)
+		const canSeeClass = (c: ClassType) => !!this.formData.classTypesHash[String(c.typeId)];
 
 		const beginnerRegion = (canSeeClass(beginner)
 			? (
@@ -133,5 +110,3 @@ class SelectClassType extends APIBlockedComponent<Props, Form, typeof validator>
 		)
 	}
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(SelectClassType)
