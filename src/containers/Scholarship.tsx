@@ -4,10 +4,8 @@ import {Option, none} from 'fp-ts/lib/Option'
 
 import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../theme/joomla/JoomlaMainPage";
-import { RootState } from '../rootReducer';
 import Currency from "../util/Currency";
 import { RadioGroup, SingleCheckbox } from "../components/InputGroup";
-import { dispatchFormUpdate, post } from "../core/form/form";
 import { Select } from "../components/Select";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
@@ -19,6 +17,8 @@ import formUpdateState from '../util/form-update-state'
 import { History } from "history";
 import Breadcrumb from "../core/Breadcrumb";
 import JoomlaNotitleRegion from "../theme/joomla/JoomlaNotitleRegion";
+import { PostJSON } from "../core/APIWrapper";
+import asc from "../app/AppStateContainer";
 
 export const formName = "scholarshipForm"
 
@@ -206,7 +206,7 @@ export default class ScholarshipPage extends React.Component<Props, State> {
 			const form = self.state.formData
 			const isApplying = form.isApplying.getOrElse("No") == "Yes"
 			if (isApplying) {
-				post(formName, postYes(this.props.parentPersonId))({
+				postYes(this.props.parentPersonId).send(asc.state.appProps.serverToUseForAPI)(PostJSON({
 					numberWorkers: Number(form.numberAdults.getOrElse("0")),
 					hasBenefits: form.haveInsurance.getOrElse("N") == "Y",
 					infantCount:  Number(form.numberInfants.getOrElse("0")),
@@ -214,9 +214,9 @@ export default class ScholarshipPage extends React.Component<Props, State> {
 					schoolagerCount:  Number(form.numberSchoolagers.getOrElse("0")),
 					teenagerCount:  Number(form.numberTeenagers.getOrElse("0")),
 					income:  Number(form.income.getOrElse("0"))
-				}).then(self.props.goNext)
+				})).then(self.props.goNext)
 			} else {
-				post(formName, postNo(this.props.parentPersonId))({}).then(self.props.goNext)
+				postNo(this.props.parentPersonId).send(asc.state.appProps.serverToUseForAPI)(PostJSON({})).then(self.props.goNext)
 			}
 			
 		}}/>

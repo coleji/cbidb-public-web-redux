@@ -1,5 +1,7 @@
 import * as t from 'io-ts'
-import APIWrapper, { HttpMethod } from '../core/APIWrapper';
+import APIWrapper from '../core/APIWrapper';
+import {HttpMethod} from "../core/HttpMethod"
+
 const path = "/logout"
 
 export const logout = new APIWrapper({

@@ -2,7 +2,6 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PlaceholderLink from "../../components/PlaceholderLink";
-import { RootState } from "../../rootReducer";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 
@@ -45,7 +44,7 @@ class Gatekeeper extends React.PureComponent<Props> {
 	}
 }
 
-export default connect<StateProps, DispatchProps, StaticProps, RootState>(
+export default connect<StateProps, DispatchProps, StaticProps>(
 	() => ({
 
 	}),

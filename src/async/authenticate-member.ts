@@ -1,12 +1,14 @@
 import * as t from 'io-ts'
-import APIWrapper, { HttpMethod, ServerParams, PostString } from '../core/APIWrapper';
+import APIWrapper, { ServerParams, PostString } from '../core/APIWrapper';
 import memberWelcome from "./member-welcome"
-import {formName as homePageFormName} from "../containers/HomePage"
 import { some } from 'fp-ts/lib/Option';
+import {HttpMethod} from "../core/HttpMethod"
 
 const path = "/authenticate-member"
+console.trace()
+console.log("#### ", HttpMethod)
 
-export const apiw = new APIWrapper<typeof t.boolean, PostString, {}>({
+export const apiw = () => new APIWrapper<typeof t.boolean, PostString, {}>({
 	path,
 	type: HttpMethod.POST,
 	resultValidator: t.boolean,

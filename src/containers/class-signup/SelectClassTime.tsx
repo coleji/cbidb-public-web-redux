@@ -4,8 +4,6 @@ import { connect } from "react-redux";
 import { matchPath } from "react-router";
 import { Dispatch } from "redux";
 import JpClassesAvailTable from "../../components/JpClassesAvailTable";
-import APIBlockedComponent from "../../core/form/APIBlockedComponent";
-import { RootState } from '../../rootReducer';
 import Joomla8_4 from "../../theme/joomla/Joomla8_4";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";

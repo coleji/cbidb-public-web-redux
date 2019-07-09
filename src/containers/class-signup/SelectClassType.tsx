@@ -2,7 +2,6 @@ import * as React from "react";
 import * as t from 'io-ts'
 import { connect } from "react-redux";
 import { RadioGroup } from "../../components/InputGroup";
-import { RootState } from '../../rootReducer';
 import { Dispatch } from "redux";
 import Joomla8_4 from "../../theme/joomla/Joomla8_4";
 import JoomlaSidebarRegion from "../../theme/joomla/JoomlaSidebarRegion";
@@ -12,7 +11,6 @@ import intermediate from "./types/intermediate";
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import advanced from "./types/advanced"
 import other from './types/other'
-import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import {getWrapper,  validator} from "../../async/junior/see-types"
 import { matchPath } from "react-router";
 import {ClassType} from "./class-description"

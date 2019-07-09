@@ -1,13 +1,6 @@
 import * as React from "react";
-import { RootState } from '../rootReducer';
-import { Dispatch } from "redux";
 import { DoublyLinkedList } from "../util/DoublyLinkedList";
-import { set } from "../core/form/form";
-import { Option } from "fp-ts/lib/Option";
-import { connect, ConnectedComponentClass } from "react-redux";
-import { push } from "connected-react-router";
 import { History } from "history";
-import Breadcrumb from "./Breadcrumb";
 
 export interface ComponentPropsFromWizard {
 	goNext: () => void,

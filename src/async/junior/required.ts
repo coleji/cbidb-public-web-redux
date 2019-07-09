@@ -1,6 +1,7 @@
 import * as t from 'io-ts'
-import APIWrapper, { HttpMethod } from '../../core/APIWrapper';
+import APIWrapper from '../../core/APIWrapper';
 import {OptionalString} from '../../util/OptionalTypeValidators'
+import {HttpMethod} from "../../core/HttpMethod"
 
 export const validator = t.type({
 	firstName: OptionalString,

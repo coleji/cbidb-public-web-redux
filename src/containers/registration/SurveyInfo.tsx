@@ -4,14 +4,11 @@ import { connect } from "react-redux";
 import { CheckboxGroup, RadioGroup, SingleCheckbox } from "../../components/InputGroup";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import TextInput from "../../components/TextInput";
-import { dispatchFormUpdate, post } from "../../core/form/form";
-import { RootState } from '../../rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import { Option, none, some } from "fp-ts/lib/Option";
 import { Dispatch } from "redux";
-import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 import ethnicities from "../../lov/ethnicities"
 import genders from "../../lov/genders"
@@ -21,6 +18,8 @@ import Button from "../../components/Button";
 import Breadcrumb from "../../core/Breadcrumb";
 import { History } from "history";
 import formUpdateState from '../../util/form-update-state'
+import asc from "../../app/AppStateContainer";
+import { PostJSON } from "../../core/APIWrapper";
 
 export const formName = "surveyInfoForm"
  
@@ -143,7 +142,7 @@ export default class SurveyInfo extends React.Component<Props, State> {
             </JoomlaArticleRegion>
 			<Button text="< Back" onClick={self.props.goPrev}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.props.personId))(this.state.formData).then(self.props.goNext)
+				postWrapper(this.props.personId).send(asc.state.appProps.serverToUseForAPI)(PostJSON(this.state.formData)).then(self.props.goNext)
 			}}/>
 		</JoomlaMainPage>
 	}

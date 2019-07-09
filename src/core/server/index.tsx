@@ -10,12 +10,11 @@ import { routerMiddleware } from 'connected-react-router'
 import { createMemoryHistory } from 'history'
 
 import App from '../../containers/App'
-import createStore from '../createStore'
-import { makeRootReducer, StaticState } from '../../rootReducer'
 import getConfig from './config'
 import memberWelcome from "../../async/member-welcome"
 import { ServerParams } from "../APIWrapper";
 import { some, none } from "fp-ts/lib/Option";
+import asc, { AppProps } from "../../app/AppStateContainer";
 
 require("../../../lib/array-polyfill")
 
@@ -95,23 +94,23 @@ getConfig.then(serverConfig => {
 		// TODO: dont autodetect if the response is a JSON with a `data` property
 		// Come up with a better arch for this.  Seems like everything should be a JSON, no more text responses
 		.then((json: any) => {
+			console.log("json from member welcome:  ", json)
 			if (json && json.userName) {
 				return Promise.resolve({
 					login: {authenticatedUserName: json.userName},	// TODO: should be option?
 					homePageForm: { data: some(json) }
 				});
-			} else Promise.resolve({})
+			} else return Promise.resolve({})
 		}, (e) => {
 			console.log("server side get welcome pkg failed", e)
-			Promise.resolve({})
+			return Promise.resolve({})
 		})
 		.then(seedState => new Promise<{}>((resolve, reject) => {
-			console.log("about to create store server side")
+			console.log("about to create store server side", seedState)
 			const history = createMemoryHistory({
 				initialEntries: [req.path]
 			});
-			const staticState: StaticState = {
-				getMoment:  () => moment(),
+			const appProps: AppProps = {
 				isServer: true,
 				jpDirectorNameFirst: "Niko",
 				jpDirectorNameLast: "Kotsatos",
@@ -123,36 +122,28 @@ getConfig.then(serverConfig => {
 				serverConfig,
 				serverToUseForAPI: apiServerParams
 			}
-			const rootReducer = makeRootReducer(history, staticState)
-	
-			const {store, initialState}  = createStore({
-				rootReducer,
-				enhancers: [],
-				middlewares: [routerMiddleware(history)],
-				seedState: {
-					...seedState,
-					staticState
-				}
-			});
+
+			asc.updateState.appProps(appProps);
+
+			const initialState = {
+				...seedState,
+				appProps
+			}
+
+			console.log("just made initialState")
 
 			Global["initialState"] = initialState;
 
-			Global["store"] = store;
 			Global["history"] = history;
 			Global["clientSideAsyncResult"] = null;
 			Global["makeProvider"] = () => (
-				<Provider store={Global["store"]}>
-					<App
-						history={Global["history"]}
-						serverSideResolveOnAsyncComplete={resolve as any}
-						clientSideAsyncResult={Global["clientSideAsyncResult"]}
-						isServer={true}
-					/>
-				</Provider>
+				<App
+					history={Global["history"]}
+					serverSideResolveOnAsyncComplete={resolve as any}
+					clientSideAsyncResult={Global["clientSideAsyncResult"]}
+					isServer={true}
+				/>
 			);
-
-
-
 
 			// trigger the components to actually attempt a render
 			renderToString(Global["makeProvider"]());
@@ -164,9 +155,10 @@ getConfig.then(serverConfig => {
 		})).then((clientSideAsyncResult: any) => {
 			console.log("asyncResutl is ", clientSideAsyncResult)
 			Global["clientSideAsyncResult"] = clientSideAsyncResult;
+			console.log("set global")
 			Global["initialState"].clientSideAsyncResult = clientSideAsyncResult;
-			delete Global["initialState"].staticState.apiServerParams;
-			Global["initialState"].staticState.serverToUseForAPI = selfServerParams
+			delete Global["initialState"].appProps.apiServerParams;
+			Global["initialState"].appProps.serverToUseForAPI = selfServerParams
 			const helmet = Helmet.renderStatic();
 
 			console.log("here we go final render trigger...")

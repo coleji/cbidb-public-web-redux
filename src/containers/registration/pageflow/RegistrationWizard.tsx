@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as t from 'io-ts'
-import { RootState } from "../../../rootReducer";
 import { Dispatch } from "redux";
 import WizardPageflow, { WizardNode, ElementDLL, ComponentPropsFromWizard } from "../../../core/WizardPageflow";
 import JoomlaMainPage from "../../../theme/joomla/JoomlaMainPage";

@@ -8,7 +8,6 @@ import JoomlaArticleRegion from "../theme/joomla/JoomlaArticleRegion";
 import Currency from "../util/Currency"
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
-import { RootState } from '../rootReducer'
 import { ServerParams } from "../core/APIWrapper";
 import { none, Option, some, Some } from "fp-ts/lib/Option";
 import { Dispatch } from "redux";
@@ -48,7 +47,13 @@ type State = {
 
 class FormInput extends TextInput<typeof formDefault> {}
 
-export default class LoginPage extends React.PureComponent<Props, State> {	
+export default class LoginPage extends React.PureComponent<Props, State> {
+	constructor(props: Props) {
+		super(props)
+		this.state = {
+			formData: formDefault
+		}
+	}
 	render() {
 		console.log("login page props: ", this.props)
 		const self = this;

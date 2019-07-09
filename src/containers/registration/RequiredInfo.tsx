@@ -9,21 +9,19 @@ import TextArea from "../../components/TextArea";
 import TextInput from "../../components/TextInput";
 import states from "../../lov/states"
 import countries from "../../lov/countries"
-import { RootState } from '../../rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
 import range from "../../util/range";
-import {getReduxState} from "../../core/reducer/store"
-import {dispatchFormUpdate, post} from "../../core/form/form"
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/junior/required"
-import APIBlockedComponent from '../../core/form/APIBlockedComponent';
 import getPersonIdFromPath from '../../util/getPersonIdFromPath';
 import Breadcrumb from '../../core/Breadcrumb';
 import { History } from 'history';
 import moment = require('moment');
 import formUpdateState from '../../util/form-update-state'
+import { PostJSON } from '../../core/APIWrapper';
+import asc from '../../app/AppStateContainer';
 
 export const formName = "registrationRequiredInfo"
 
@@ -291,7 +289,7 @@ export default class RequiredInfo extends React.Component<Props, State> {
 			</JoomlaArticleRegion>
 			<Button text="< Back" onClick={self.props.goPrev}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.props.personId))(formToAPI(this.state.formData)).then(self.props.goNext)
+				postWrapper(this.props.personId).send(asc.state.appProps.serverToUseForAPI)(PostJSON(formToAPI(this.state.formData))).then(self.props.goNext)
 			}}/>
 		</JoomlaMainPage>
 	}

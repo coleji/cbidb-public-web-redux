@@ -4,8 +4,6 @@ import { connect } from "react-redux";
 import PhoneTriBox, { PhoneTriBoxProps, splitPhone, combinePhone } from "../../components/PhoneTriBox";
 import ProgressThermometer from "../../components/ProgressThermometer";
 import TextInput from "../../components/TextInput";
-import {dispatchFormUpdate, post} from "../../core/form/form"
-import { RootState } from '../../rootReducer';
 import JoomlaArticleRegion from "../../theme/joomla/JoomlaArticleRegion";
 import JoomlaMainPage from "../../theme/joomla/JoomlaMainPage";
 import JoomlaNotitleRegion from "../../theme/joomla/JoomlaNotitleRegion";
@@ -14,11 +12,12 @@ import {Dispatch} from "redux";
 import { push } from 'connected-react-router';
 import Button from "../../components/Button";
 import {getWrapper, postWrapper, validator} from "../../async/junior/emerg-contact"
-import APIBlockedComponent from "../../core/form/APIBlockedComponent";
 import getPersonIdFromPath from "../../util/getPersonIdFromPath";
 import Breadcrumb from "../../core/Breadcrumb";
 import { History } from "history";
 import formUpdateState from '../../util/form-update-state'
+import { PostJSON } from "../../core/APIWrapper";
+import asc from "../../app/AppStateContainer";
 
 export const formName = "emergencyContact"
 
@@ -206,7 +205,7 @@ export default class EmergencyContact extends React.PureComponent<Props, State> 
 			</JoomlaArticleRegion>
 			<Button text="< Back" onClick={self.props.goPrev}/>
 			<Button text="Next >" onClick={() => {
-				post(formName, postWrapper(this.props.personId))(formToAPI(this.state.formData)).then(self.props.goNext)
+				postWrapper(this.props.personId).send(asc.state.appProps.serverToUseForAPI)(PostJSON(formToAPI(this.state.formData))).then(self.props.goNext)
 			}}/>
 		</JoomlaMainPage>
 	}

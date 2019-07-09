@@ -1,5 +1,6 @@
 import * as t from 'io-ts'
-import APIWrapper, { HttpMethod } from '../../core/APIWrapper';
+import APIWrapper from '../../core/APIWrapper';
+import {HttpMethod} from "../../core/HttpMethod"
 import { OptionalString, OptionalStringList, OptionalBoolean } from '../../util/OptionalTypeValidators';
 
 // TODO: this is just for debug

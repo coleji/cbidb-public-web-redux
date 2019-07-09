@@ -17,7 +17,7 @@ import {getWrapper as seeTypesWrapper, validator as seeTypesValidator} from "../
 import {getWrapper as classTimesWrapper, validator as classTimesValidator} from "../async/junior/get-class-instances"
 import RegistrationWizard from '../containers/registration/pageflow/RegistrationWizard';
 import SelectClassTime from "../containers/class-signup/SelectClassTime"
-import AppStateContainer from './AppStateContainer';
+import asc from './AppStateContainer';
 import Currency from '../util/Currency';
 
 export interface AutoResolver {
@@ -58,7 +58,7 @@ export const paths = {
 // of the page we want to render.  So stick that stuff in the AsyncResolver we hand to the PageWrapper, and when it goes to render and sees stuff in there,
 // it will blindly use it and not call API.
 // Client-side we still have `serverSideResolveOnAsyncComplete` being passed around all over the place but it is a () => {} function that nobody cares about
-export default function (asc: AppStateContainer, history: History<any>, serverSideResolveOnAsyncComplete: (clientSideAsyncResult: any) => void, clientSideAsyncResult: any) {
+export default function (history: History<any>, serverSideResolveOnAsyncComplete: (clientSideAsyncResult: any) => void, clientSideAsyncResult: any) {
 	console.log("inside routing function")
 	var asyncResolver: AutoResolver = {
 		clientSideAsyncResult,
@@ -147,7 +147,18 @@ export default function (asc: AppStateContainer, history: History<any>, serverSi
 			/>
 		}} />,
 
-		<Route key="default" render={() => <HomePage />} />
+		<Route key="default" render={() => <PageWrapper
+			key="SelectClassType"
+			component={(urlProps: {}, async: HomePageForm) => <HomePage
+				data={async}
+			/>}
+			urlProps={{}}
+			shadowComponent={<span>hi!</span>}
+			getAsyncProps={(urlProps: {}) => {
+				return welcomeAPI.do().catch(err => Promise.resolve(null));  // TODO: handle failure
+			}}
+			asyncResolver={asyncResolver}
+		/>} />
 	]
 
 	const isLoggedIn = asc.state.login.authenticatedUserName.isSome();

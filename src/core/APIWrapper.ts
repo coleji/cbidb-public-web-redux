@@ -6,12 +6,9 @@ import { Either } from 'fp-ts/lib/Either';
 import * as https from "https"
 import { Option, some, none } from 'fp-ts/lib/Option';
 import { removeOptions } from '../util/deserializeOption';
-import { getReduxState } from './reducer/store';
+import asc from "../app/AppStateContainer"
+import {HttpMethod} from "./HttpMethod"
 
-export enum HttpMethod {
-	GET = "GET",
-	POST = "POST"
-}
 
 interface Success<T_Result> {
 	type: "Success",
@@ -73,8 +70,9 @@ export default class APIWrapper<T_Validator extends t.Any, T_PostJSON, T_FixedPa
 		this.config = config;
 	}
 	do(): Promise<ApiResult<t.TypeOf<T_Validator>>> {
-		console.log("using the following for APIWrapper.do() ", getReduxState().staticState.serverToUseForAPI)
-		return this.send(getReduxState().staticState.serverToUseForAPI)(null).then((result: string) => {
+		const serverToUse = asc.state.appProps.serverToUseForAPI;
+		console.log("using the following for APIWrapper.do() ", serverToUse)
+		return this.send(serverToUse)(null).then((result: string) => {
 			console.log("Got result from api: ", result.substr(0,50))
 			const parsedResult = this.parseResponse(result)
 			if (parsedResult.type == "Success") {

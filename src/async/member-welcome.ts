@@ -1,5 +1,6 @@
 import * as t from 'io-ts'
-import APIWrapper, { HttpMethod, ServerParams } from '../core/APIWrapper';
+import APIWrapper, { ServerParams } from '../core/APIWrapper';
+import {HttpMethod} from "../core/HttpMethod"
 
 export const validator = t.type({
 	parentPersonId: t.number,
